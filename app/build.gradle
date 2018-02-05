@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.catalinj.cryptosmart"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        //add the kotlin folder as a sources folder
+        main.java.srcDirs += 'src/main/kotlin'
+        //add the schemas folder as an asset for the tests
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    configurations.all {
+        resolutionStrategy {
+
+        }
+    }
+
+    kapt {
+        arguments {
+            ["room.schemaLocation": "$projectDir/schemas".toString()]
+        }
+    }
+}
+
+def roomVersion = "1.1.0-alpha1"
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //kotlin stdlib
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    //support libraries
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.2'
+    //dagger2
+    compile 'com.google.dagger:dagger:2.14.1'
+    kapt 'com.google.dagger:dagger-compiler:2.14.1'
+    //room
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+
+    //test
+    testImplementation 'junit:junit:4.12'
+
+    //instrumentation tests
+    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+}

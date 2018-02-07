@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.features.coinslist.presenter
 
+import android.util.Log
 import com.catalinj.cryptosmart.common.Executors
 import com.catalinj.cryptosmart.datastorage.database.CryptoSmartDb
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
@@ -10,10 +11,14 @@ import com.catalinj.cryptosmart.repository.CoinsRepository
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListPresenter(db: CryptoSmartDb, cmkService: CoinMarketCapService) : CoinsListContract.CoinsListPresenter {
+class CoinsListPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarketCapService) : CoinsListContract.CoinsListPresenter {
 
     private val repository = CoinsRepository(db, cmkService)
     private lateinit var view: CoinsListContract.CoinsListView
+
+    init {
+        Log.d("Cata", "Injected CoinListPresenter")
+    }
 
     override fun startPresenting() {
         //fetch coins
@@ -32,6 +37,9 @@ class CoinsListPresenter(db: CryptoSmartDb, cmkService: CoinMarketCapService) : 
 
     override fun onViewAvailable(view: CoinsListContract.CoinsListView) {
         this.view = view
+        Executors.networkIO().execute {
+            repository.refreshCoins()
+        }
     }
 
     override fun onViewDestroyed() {

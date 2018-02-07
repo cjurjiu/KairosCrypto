@@ -40,6 +40,10 @@ android {
             ["room.schemaLocation": "$projectDir/schemas".toString()]
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 def roomVersion = "1.1.0-alpha1"

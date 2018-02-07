@@ -3,7 +3,6 @@ package com.catalinj.cryptosmart.features.coinslist.view
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -11,9 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.catalinj.cryptosmart.DependencyRoot
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.common.BaseFragment
+import com.catalinj.cryptosmart.di.components.CoinListComponent
+import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
+import com.catalinj.cryptosmart.features.HasRetainable
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
@@ -22,24 +24,37 @@ import javax.inject.Inject
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListFragment : Fragment(), CoinsListContract.CoinsListView {
+class CoinsListFragment : BaseFragment<CoinListComponent>(),
+        HasRetainable<Pair<String, CoinListComponent>>,
+        CoinsListContract.CoinsListView {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: CoinListAdapter
+
     @Inject
     protected lateinit var coinListPresenter: CoinsListContract.CoinsListPresenter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        getInjector().inject(this)
         Log.d(TAG, "CoinsListFragment#onAttach")
-        ((context!!.applicationContext) as DependencyRoot).getCoinListComponent().inject(this)
-        val o = (context as MainActivity).lastCustomNonConfigurationInstance
-        Log.d(TAG, "CoinsListFragment#onAttach end. my Any: $o")
+    }
+
+    override fun getRetainable(): Pair<String, CoinListComponent> {
+        return Pair(TAG, getInjector())
+    }
+
+    override fun getIdentity(): String {
+        return TAG
+    }
+
+    override fun createInjector(): CoinListComponent {
+        return (activity as MainActivity).get().getCoinListComponent(CoinListModule())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val o = (activity as MainActivity).lastCustomNonConfigurationInstance
-        Log.d(TAG, "CoinsListFragment#onCreate. my Any: $o")
+        Log.d(TAG, "CoinsListFragment#onCreate.")
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -129,7 +144,7 @@ class CoinsListFragment : Fragment(), CoinsListContract.CoinsListView {
         Toast.makeText(activity.baseContext, "Loading stopped", Toast.LENGTH_SHORT).show()
     }
 
-    private companion object {
-        const val TAG = "Cata"
+    companion object {
+        const val TAG = "CoinsListFragment"
     }
 }

@@ -1,6 +1,5 @@
 package com.catalinj.cryptosmart.di.components
 
-import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.di.modules.general.AppModule
 import com.catalinj.cryptosmart.di.modules.general.NetworkModule
 import com.catalinj.cryptosmart.di.modules.general.PersistanceModule
@@ -17,5 +16,5 @@ import javax.inject.Singleton
 @Singleton
 abstract class AppComponent {
 
-    abstract fun getCoinListComponent(coinListModule: CoinListModule): CoinListComponent
+    abstract fun getActivityComponent(): ActivityComponent
 }

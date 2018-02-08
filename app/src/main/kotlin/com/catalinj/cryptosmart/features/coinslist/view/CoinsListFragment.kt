@@ -12,10 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.common.BaseFragment
+import com.catalinj.cryptosmart.common.atomics.HasRetainable
+import com.catalinj.cryptosmart.common.cryptobase.BaseFragment
 import com.catalinj.cryptosmart.di.components.CoinListComponent
-import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
-import com.catalinj.cryptosmart.features.HasRetainable
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
@@ -25,7 +24,7 @@ import javax.inject.Inject
  * Created by catalinj on 21.01.2018.
  */
 class CoinsListFragment : BaseFragment<CoinListComponent>(),
-        HasRetainable<Pair<String, CoinListComponent>>,
+        HasRetainable<Map<String, Any>>,
         CoinsListContract.CoinsListView {
 
     private lateinit var recyclerView: RecyclerView
@@ -37,11 +36,14 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         getInjector().inject(this)
+
         Log.d(TAG, "CoinsListFragment#onAttach")
     }
 
-    override fun getRetainable(): Pair<String, CoinListComponent> {
-        return Pair(TAG, getInjector())
+    override fun getRetainable(): Map<String, Any> {
+        val retainablesMap = mutableMapOf<String, Any>()
+        retainablesMap[TAG] = getInjector()
+        return retainablesMap
     }
 
     override fun getIdentity(): String {
@@ -49,7 +51,7 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
     }
 
     override fun createInjector(): CoinListComponent {
-        return (activity as MainActivity).get().getCoinListComponent(CoinListModule())
+        return (activity as MainActivity).getCoinListComponent()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

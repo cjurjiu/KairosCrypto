@@ -1,15 +1,16 @@
-package com.catalinj.cryptosmart.common
+package com.catalinj.cryptosmart.common.cryptobase
 
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.util.Log
+import com.catalinj.cryptosmart.common.atomics.Identifiable
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
 
 /**
  * Created by catalin on 06.02.18.
  */
-abstract class BaseFragment<out DaggerComponent : Any> : Fragment(), Identifiable<String> {
+abstract class  BaseFragment<out DaggerComponent : Any> : Fragment(), Identifiable<String> {
 
     private lateinit var myInjector: DaggerComponent
 

@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart
+package com.catalinj.cryptosmart.di
 
 import com.catalinj.cryptosmart.di.components.AppComponent
 

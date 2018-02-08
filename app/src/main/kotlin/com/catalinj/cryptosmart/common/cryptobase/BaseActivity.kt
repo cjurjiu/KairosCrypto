@@ -1,8 +1,9 @@
-package com.catalinj.cryptosmart.common;
+package com.catalinj.cryptosmart.common.cryptobase;
 
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.catalinj.cryptosmart.features.HasRetainable
+import com.catalinj.cryptosmart.common.atomics.HasRetainable
+import com.catalinj.cryptosmart.common.atomics.Identifiable
 
 /**
  * Created by catalin on 06.02.18.
@@ -43,9 +44,10 @@ abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Id
         val retainedObjectsMap: MutableMap<String, Any> = mutableMapOf()
         retainedObjectsMap[getIdentity()] = myInjector
         if (retainsFragments()) {
-            supportFragmentManager.fragments.filterIsInstance<HasRetainable<Pair<String, Any>>>()
-                    .map { fragment -> fragment.getRetainable() }
-                    .forEach { pair -> retainedObjectsMap[pair.first] = pair.second }
+            supportFragmentManager.fragments
+                    .filterIsInstance<HasRetainable<Map<String, Any>>>()
+                    .map { it.getRetainable() }
+                    .forEach { retainedObjectsMap.putAll(it) }
         }
         Log.d(getIdentity(), "MainActivity#onRetainCustomNonConfigurationInstance finishing: $isFinishing. my any: $retainedObjectsMap. keys count: ${retainedObjectsMap.size}")
         retainedObjectsMap.putAll(onRetainConfiguration())

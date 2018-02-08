@@ -2,8 +2,10 @@ package com.catalinj.cryptosmart
 
 import android.os.Bundle
 import android.util.Log
-import com.catalinj.cryptosmart.common.BaseActivity
+import com.catalinj.cryptosmart.common.cryptobase.BaseActivity
 import com.catalinj.cryptosmart.di.components.ActivityComponent
+import com.catalinj.cryptosmart.di.components.CoinListComponent
+import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
 import javax.inject.Provider
 
@@ -74,5 +76,9 @@ class MainActivity : BaseActivity<ActivityComponent>(), Provider<ActivityCompone
 
     private companion object {
         const val TAG = "MainActivity"
+    }
+
+    fun getCoinListComponent(): CoinListComponent {
+        return getInjector().getCoinListComponent(CoinListModule())
     }
 }

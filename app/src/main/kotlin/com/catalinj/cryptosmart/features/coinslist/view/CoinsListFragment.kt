@@ -1,7 +1,6 @@
 package com.catalinj.cryptosmart.features.coinslist.view
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,6 +14,7 @@ import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.common.atomics.HasRetainable
 import com.catalinj.cryptosmart.common.cryptobase.BaseFragment
 import com.catalinj.cryptosmart.di.components.CoinListComponent
+import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
@@ -54,16 +54,13 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         return (activity as MainActivity).getCoinListComponent()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "CoinsListFragment#onCreate.")
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinsListFragment#onCreateView")
         val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
-        recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList())
+        recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList()) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, CoinDetailsFragment(), CoinDetailsFragment.TAG).addToBackStack(TAG).commit()
+        }
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity.baseContext)
         return v
@@ -75,35 +72,10 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         coinListPresenter.onViewAvailable(this)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d(TAG, "CoinsListFragment#onActivityCreated")
-    }
-
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "CoinsListFragment#onStart")
         coinListPresenter.startPresenting()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "CoinsListFragment#onResume")
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration?) {
-        super.onConfigurationChanged(newConfig)
-        Log.d(TAG, "CoinsListFragment#onActivityCreated")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "CoinsListFragment#onPause")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        Log.d(TAG, "CoinsListFragment#onSaveInstanceState")
     }
 
     override fun onStop() {
@@ -124,9 +96,8 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         //TODO release presenter reference?
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "CoinsListFragment#onDetach")
+    override fun onBack(): Boolean {
+        return false
     }
 
     override fun getPresenter(): CoinsListContract.CoinsListPresenter {

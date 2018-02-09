@@ -4,13 +4,14 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.util.Log
+import com.catalinj.cryptosmart.common.atomics.BackEventAwareComponent
 import com.catalinj.cryptosmart.common.atomics.Identifiable
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
 
 /**
  * Created by catalin on 06.02.18.
  */
-abstract class  BaseFragment<out DaggerComponent : Any> : Fragment(), Identifiable<String> {
+abstract class BaseFragment<out DaggerComponent : Any> : Fragment(), Identifiable<String>, BackEventAwareComponent {
 
     private lateinit var myInjector: DaggerComponent
 
@@ -28,4 +29,6 @@ abstract class  BaseFragment<out DaggerComponent : Any> : Fragment(), Identifiab
     }
 
     abstract fun createInjector(): DaggerComponent
+
+    abstract override fun onBack(): Boolean
 }

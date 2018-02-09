@@ -11,6 +11,5 @@ import dagger.Subcomponent
 @CoinListScope
 @Subcomponent(modules = [CoinListModule::class])
 abstract class CoinListComponent {
-
     abstract fun inject(frag: CoinsListFragment)
 }

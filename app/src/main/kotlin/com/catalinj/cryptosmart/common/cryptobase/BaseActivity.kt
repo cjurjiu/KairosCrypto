@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.common.cryptobase;
 
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.catalinj.cryptosmart.common.atomics.BackEventAwareComponent
 import com.catalinj.cryptosmart.common.atomics.HasRetainable
 import com.catalinj.cryptosmart.common.atomics.Identifiable
 
@@ -16,18 +17,6 @@ abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Id
             initInjector()
         }
         return myInjector
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun initInjector() {
-        val retainedMap: Map<String, Any>? = lastCustomNonConfigurationInstance as Map<String, Any>?
-        myInjector = if (retainedMap != null && retainedMap.containsKey(getIdentity())) {
-            Log.d(getIdentity(), "initComponent: use lastNonConfigurationInstance.")
-            retainedMap[getIdentity()] as DaggerComponent
-        } else {
-            Log.d(getIdentity(), "initComponent: create new from application.")
-            createInjector()
-        }
     }
 
     protected open fun retainsFragments(): Boolean {
@@ -54,5 +43,29 @@ abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Id
         return retainedObjectsMap
     }
 
+    @Suppress("UNCHECKED_CAST")
+    private fun initInjector() {
+        val retainedMap: Map<String, Any>? = lastCustomNonConfigurationInstance as Map<String, Any>?
+        myInjector = if (retainedMap != null && retainedMap.containsKey(getIdentity())) {
+            Log.d(getIdentity(), "initComponent: use lastNonConfigurationInstance.")
+            retainedMap[getIdentity()] as DaggerComponent
+        } else {
+            Log.d(getIdentity(), "initComponent: create new from application.")
+            createInjector()
+        }
+    }
 
+    override fun onBackPressed() {
+        var backConsumed: Boolean = supportFragmentManager.fragments
+                .filterIsInstance<BackEventAwareComponent>()
+                .any { it.onBack() }
+        if (!backConsumed) {
+            backConsumed = supportFragmentManager.popBackStackImmediate()
+        }
+        if (backConsumed) {
+            return
+        } else {
+            super.onBackPressed()
+        }
+    }
 }

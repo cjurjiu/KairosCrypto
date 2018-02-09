@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import com.catalinj.cryptosmart.common.cryptobase.BaseActivity
 import com.catalinj.cryptosmart.di.components.ActivityComponent
+import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.components.CoinListComponent
+import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
-import javax.inject.Provider
 
-class MainActivity : BaseActivity<ActivityComponent>(), Provider<ActivityComponent> {
+class MainActivity : BaseActivity<ActivityComponent>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,50 +36,16 @@ class MainActivity : BaseActivity<ActivityComponent>(), Provider<ActivityCompone
         return true
     }
 
-    override fun get(): ActivityComponent {
-        return getInjector()
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        Log.d(TAG, "MainActivity#onPostCreate")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "MainActivity#onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "MainActivity#onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "MainActivity#onPause finishing: $isFinishing")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        Log.d(TAG, "MainActivity#onSaveInstanceState finishing: $isFinishing")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "MainActivity#onStop finishing: $isFinishing")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "MainActivity#onDestroy finishing: $isFinishing")
+    fun getCoinListComponent(): CoinListComponent {
+        return getInjector().getCoinListComponent(CoinListModule())
     }
 
     private companion object {
         const val TAG = "MainActivity"
     }
 
-    fun getCoinListComponent(): CoinListComponent {
-        return getInjector().getCoinListComponent(CoinListModule())
+    fun getCoinDetailsComponent(): CoinDetailsComponent {
+        return getInjector().getCoinDetailsComponent(CoinDetailsModule())
     }
+
 }

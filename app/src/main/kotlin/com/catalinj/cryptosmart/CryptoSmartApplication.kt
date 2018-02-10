@@ -7,6 +7,7 @@ import com.catalinj.cryptosmart.di.components.DaggerAppComponent
 import com.catalinj.cryptosmart.di.modules.general.AppModule
 import com.catalinj.cryptosmart.di.modules.general.NetworkModule
 import com.catalinj.cryptosmart.di.modules.general.PersistanceModule
+import com.squareup.leakcanary.LeakCanary
 
 
 /**
@@ -29,6 +30,14 @@ class CryptoSmartApplication : Application(), DependencyRoot {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
         println("Application onCreate")
     }
 

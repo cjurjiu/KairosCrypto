@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.common.cryptobase;
 
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.catalinj.cryptosmart.common.atomics.BackEventAwareComponent
@@ -10,6 +11,13 @@ import com.catalinj.cryptosmart.common.atomics.Identifiable
  * Created by catalin on 06.02.18.
  */
 abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Identifiable<String> {
+    private var lastConfigChangeObjPersisted: Any? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lastConfigChangeObjPersisted = lastCustomNonConfigurationInstance
+    }
+
     private lateinit var myInjector: DaggerComponent
 
     protected fun getInjector(): DaggerComponent {
@@ -33,7 +41,13 @@ abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Id
         val retainedObjectsMap: MutableMap<String, Any> = mutableMapOf()
         retainedObjectsMap[getIdentity()] = myInjector
         if (retainsFragments()) {
-            supportFragmentManager.fragments
+            FragmentNavigator.instance.listFragments()
+                    .filterIsInstance<BaseFragment<*>>()
+                    .onEach {
+                        if (!it.isInjectorAvailable()) {
+                            it.forceInitInjector(this)
+                        }
+                    }
                     .filterIsInstance<HasRetainable<Map<String, Any>>>()
                     .map { it.getRetainable() }
                     .forEach { retainedObjectsMap.putAll(it) }
@@ -41,6 +55,11 @@ abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Id
         Log.d(getIdentity(), "MainActivity#onRetainCustomNonConfigurationInstance finishing: $isFinishing. my any: $retainedObjectsMap. keys count: ${retainedObjectsMap.size}")
         retainedObjectsMap.putAll(onRetainConfiguration())
         return retainedObjectsMap
+    }
+
+    override fun getLastCustomNonConfigurationInstance(): Any? {
+        val lastConfigChangeObj = super.getLastCustomNonConfigurationInstance()
+        return lastConfigChangeObj ?: lastConfigChangeObjPersisted
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -56,16 +75,22 @@ abstract class BaseActivity<out DaggerComponent : Any> : AppCompatActivity(), Id
     }
 
     override fun onBackPressed() {
-        var backConsumed: Boolean = supportFragmentManager.fragments
+        var backConsumed: Boolean = FragmentNavigator.instance.listFragments()
                 .filterIsInstance<BackEventAwareComponent>()
                 .any { it.onBack() }
         if (!backConsumed) {
-            backConsumed = supportFragmentManager.popBackStackImmediate()
+            backConsumed = FragmentNavigator.instance.popBackStackImmediate()
         }
+
         if (backConsumed) {
             return
         } else {
             super.onBackPressed()
         }
+    }
+
+    fun removedSavedInformation(identity: String) {
+        val removed = (lastConfigChangeObjPersisted as MutableMap<String, Any>?)?.remove(identity)
+        Log.d("Cata", "Remove for $identity result: $removed")
     }
 }

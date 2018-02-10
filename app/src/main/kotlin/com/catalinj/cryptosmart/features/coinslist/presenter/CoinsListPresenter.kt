@@ -14,7 +14,7 @@ import com.catalinj.cryptosmart.repository.CoinsRepository
 class CoinsListPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarketCapService) : CoinsListContract.CoinsListPresenter {
 
     private val repository = CoinsRepository(db, cmkService)
-    private lateinit var view: CoinsListContract.CoinsListView
+    private var view: CoinsListContract.CoinsListView? = null
 
     init {
         Log.d("Cata", "Injected CoinListPresenter")
@@ -26,7 +26,7 @@ class CoinsListPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarketCa
             val coins: List<CoinMarketCapCryptoCoin> = repository.getCoins()
             println("coins received! size is:${coins.size}")
             Executors.mainThread().execute {
-                view.setListData(coins)
+                view?.setListData(coins)
             }
         }
     }
@@ -43,7 +43,7 @@ class CoinsListPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarketCa
     }
 
     override fun onViewDestroyed() {
-        //todo, do something
+        this.view = null
     }
 
     override fun getView(): CoinsListContract.CoinsListView {

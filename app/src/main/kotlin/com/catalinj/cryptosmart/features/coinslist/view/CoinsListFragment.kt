@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.features.coinslist.view
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -13,6 +14,7 @@ import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.common.atomics.HasRetainable
 import com.catalinj.cryptosmart.common.cryptobase.BaseFragment
+import com.catalinj.cryptosmart.common.cryptobase.FragmentNavigator
 import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
@@ -37,7 +39,7 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         super.onAttach(context)
         getInjector().inject(this)
 
-        Log.d(TAG, "CoinsListFragment#onAttach")
+        Log.d(TAG, "CoinsListFragment${hashCode()}#onAttach.injector:" + getInjector().hashCode() + " presenter:" + coinListPresenter.hashCode())
     }
 
     override fun getRetainable(): Map<String, Any> {
@@ -50,7 +52,8 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         return TAG
     }
 
-    override fun createInjector(): CoinListComponent {
+    override fun createInjector(activity: AppCompatActivity): CoinListComponent {
+        Log.d(TAG, "CoinsListFragment#createInjector")
         return (activity as MainActivity).getCoinListComponent()
     }
 
@@ -59,7 +62,8 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
         recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList()) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, CoinDetailsFragment(), CoinDetailsFragment.TAG).addToBackStack(TAG).commit()
+            FragmentNavigator.instance.replaceWithBackStack(R.id.fragment_container,
+                    CoinDetailsFragment(), CoinDetailsFragment.TAG)
         }
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity.baseContext)
@@ -82,21 +86,39 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         super.onStop()
         Log.d(TAG, "CoinsListFragment#onStop")
         coinListPresenter.stopPresenting()
+        Log.d(TAG, "CoinsListFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
+                "a2:${activity.isChangingConfigurations}")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "CoinsListFragment#onSaveInstanceState. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
+                "a2:${activity.isChangingConfigurations}")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG, "CoinsListFragment#onDestroyView")
         coinListPresenter.onViewDestroyed()
+        Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
+                "a2:${activity.isChangingConfigurations}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "CoinsListFragment#onDestroy")
         //TODO release presenter reference?
+        Log.d(TAG, "CoinsListFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
+                "a2:${activity.isChangingConfigurations}")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "CoinsListFragment#onDetach")
     }
 
     override fun onBack(): Boolean {
+        Log.d(TAG, "CoinsListFragment#onBack")
         return false
     }
 

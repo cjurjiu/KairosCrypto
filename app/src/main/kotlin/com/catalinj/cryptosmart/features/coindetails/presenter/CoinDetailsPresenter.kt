@@ -12,7 +12,7 @@ import com.catalinj.cryptosmart.repository.CoinsRepository
 class CoinDetailsPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarketCapService) : CoinDetailsContract.CoinDetailsPresenter {
 
     private val repository = CoinsRepository(db, cmkService)
-    private lateinit var view: CoinDetailsContract.CoinDetailsView
+    private var view: CoinDetailsContract.CoinDetailsView? = null
 
     init {
         Log.d("Cata", "Injected CoinDetailsPresenter")
@@ -33,10 +33,11 @@ class CoinDetailsPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarket
 
     override fun onViewDestroyed() {
         Log.d("Cata", "CoinDetailsPresenter#onViewDestroyed")
+        this.view = null
     }
 
     override fun getView(): CoinDetailsContract.CoinDetailsView {
-        return view
+        return view!!
     }
 
     override fun userPressedBack(): Boolean {
@@ -48,6 +49,6 @@ class CoinDetailsPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarket
     }
 
     override fun receivedFocus() {
-        view.increaseValue()
+        view?.increaseValue()
     }
 }

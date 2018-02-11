@@ -12,7 +12,8 @@ import com.catalinj.smartpersist.atomics.Identifiable
 abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivity(), Identifiable<String> {
 
     val fragmentNavigator: FragmentNavigator by lazy {
-        FragmentNavigator(fragmentManager = supportFragmentManager)
+        val savedObj = (lastCustomNonConfigurationInstance as Map<String, Any>?).orEmpty()
+        FragmentNavigator(fragmentManager = supportFragmentManager, previousRetainable = (savedObj[FRAGMENT_NAVIGATOR_KEY] as Map<String, Any>?).orEmpty())
     }
 
     private var lastConfigChangeObjPersisted: Any? = null
@@ -37,6 +38,7 @@ abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivi
                     .map { it.getRetainable() }
                     .forEach { retainedObjectsMap.putAll(it) }
         }
+        retainedObjectsMap[FRAGMENT_NAVIGATOR_KEY] = fragmentNavigator.getRetainable()
         Log.d(getIdentity(), "MainActivity#onRetainCustomNonConfigurationInstance finishing: $isFinishing. my any: $retainedObjectsMap. keys count: ${retainedObjectsMap.size}")
         retainedObjectsMap.putAll(onRetainConfiguration())
         return retainedObjectsMap
@@ -94,6 +96,10 @@ abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivi
             Log.d(getIdentity(), "initComponent: create new from application.")
             createInjector()
         }
+    }
+
+    private companion object {
+        private const val FRAGMENT_NAVIGATOR_KEY = "fragNav"
     }
 
 }

@@ -16,10 +16,6 @@ import com.squareup.leakcanary.LeakCanary
 @Suppress("unused")
 class CryptoSmartApplication : Application(), DependencyRoot {
 
-    init {
-        println("Application constructor")
-    }
-
     private val cryptoAppComponent: AppComponent by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         DaggerAppComponent.builder()
                 .appModule(AppModule(applicationContext))
@@ -34,7 +30,7 @@ class CryptoSmartApplication : Application(), DependencyRoot {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
-            return;
+            return
         }
         LeakCanary.install(this);
 

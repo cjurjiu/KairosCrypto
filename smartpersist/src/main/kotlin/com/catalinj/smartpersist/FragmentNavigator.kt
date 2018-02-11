@@ -3,39 +3,21 @@ package com.catalinj.smartpersist
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import com.catalinj.smartpersist.atomics.HasRetainable
 
 /**
  * Created by catalinj on 10.02.2018.
  */
-class FragmentNavigator(private var fragmentManager: FragmentManager, previousBackStackList: Set<String> = emptySet()) {
+class FragmentNavigator(private var fragmentManager: FragmentManager, previousRetainable: Map<String, Any> = emptyMap()) : HasRetainable<Map<String, Any>> {
+    private val inBackStackList: MutableSet<String>
+    private var backStackEntryCount: Int
 
-    private val inBackStackList: MutableSet<String> = mutableSetOf()
-    private var backStackEntryCount: Int = -1
-
-//  private var backStackChangedListener = object : FragmentManager.OnBackStackChangedListener {
-//
-//        override fun onBackStackChanged() {
-//            val increased = backStackEntryCount < fragmentManager.backStackEntryCount
-//            if (increased) {
-//                for (i in 0 until fragmentManager.backStackEntryCount) {
-//                    val backStackEntry: FragmentManager.BackStackEntry = fragmentManager.getBackStackEntryAt(i)
-//                    inBackStackList.add(backStackEntry.name.substringBefore(BackStackEntryName.SEPARATOR))
-//                }
-//            } else {
-//                val savedList: MutableSet<String> = mutableSetOf()
-//                for (i in 0 until fragmentManager.backStackEntryCount) {
-//                    val backStackEntry: FragmentManager.BackStackEntry = fragmentManager.getBackStackEntryAt(i)
-//                    savedList.remove(backStackEntry.name.substringBefore(BackStackEntryName.SEPARATOR))
-//                }
-//                if (savedList.isEmpty()) {
-//                    inBackStackList.clear()
-//                } else {
-//                    inBackStackList.remove(savedList.first())
-//                }
-//            }
-//            backStackEntryCount = inBackStackList.size
-//        }
-//    }
+    init {
+        inBackStackList = mutableSetOf()
+        @Suppress("UNCHECKED_CAST")
+        inBackStackList.addAll((previousRetainable[TAG] as Set<String>?) ?: emptySet())
+        backStackEntryCount = inBackStackList.size
+    }
 
     private var backStackChangedListener: () -> Unit = {
         val increased = backStackEntryCount < fragmentManager.backStackEntryCount
@@ -60,8 +42,11 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousBa
     }
 
     init {
-        inBackStackList.addAll(previousBackStackList)
         fragmentManager.addOnBackStackChangedListener(backStackChangedListener)
+    }
+
+    override fun getRetainable(): Map<String, Any> {
+        return mapOf(Pair(TAG, inBackStackList))
     }
 
     fun add(@IdRes container: Int, frag: Fragment, tag: String) {
@@ -97,21 +82,6 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousBa
         return fragmentManager.popBackStackImmediate()
     }
 
-//    companion object {
-//        lateinit var instance: FragmentNavigator
-//
-//        fun doInit(fragManager: FragmentManager) {
-//            instance = FragmentNavigator(fragManager)
-//            instance.fragmentManager.addOnBackStackChangedListener(instance.backStackChangedListener)
-//        }
-//
-//        fun updateFragManager(fragManager: FragmentManager) {
-//            instance.fragmentManager.removeOnBackStackChangedListener(instance.backStackChangedListener)
-//            instance.fragmentManager = fragManager
-//            instance.fragmentManager.addOnBackStackChangedListener(instance.backStackChangedListener)
-//        }
-//    }
-
     private data class BackStackEntryName(val oldFragment: String, val newFragment: String) {
         override fun toString(): String {
             return "$oldFragment$$newFragment"
@@ -120,5 +90,9 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousBa
         companion object {
             const val SEPARATOR = "$"
         }
+    }
+
+    private companion object {
+        private const val TAG = "FragmentNavigator"
     }
 }

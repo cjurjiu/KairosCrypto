@@ -3,7 +3,6 @@ package com.catalinj.cryptosmart.features.coindetails.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +10,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.common.atomics.HasRetainable
-import com.catalinj.cryptosmart.common.cryptobase.BaseFragment
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
-import com.google.android.gms.plus.PlusOneButton
+import com.catalinj.smartpersist.SmartPersistActivity
+import com.catalinj.smartpersist.SmartPersistFragment
 import javax.inject.Inject
 
 
 /**
  * A fragment with a Google +1 button.
  */
-class CoinDetailsFragment : BaseFragment<CoinDetailsComponent>(), HasRetainable<Map<String, Any>>,
+class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
         CoinDetailsContract.CoinDetailsView {
 
     private var mPlusOneButton: Button? = null
@@ -105,19 +103,23 @@ class CoinDetailsFragment : BaseFragment<CoinDetailsComponent>(), HasRetainable<
         return TAG
     }
 
-    override fun createInjector(activity: AppCompatActivity): CoinDetailsComponent {
+    override fun createInjector(activity: SmartPersistActivity<*>): CoinDetailsComponent {
         Log.d(TAG, "CoinDetailsFragment#createInjector")
         return (activity as MainActivity).getCoinDetailsComponent()
-    }
-
-    override fun getPresenter(): CoinDetailsContract.CoinDetailsPresenter {
-        return coinDetailsPresenter
     }
 
     override fun getRetainable(): Map<String, Any> {
         val retainablesMap = mutableMapOf<String, Any>()
         retainablesMap[TAG] = getInjector()
         return retainablesMap
+    }
+
+    override fun onBack(): Boolean {
+        return false
+    }
+
+    override fun getPresenter(): CoinDetailsContract.CoinDetailsPresenter {
+        return coinDetailsPresenter
     }
 
     override fun setCoinData(data: CoinMarketCapCryptoCoin) {
@@ -130,10 +132,6 @@ class CoinDetailsFragment : BaseFragment<CoinDetailsComponent>(), HasRetainable<
 
     override fun hideLoadingIndicator() {
         //todo
-    }
-
-    override fun onBack(): Boolean {
-        return false
     }
 
     override fun increaseValue() {

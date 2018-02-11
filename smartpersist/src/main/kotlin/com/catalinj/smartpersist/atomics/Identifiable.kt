@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.common.atomics
+package com.catalinj.smartpersist.atomics
 
 /**
  * Created by catalin on 06.02.18.

@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.common.cryptobase
+package com.catalinj.smartpersist
 
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentManager
 /**
  * Created by catalinj on 10.02.2018.
  */
-class FragmentNavigator(private var fragmentManager: FragmentManager) {
+class FragmentNavigator(private var fragmentManager: FragmentManager, previousBackStackList: Set<String> = emptySet()) {
 
     private val inBackStackList: MutableSet<String> = mutableSetOf()
     private var backStackEntryCount: Int = -1
-    //    private var backStackChangedListener = object : FragmentManager.OnBackStackChangedListener {
+
+//  private var backStackChangedListener = object : FragmentManager.OnBackStackChangedListener {
 //
 //        override fun onBackStackChanged() {
 //            val increased = backStackEntryCount < fragmentManager.backStackEntryCount
@@ -35,6 +36,7 @@ class FragmentNavigator(private var fragmentManager: FragmentManager) {
 //            backStackEntryCount = inBackStackList.size
 //        }
 //    }
+
     private var backStackChangedListener: () -> Unit = {
         val increased = backStackEntryCount < fragmentManager.backStackEntryCount
         if (increased) {
@@ -57,13 +59,16 @@ class FragmentNavigator(private var fragmentManager: FragmentManager) {
         backStackEntryCount = inBackStackList.size
     }
 
+    init {
+        inBackStackList.addAll(previousBackStackList)
+        fragmentManager.addOnBackStackChangedListener(backStackChangedListener)
+    }
 
     fun add(@IdRes container: Int, frag: Fragment, tag: String) {
         fragmentManager.beginTransaction()
                 .add(container, frag, tag)
                 .commitNow()
     }
-
 
     fun replace(@IdRes container: Int, frag: Fragment, tag: String) {
         fragmentManager.beginTransaction()
@@ -92,28 +97,28 @@ class FragmentNavigator(private var fragmentManager: FragmentManager) {
         return fragmentManager.popBackStackImmediate()
     }
 
-    companion object {
-        lateinit var instance: FragmentNavigator
+//    companion object {
+//        lateinit var instance: FragmentNavigator
+//
+//        fun doInit(fragManager: FragmentManager) {
+//            instance = FragmentNavigator(fragManager)
+//            instance.fragmentManager.addOnBackStackChangedListener(instance.backStackChangedListener)
+//        }
+//
+//        fun updateFragManager(fragManager: FragmentManager) {
+//            instance.fragmentManager.removeOnBackStackChangedListener(instance.backStackChangedListener)
+//            instance.fragmentManager = fragManager
+//            instance.fragmentManager.addOnBackStackChangedListener(instance.backStackChangedListener)
+//        }
+//    }
 
-        fun doInit(fragManager: FragmentManager) {
-            instance = FragmentNavigator(fragManager)
-            instance.fragmentManager.addOnBackStackChangedListener(instance.backStackChangedListener)
+    private data class BackStackEntryName(val oldFragment: String, val newFragment: String) {
+        override fun toString(): String {
+            return "$oldFragment$$newFragment"
         }
 
-        fun updateFragManager(fragManager: FragmentManager) {
-            instance.fragmentManager.removeOnBackStackChangedListener(instance.backStackChangedListener)
-            instance.fragmentManager = fragManager
-            instance.fragmentManager.addOnBackStackChangedListener(instance.backStackChangedListener)
+        companion object {
+            const val SEPARATOR = "$"
         }
-    }
-}
-
-data class BackStackEntryName(val oldFragment: String, val newFragment: String) {
-    override fun toString(): String {
-        return "$oldFragment$$newFragment"
-    }
-
-    companion object {
-        const val SEPARATOR = "$"
     }
 }

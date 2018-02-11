@@ -2,7 +2,6 @@ package com.catalinj.cryptosmart.features.coinslist.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,21 +11,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.common.atomics.HasRetainable
-import com.catalinj.cryptosmart.common.cryptobase.BaseFragment
-import com.catalinj.cryptosmart.common.cryptobase.FragmentNavigator
 import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
+import com.catalinj.smartpersist.SmartPersistActivity
+import com.catalinj.smartpersist.SmartPersistFragment
+import com.catalinj.smartpersist.atomics.HasRetainable
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import javax.inject.Inject
 
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListFragment : BaseFragment<CoinListComponent>(),
-        HasRetainable<Map<String, Any>>,
+class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
         CoinsListContract.CoinsListView {
 
     private lateinit var recyclerView: RecyclerView
@@ -42,27 +40,12 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
         Log.d(TAG, "CoinsListFragment${hashCode()}#onAttach.injector:" + getInjector().hashCode() + " presenter:" + coinListPresenter.hashCode())
     }
 
-    override fun getRetainable(): Map<String, Any> {
-        val retainablesMap = mutableMapOf<String, Any>()
-        retainablesMap[TAG] = getInjector()
-        return retainablesMap
-    }
-
-    override fun getIdentity(): String {
-        return TAG
-    }
-
-    override fun createInjector(activity: AppCompatActivity): CoinListComponent {
-        Log.d(TAG, "CoinsListFragment#createInjector")
-        return (activity as MainActivity).getCoinListComponent()
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinsListFragment#onCreateView")
         val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
         recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList()) {
-            FragmentNavigator.instance.replaceWithBackStack(R.id.fragment_container,
+            fragmentNavigator.replaceWithBackStack(R.id.fragment_container,
                     CoinDetailsFragment(), CoinDetailsFragment.TAG)
         }
         recyclerView.adapter = recyclerViewAdapter
@@ -115,6 +98,21 @@ class CoinsListFragment : BaseFragment<CoinListComponent>(),
     override fun onDetach() {
         super.onDetach()
         Log.d(TAG, "CoinsListFragment#onDetach")
+    }
+
+    override fun getRetainable(): Map<String, Any> {
+        val retainablesMap = mutableMapOf<String, Any>()
+        retainablesMap[TAG] = getInjector()
+        return retainablesMap
+    }
+
+    override fun getIdentity(): String {
+        return TAG
+    }
+
+    override fun createInjector(activity: SmartPersistActivity<*>): CoinListComponent {
+        Log.d(TAG, "CoinsListFragment#createInjector")
+        return (activity as MainActivity).getCoinListComponent()
     }
 
     override fun onBack(): Boolean {

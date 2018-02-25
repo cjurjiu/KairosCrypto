@@ -11,6 +11,7 @@ import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
 import com.catalinj.smartpersist.SmartPersistActivity
 
 class MainActivity : SmartPersistActivity<ActivityComponent>() {
+    override val name: String = TAG
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +33,6 @@ class MainActivity : SmartPersistActivity<ActivityComponent>() {
                 "a2:$isChangingConfigurations")
     }
 
-    override fun getIdentity(): String {
-        return TAG
-    }
-
     override fun createInjector(): ActivityComponent {
         return (application as CryptoSmartApplication).getAppComponent().getActivityComponent()
     }
@@ -51,5 +48,4 @@ class MainActivity : SmartPersistActivity<ActivityComponent>() {
     private companion object {
         const val TAG = "MainActivity"
     }
-
 }

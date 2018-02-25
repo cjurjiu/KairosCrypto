@@ -17,7 +17,6 @@ import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
 import com.catalinj.smartpersist.SmartPersistActivity
 import com.catalinj.smartpersist.SmartPersistFragment
-import com.catalinj.smartpersist.atomics.HasRetainable
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import javax.inject.Inject
 
@@ -27,11 +26,13 @@ import javax.inject.Inject
 class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
         CoinsListContract.CoinsListView {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViewAdapter: CoinListAdapter
-
+    override val name: String = TAG
     @Inject
     protected lateinit var coinListPresenter: CoinsListContract.CoinsListPresenter
+
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var recyclerViewAdapter: CoinListAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -45,7 +46,9 @@ class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
         val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
         recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList()) {
-            fragmentNavigator.replaceWithBackStack(R.id.fragment_container,
+            //            fragmentNavigator.replaceWithBackStack(R.id.fragment_container,
+//                    CoinDetailsFragment(), CoinDetailsFragment.TAG)
+            childFragmentNavigator.replaceWithBackStack(R.id.fragment_container2,
                     CoinDetailsFragment(), CoinDetailsFragment.TAG)
         }
         recyclerView.adapter = recyclerViewAdapter
@@ -98,16 +101,6 @@ class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
     override fun onDetach() {
         super.onDetach()
         Log.d(TAG, "CoinsListFragment#onDetach")
-    }
-
-    override fun getRetainable(): Map<String, Any> {
-        val retainablesMap = mutableMapOf<String, Any>()
-        retainablesMap[TAG] = getInjector()
-        return retainablesMap
-    }
-
-    override fun getIdentity(): String {
-        return TAG
     }
 
     override fun createInjector(activity: SmartPersistActivity<*>): CoinListComponent {

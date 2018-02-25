@@ -24,9 +24,10 @@ import javax.inject.Inject
 class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
         CoinDetailsContract.CoinDetailsView {
 
-    private var mPlusOneButton: Button? = null
+    override val name: String = TAG
     @Inject
     protected lateinit var coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter
+    private var mPlusOneButton: Button? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -99,22 +100,13 @@ class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
         Log.d(TAG, "CoinDetailsFragment#onDetach")
     }
 
-    override fun getIdentity(): String {
-        return TAG
-    }
-
     override fun createInjector(activity: SmartPersistActivity<*>): CoinDetailsComponent {
         Log.d(TAG, "CoinDetailsFragment#createInjector")
         return (activity as MainActivity).getCoinDetailsComponent()
     }
 
-    override fun getRetainable(): Map<String, Any> {
-        val retainablesMap = mutableMapOf<String, Any>()
-        retainablesMap[TAG] = getInjector()
-        return retainablesMap
-    }
-
     override fun onBack(): Boolean {
+        Log.d("Cata", "CoinDetailsFragment back pressed")
         return false
     }
 

@@ -3,13 +3,12 @@ package com.catalinj.smartpersist
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.catalinj.smartpersist.atomics.BackEventAwareComponent
-import com.catalinj.smartpersist.atomics.Identifiable
+import com.catalinj.smartpersist.atomics.NamedComponent
 
 /**
  * Created by catalin on 06.02.18.
  */
-abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivity(), Identifiable<String> {
+abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivity(), NamedComponent {
 
     val fragmentNavigator: FragmentNavigator by lazy {
         val savedObj = (lastCustomNonConfigurationInstance as Map<String, Any>?).orEmpty()
@@ -26,20 +25,18 @@ abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivi
 
     final override fun onRetainCustomNonConfigurationInstance(): Any {
         val retainedObjectsMap: MutableMap<String, Any> = mutableMapOf()
-        retainedObjectsMap[getIdentity()] = myInjector
+        retainedObjectsMap[this.name] = myInjector
         if (retainsFragments()) {
             fragmentNavigator.listFragments()
                     .filterIsInstance<SmartPersistFragment<*>>()
                     .onEach {
                         if (!it.isInjectorAvailable()) {
-                            it.forceInitInjector(this)
+                            it.forceInit(this)
                         }
-                    }
-                    .map { it.getRetainable() }
-                    .forEach { retainedObjectsMap.putAll(it) }
+                    }.forEach { retainedObjectsMap[it.name] = it.getRetainable() }
         }
         retainedObjectsMap[FRAGMENT_NAVIGATOR_KEY] = fragmentNavigator.getRetainable()
-        Log.d(getIdentity(), "MainActivity#onRetainCustomNonConfigurationInstance finishing: $isFinishing. my any: $retainedObjectsMap. keys count: ${retainedObjectsMap.size}")
+        Log.d(this.name, "MainActivity#onRetainCustomNonConfigurationInstance finishing: $isFinishing. my any: $retainedObjectsMap. keys count: ${retainedObjectsMap.size}")
         retainedObjectsMap.putAll(onRetainConfiguration())
         return retainedObjectsMap
     }
@@ -51,8 +48,8 @@ abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivi
 
     override fun onBackPressed() {
         var backConsumed: Boolean = fragmentNavigator.listFragments()
-                .filterIsInstance<BackEventAwareComponent>()
-                .any { it.onBack() }
+                .filterIsInstance<SmartPersistFragment<*>>()
+                .any { it.onBackPressed() }
         if (!backConsumed) {
             backConsumed = fragmentNavigator.popBackStackImmediate()
         }
@@ -89,11 +86,11 @@ abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivi
     @Suppress("UNCHECKED_CAST")
     private fun initInjector() {
         val retainedMap: Map<String, Any>? = lastCustomNonConfigurationInstance as Map<String, Any>?
-        myInjector = if (retainedMap != null && retainedMap.containsKey(getIdentity())) {
-            Log.d(getIdentity(), "initComponent: use lastNonConfigurationInstance.")
-            retainedMap[getIdentity()] as DaggerComponent
+        myInjector = if (retainedMap != null && retainedMap.containsKey(this.name)) {
+            Log.d(this.name, "initComponent: use lastNonConfigurationInstance.")
+            retainedMap[this.name] as DaggerComponent
         } else {
-            Log.d(getIdentity(), "initComponent: create new from application.")
+            Log.d(this.name, "initComponent: create new from application.")
             createInjector()
         }
     }

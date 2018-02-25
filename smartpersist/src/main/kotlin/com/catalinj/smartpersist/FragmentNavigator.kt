@@ -9,11 +9,10 @@ import com.catalinj.smartpersist.atomics.HasRetainable
  * Created by catalinj on 10.02.2018.
  */
 class FragmentNavigator(private var fragmentManager: FragmentManager, previousRetainable: Map<String, Any> = emptyMap()) : HasRetainable<Map<String, Any>> {
-    private val inBackStackList: MutableSet<String>
+    private val inBackStackList: MutableSet<String> = mutableSetOf()
     private var backStackEntryCount: Int
 
     init {
-        inBackStackList = mutableSetOf()
         @Suppress("UNCHECKED_CAST")
         inBackStackList.addAll((previousRetainable[TAG] as Set<String>?) ?: emptySet())
         backStackEntryCount = inBackStackList.size
@@ -52,7 +51,15 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousRe
     fun add(@IdRes container: Int, frag: Fragment, tag: String) {
         fragmentManager.beginTransaction()
                 .add(container, frag, tag)
-                .commitNow()
+                .commit()
+    }
+
+    fun addWithBackStack(@IdRes container: Int, frag: Fragment, tag: String) {
+        val existingFragTag: String = fragmentManager.findFragmentById(container).tag ?: ""
+        fragmentManager.beginTransaction()
+                .add(container, frag, tag)
+                .addToBackStack(BackStackEntryName(existingFragTag, tag).toString())
+                .commit()
     }
 
     fun replace(@IdRes container: Int, frag: Fragment, tag: String) {
@@ -63,7 +70,7 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousRe
 
     fun replaceWithBackStack(@IdRes container: Int, frag: Fragment, tag: String) {
 
-        val existingFragTag: String = fragmentManager.findFragmentById(container).tag ?: ""
+        val existingFragTag: String = fragmentManager.findFragmentById(container)?.tag ?: ""
 
         fragmentManager.beginTransaction()
                 .replace(container, frag, tag)
@@ -74,7 +81,12 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousRe
     fun listFragments(): List<Fragment> {
         val fragments = mutableSetOf<Fragment>()
         fragments.addAll(fragmentManager.fragments)
-        inBackStackList.forEach { fragments.add(fragmentManager.findFragmentByTag(it)) }
+        inBackStackList.forEach {
+            val foundFragment = fragmentManager.findFragmentByTag(it)
+            foundFragment?.let {
+                fragments.add(it)
+            }
+        }
         return fragments.toList()
     }
 
@@ -84,7 +96,7 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousRe
 
     private data class BackStackEntryName(val oldFragment: String, val newFragment: String) {
         override fun toString(): String {
-            return "$oldFragment$$newFragment"
+            return "$oldFragment$SEPARATOR$newFragment"
         }
 
         companion object {

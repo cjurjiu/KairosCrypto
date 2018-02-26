@@ -1,9 +1,8 @@
-package com.catalinj.smartpersist.atomics
+package com.catalinj.smartpersist.markes
 
 /**
  * Created by catalin on 05.02.18.
  */
 interface HasRetainable<out T : Map<String, Any>> {
-
-    fun getRetainable(): T
+    val retainable: T
 }

@@ -3,9 +3,9 @@ package com.catalinj.smartpersist
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.util.Log
-import com.catalinj.smartpersist.atomics.BackEventAwareComponent
-import com.catalinj.smartpersist.atomics.HasRetainable
-import com.catalinj.smartpersist.atomics.NamedComponent
+import com.catalinj.smartpersist.functional.BackEventAwareComponent
+import com.catalinj.smartpersist.markes.HasRetainable
+import com.catalinj.smartpersist.markes.NamedComponent
 
 
 /**
@@ -15,6 +15,11 @@ abstract class SmartPersistFragment<out DaggerComponent : Any> : Fragment(),
         HasRetainable<Map<String, Any>>,
         NamedComponent,
         BackEventAwareComponent {
+
+    override val retainable: Map<String, Any>
+        get() {
+            return computeRetainable()
+        }
 
     protected lateinit var fragmentNavigator: FragmentNavigator
     protected lateinit var childFragmentNavigator: FragmentNavigator
@@ -51,7 +56,7 @@ abstract class SmartPersistFragment<out DaggerComponent : Any> : Fragment(),
         smartPersistActivity = null
     }
 
-    final override fun getRetainable(): Map<String, Any> {
+    fun computeRetainable(): Map<String, Any> {
         val mutableRetainableMap: MutableMap<String, Any> = mutableMapOf()
         mutableRetainableMap.putAll(onRetainableRequested())
         mutableRetainableMap[CHILD_FRAGMENT_NAVIGATOR_KEY] = getChildFragmentNavigatorState()
@@ -104,7 +109,7 @@ abstract class SmartPersistFragment<out DaggerComponent : Any> : Fragment(),
     @Suppress("UNCHECKED_CAST")
     private fun getChildFragmentNavigatorState(): Map<String, Any> {
         return if (::childFragmentNavigator.isInitialized) {
-            childFragmentNavigator.getRetainable()
+            childFragmentNavigator.retainable
         } else {
             (savedRetainable[CHILD_FRAGMENT_NAVIGATOR_KEY] as Map<String, Any>?).orEmpty()
         }

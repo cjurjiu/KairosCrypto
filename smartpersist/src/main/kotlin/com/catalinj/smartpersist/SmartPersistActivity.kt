@@ -3,7 +3,7 @@ package com.catalinj.smartpersist
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.catalinj.smartpersist.atomics.NamedComponent
+import com.catalinj.smartpersist.markes.NamedComponent
 
 /**
  * Created by catalin on 06.02.18.
@@ -35,7 +35,7 @@ abstract class SmartPersistActivity<out DaggerComponent : Any> : AppCompatActivi
                         }
                     }.forEach { retainedObjectsMap[it.name] = it.getRetainable() }
         }
-        retainedObjectsMap[FRAGMENT_NAVIGATOR_KEY] = fragmentNavigator.getRetainable()
+        retainedObjectsMap[FRAGMENT_NAVIGATOR_KEY] = fragmentNavigator.retainable
         Log.d(this.name, "MainActivity#onRetainCustomNonConfigurationInstance finishing: $isFinishing. my any: $retainedObjectsMap. keys count: ${retainedObjectsMap.size}")
         retainedObjectsMap.putAll(onRetainConfiguration())
         return retainedObjectsMap

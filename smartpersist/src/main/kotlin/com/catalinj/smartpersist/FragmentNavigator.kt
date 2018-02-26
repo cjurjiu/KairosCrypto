@@ -3,12 +3,18 @@ package com.catalinj.smartpersist
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import com.catalinj.smartpersist.atomics.HasRetainable
+import com.catalinj.smartpersist.markes.HasRetainable
 
 /**
  * Created by catalinj on 10.02.2018.
  */
 class FragmentNavigator(private var fragmentManager: FragmentManager, previousRetainable: Map<String, Any> = emptyMap()) : HasRetainable<Map<String, Any>> {
+
+    override val retainable: Map<String, Any>
+        get() {
+            return mapOf(Pair(TAG, inBackStackList))
+        }
+
     private val inBackStackList: MutableSet<String> = mutableSetOf()
     private var backStackEntryCount: Int
 
@@ -42,10 +48,6 @@ class FragmentNavigator(private var fragmentManager: FragmentManager, previousRe
 
     init {
         fragmentManager.addOnBackStackChangedListener(backStackChangedListener)
-    }
-
-    override fun getRetainable(): Map<String, Any> {
-        return mapOf(Pair(TAG, inBackStackList))
     }
 
     fun add(@IdRes container: Int, frag: Fragment, tag: String) {

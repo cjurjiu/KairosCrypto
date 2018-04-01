@@ -1,7 +1,6 @@
 package com.catalinj.cryptosmart
 
 import android.app.Application
-import com.catalinj.cryptosmart.di.DependencyRoot
 import com.catalinj.cryptosmart.di.components.AppComponent
 import com.catalinj.cryptosmart.di.components.DaggerAppComponent
 import com.catalinj.cryptosmart.di.modules.general.AppModule
@@ -14,7 +13,13 @@ import com.squareup.leakcanary.LeakCanary
  * Created by catalinj on 04.02.2018.
  */
 @Suppress("unused")
-class CryptoSmartApplication : Application(), DependencyRoot {
+class CryptoSmartApplication : Application(), Holder<AppComponent> {
+
+    override lateinit var component: AppComponent
+
+    override val hasComp: Boolean
+        get() = ::component.isInitialized
+
 
     private val cryptoAppComponent: AppComponent by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         DaggerAppComponent.builder()
@@ -33,11 +38,8 @@ class CryptoSmartApplication : Application(), DependencyRoot {
             return
         }
         LeakCanary.install(this);
-
+        component = cryptoAppComponent
         println("Application onCreate")
     }
 
-    override fun getAppComponent(): AppComponent {
-        return cryptoAppComponent
-    }
 }

@@ -8,7 +8,8 @@ import com.catalinj.smartpersist.markes.HasRetainable
 /**
  * Created by catalinj on 10.02.2018.
  */
-class FragmentNavigator(private var fragmentManager: FragmentManager, previousRetainable: Map<String, Any> = emptyMap()) : HasRetainable<Map<String, Any>> {
+class FragmentNavigator(private var fragmentManager: FragmentManager,
+                        previousRetainable: Map<String, Any> = emptyMap()) : HasRetainable<Map<String, Any>> {
 
     override val retainable: Map<String, Any>
         get() {

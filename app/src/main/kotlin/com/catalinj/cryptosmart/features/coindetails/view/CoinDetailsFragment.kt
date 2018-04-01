@@ -1,27 +1,25 @@
 package com.catalinj.cryptosmart.features.coindetails.view
 
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.catalinj.cryptosmart.MainActivity
+import com.catalinj.cryptosmart.DaggerFragment
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.common.functional.BackEventAwareComponent
+import com.catalinj.cryptosmart.common.markers.NamedComponent
+import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
+import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
-import com.catalinj.smartpersist.SmartPersistActivity
-import com.catalinj.smartpersist.SmartPersistFragment
 import javax.inject.Inject
 
 
-/**
- * A fragment with a Google +1 button.
- */
-class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
+class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedComponent, BackEventAwareComponent,
         CoinDetailsContract.CoinDetailsView {
 
     override val name: String = TAG
@@ -29,11 +27,23 @@ class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
     protected lateinit var coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter
     private var mPlusOneButton: Button? = null
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        getInjector().inject(this)
+    class Factory(private val activityComponent: ActivityComponent) : DaggerFragmentFactory<CoinDetailsComponent>() {
 
-        Log.d(TAG, "CoinDetailsFragment${hashCode()}#onAttach.injector:" + getInjector().hashCode() + " presenter:" + coinDetailsPresenter.hashCode())
+        override fun onCreateFragment(): DaggerFragment<CoinDetailsComponent> {
+            val f = CoinDetailsFragment()
+            //do some other initializations, set arguments
+            return f
+        }
+
+        override fun onCreateDaggerComponent(): CoinDetailsComponent {
+            return activityComponent.getCoinDetailsComponent(CoinDetailsModule())
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injector.inject(this)
+        Log.d(TAG, "CoinDetailsFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinDetailsPresenter.hashCode().toString(16))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -100,11 +110,6 @@ class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
         Log.d(TAG, "CoinDetailsFragment#onDetach")
     }
 
-    override fun createInjector(activity: SmartPersistActivity<*>): CoinDetailsComponent {
-        Log.d(TAG, "CoinDetailsFragment#createInjector")
-        return (activity as MainActivity).getCoinDetailsComponent()
-    }
-
     override fun onBack(): Boolean {
         Log.d("Cata", "CoinDetailsFragment back pressed")
         return false
@@ -134,5 +139,4 @@ class CoinDetailsFragment : SmartPersistFragment<CoinDetailsComponent>(),
     internal companion object {
         const val TAG: String = "CoinDetailsFragment"
     }
-
 }

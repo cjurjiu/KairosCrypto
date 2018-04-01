@@ -2,29 +2,32 @@ package com.catalinj.cryptosmart
 
 import android.os.Bundle
 import android.util.Log
+import com.catalinj.cryptosmart.common.markers.NamedComponent
 import com.catalinj.cryptosmart.di.components.ActivityComponent
-import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
-import com.catalinj.cryptosmart.di.components.CoinListComponent
-import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
-import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
-import com.catalinj.smartpersist.SmartPersistActivity
 
-class MainActivity : SmartPersistActivity<ActivityComponent>() {
+class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
+
     override val name: String = TAG
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         Log.d(TAG, "MainActivity#onCreate.")
 
         if (savedInstanceState == null) {
-            fragmentNavigator.add(R.id.fragment_container, CoinsListFragment(), CoinsListFragment.TAG)
-        }
+            val frag = CoinsListFragment.Factory(activityComponent = injector).create()
 
-        getInjector().inject(this)
-        Log.d(TAG, "MainActivity${hashCode()}#onCreate end. injector: ${getInjector().hashCode()}")
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, frag, CoinsListFragment.TAG)
+                    .commit()
+        }
+        injector.inject(this)
+        Log.d(TAG, "MainActivity${hashCode().toString(16)}#onCreate end. injector: ${injector.hashCode().toString(16)}")
+    }
+
+    override fun onCreateDaggerComponent(): ActivityComponent {
+        return (application as CryptoSmartApplication).component.getActivityComponent()
     }
 
     override fun onStop() {
@@ -33,19 +36,8 @@ class MainActivity : SmartPersistActivity<ActivityComponent>() {
                 "a2:$isChangingConfigurations")
     }
 
-    override fun createInjector(): ActivityComponent {
-        return (application as CryptoSmartApplication).getAppComponent().getActivityComponent()
-    }
-
-    fun getCoinListComponent(): CoinListComponent {
-        return getInjector().getCoinListComponent(CoinListModule())
-    }
-
-    fun getCoinDetailsComponent(): CoinDetailsComponent {
-        return getInjector().getCoinDetailsComponent(CoinDetailsModule())
-    }
-
     private companion object {
         const val TAG = "MainActivity"
     }
+
 }

@@ -1,6 +1,5 @@
 package com.catalinj.cryptosmart.features.coinslist.view
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,24 +8,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.catalinj.cryptosmart.DaggerFragment
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.common.functional.BackEventAwareComponent
+import com.catalinj.cryptosmart.common.markers.NamedComponent
+import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinListComponent
+import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
-import com.catalinj.smartpersist.SmartPersistActivity
-import com.catalinj.smartpersist.SmartPersistFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import javax.inject.Inject
 
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
+class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, BackEventAwareComponent,
         CoinsListContract.CoinsListView {
 
     override val name: String = TAG
+
     @Inject
     protected lateinit var coinListPresenter: CoinsListContract.CoinsListPresenter
 
@@ -34,11 +37,23 @@ class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
 
     private lateinit var recyclerViewAdapter: CoinListAdapter
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        getInjector().inject(this)
+    class Factory(private val activityComponent: ActivityComponent) : DaggerFragmentFactory<CoinListComponent>() {
 
-        Log.d(TAG, "CoinsListFragment${hashCode()}#onAttach.injector:" + getInjector().hashCode() + " presenter:" + coinListPresenter.hashCode())
+        override fun onCreateFragment(): DaggerFragment<CoinListComponent> {
+            val f = CoinsListFragment()
+            //do some other initializations, set arguments
+            return f
+        }
+
+        override fun onCreateDaggerComponent(): CoinListComponent {
+            return activityComponent.getCoinListComponent(CoinListModule())
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injector.inject(this)
+        Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinListPresenter.hashCode().toString(16))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,10 +61,13 @@ class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
         val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
         recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList()) {
-            //            fragmentNavigator.replaceWithBackStack(R.id.fragment_container,
-//                    CoinDetailsFragment(), CoinDetailsFragment.TAG)
-            childFragmentNavigator.replaceWithBackStack(R.id.fragment_container2,
-                    CoinDetailsFragment(), CoinDetailsFragment.TAG)
+            val activityComponent = (activity as MainActivity).injector
+            val fragmentFactory = CoinDetailsFragment.Factory(activityComponent)
+            val frag = fragmentFactory.create()
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)
+                    .addToBackStack(CoinDetailsFragment.TAG)
+                    .commit()
         }
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity.baseContext)
@@ -101,11 +119,6 @@ class CoinsListFragment : SmartPersistFragment<CoinListComponent>(),
     override fun onDetach() {
         super.onDetach()
         Log.d(TAG, "CoinsListFragment#onDetach")
-    }
-
-    override fun createInjector(activity: SmartPersistActivity<*>): CoinListComponent {
-        Log.d(TAG, "CoinsListFragment#createInjector")
-        return (activity as MainActivity).getCoinListComponent()
     }
 
     override fun onBack(): Boolean {

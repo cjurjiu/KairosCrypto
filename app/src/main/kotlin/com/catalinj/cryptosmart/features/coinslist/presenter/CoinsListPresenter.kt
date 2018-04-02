@@ -4,16 +4,16 @@ import android.util.Log
 import com.catalinj.cryptosmart.common.Executors
 import com.catalinj.cryptosmart.datastorage.database.CryptoSmartDb
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
-import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
-import com.catalinj.cryptosmart.network.CoinMarketCapService
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapService
 import com.catalinj.cryptosmart.repository.CoinsRepository
 
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListPresenter constructor(db: CryptoSmartDb, cmkService: CoinMarketCapService) : CoinsListContract.CoinsListPresenter {
+class CoinsListPresenter constructor(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapService) : CoinsListContract.CoinsListPresenter {
 
-    private val repository = CoinsRepository(db, cmkService)
+    private val repository = CoinsRepository(db, coinMarketCapService)
     private var view: CoinsListContract.CoinsListView? = null
 
     init {

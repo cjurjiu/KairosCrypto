@@ -10,7 +10,7 @@ import javax.inject.Singleton
  * Created by catalinj on 04.02.2018.
  */
 @Module
-class PersistanceModule {
+class PersistenceModule {
 
     @Provides
     @Singleton

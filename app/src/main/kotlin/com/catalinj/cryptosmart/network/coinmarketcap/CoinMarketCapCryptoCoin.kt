@@ -1,9 +1,10 @@
-package com.catalinj.cryptosmart.network
+package com.catalinj.cryptosmart.network.coinmarketcap
 
 import com.google.gson.annotations.SerializedName
 
 /**
- * Jp;ds
+ * Model for a crypto currency coin, as returned by the coinmarketcap.com API.
+ *
  * Created by catalinj on 27.01.2018.
  */
 data class CoinMarketCapCryptoCoin(@SerializedName("id") val id: String,

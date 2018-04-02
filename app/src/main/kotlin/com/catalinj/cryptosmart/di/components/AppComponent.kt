@@ -2,7 +2,7 @@ package com.catalinj.cryptosmart.di.components
 
 import com.catalinj.cryptosmart.di.modules.general.AppModule
 import com.catalinj.cryptosmart.di.modules.general.NetworkModule
-import com.catalinj.cryptosmart.di.modules.general.PersistanceModule
+import com.catalinj.cryptosmart.di.modules.general.PersistenceModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,7 +11,7 @@ import javax.inject.Singleton
  */
 
 @Component(modules = [(AppModule::class),
-    (PersistanceModule::class),
+    (PersistenceModule::class),
     (NetworkModule::class)])
 @Singleton
 abstract class AppComponent {

@@ -2,8 +2,8 @@ package com.catalinj.cryptosmart.repository
 
 import com.catalinj.cryptosmart.datastorage.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datastorage.database.models.DbCryptoCoin
-import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
-import com.catalinj.cryptosmart.network.CoinMarketCapService
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapService
 import retrofit2.Call
 
 /**

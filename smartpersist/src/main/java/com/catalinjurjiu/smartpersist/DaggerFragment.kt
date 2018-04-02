@@ -31,16 +31,14 @@ abstract class DaggerFragment<T : Any> : Fragment(), NamedComponent {
             if (isInjectorInitialized()) {
                 daggerComponentStore.component = injector
             } else {
-                //injector not initialised but the flags were set to store the initializer?? how??
-                Log.e("Cata", "WTF1")
+                Log.e("Cata", "injector not initialised but the flags were set to store the initializer?? how??")
             }
         } else if (doReadDaggerCompToViewModel) {
             if (daggerComponentStore.hasComp) {
                 injector = daggerComponentStore.component
             } else {
-                //injector wants to be initialized from the dagger comp store, but the store has no
-                //component in it....an error? check flags?
-                Log.e("Cata", "WTF2")
+                Log.e("Cata", "injector wants to be initialized from the dagger comp store, but the store has no\n" +
+                        "component in it....an error? check flags?")
             }
         }
     }

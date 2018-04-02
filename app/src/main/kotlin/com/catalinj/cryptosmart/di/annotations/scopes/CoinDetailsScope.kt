@@ -1,8 +1,10 @@
-package com.catalinj.cryptosmart.di.scopes
+package com.catalinj.cryptosmart.di.annotations.scopes
 
 import javax.inject.Scope
 
 /**
+ * Annotation which marks components scoped to CoinDetails use case.
+ *
  * Created by catalinj on 04.02.2018.
  */
 @Scope

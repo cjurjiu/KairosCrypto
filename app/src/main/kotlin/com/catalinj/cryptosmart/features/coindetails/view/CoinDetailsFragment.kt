@@ -13,7 +13,7 @@ import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinDetailsContract
-import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import javax.inject.Inject

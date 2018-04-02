@@ -22,6 +22,9 @@ abstract class DaggerActivity<ActivityComponent : Any> : FragmentActivity(), Nam
         Log.d(TAG, "DaggerActivity${hashCode().toString(16)}#onCreate end. injector: ${injector.hashCode().toString(16)}")
     }
 
+    /**
+     * Called when the Dagger component needs to be created.
+     */
     abstract fun onCreateDaggerComponent(): ActivityComponent
 
     private companion object {

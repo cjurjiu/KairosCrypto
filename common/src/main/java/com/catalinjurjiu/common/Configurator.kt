@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.common.config
+package com.catalinjurjiu.common
 
 /**
  * Created by catalinj on 03.02.2018.

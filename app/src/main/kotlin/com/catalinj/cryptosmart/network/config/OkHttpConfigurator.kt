@@ -1,6 +1,6 @@
 package com.catalinj.cryptosmart.network.config
 
-import com.catalinj.cryptosmart.common.config.Configurator
+import com.catalinjurjiu.common.Configurator
 import okhttp3.OkHttpClient
 
 /**

@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.repository
 
 import com.catalinj.cryptosmart.datastorage.database.models.DbCryptoCoin
-import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
 
 /**
  * Created by catalinj on 03.02.2018.

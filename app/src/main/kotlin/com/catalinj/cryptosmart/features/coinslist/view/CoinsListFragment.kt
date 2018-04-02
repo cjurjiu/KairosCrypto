@@ -16,7 +16,7 @@ import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
-import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*

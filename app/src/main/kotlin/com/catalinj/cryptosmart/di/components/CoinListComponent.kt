@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.di.components
 
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
-import com.catalinj.cryptosmart.di.scopes.CoinListScope
+import com.catalinj.cryptosmart.di.annotations.scopes.CoinListScope
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
 import dagger.Subcomponent
 

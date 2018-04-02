@@ -1,10 +1,11 @@
-package com.catalinj.cryptosmart
+package com.catalinjurjiu.smartpersist
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
-import com.catalinj.cryptosmart.common.markers.NamedComponent
+import com.catalinjurjiu.common.Factory
+import com.catalinjurjiu.common.NamedComponent
 
 /**
  * Created by catalinj on 27.02.2018.

@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart
+package com.catalinjurjiu.common
 
 @FunctionalInterface
 interface Factory<out T> {

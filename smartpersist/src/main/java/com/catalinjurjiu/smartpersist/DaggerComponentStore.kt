@@ -1,6 +1,7 @@
-package com.catalinj.cryptosmart
+package com.catalinjurjiu.smartpersist
 
 import android.arch.lifecycle.ViewModel
+import com.catalinjurjiu.common.Holder
 
 class DaggerComponentStore<T : Any> : ViewModel(), Holder<T> {
 

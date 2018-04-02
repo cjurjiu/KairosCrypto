@@ -6,6 +6,7 @@ import com.catalinj.cryptosmart.di.components.DaggerAppComponent
 import com.catalinj.cryptosmart.di.modules.general.AppModule
 import com.catalinj.cryptosmart.di.modules.general.NetworkModule
 import com.catalinj.cryptosmart.di.modules.general.PersistanceModule
+import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
 
 

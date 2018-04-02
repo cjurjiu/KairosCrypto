@@ -7,15 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.catalinj.cryptosmart.DaggerFragment
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.common.functional.BackEventAwareComponent
-import com.catalinj.cryptosmart.common.markers.NamedComponent
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
+import com.catalinjurjiu.common.NamedComponent
+import com.catalinjurjiu.smartpersist.DaggerFragment
 import javax.inject.Inject
 
 

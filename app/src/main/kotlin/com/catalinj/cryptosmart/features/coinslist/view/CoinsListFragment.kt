@@ -8,17 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.catalinj.cryptosmart.DaggerFragment
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.common.functional.BackEventAwareComponent
-import com.catalinj.cryptosmart.common.markers.NamedComponent
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.network.CoinMarketCapCryptoCoin
+import com.catalinjurjiu.common.NamedComponent
+import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import javax.inject.Inject
 

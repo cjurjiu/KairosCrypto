@@ -1,10 +1,10 @@
-package com.catalinj.cryptosmart
+package com.catalinjurjiu.smartpersist
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.util.Log
-import com.catalinj.cryptosmart.common.markers.NamedComponent
+import com.catalinjurjiu.common.NamedComponent
 
 @Suppress("UNCHECKED_CAST")
 abstract class DaggerActivity<ActivityComponent : Any> : FragmentActivity(), NamedComponent {

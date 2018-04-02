@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.common.markers
+package com.catalinjurjiu.common
 
 /**
  * Created by catalin on 05.02.18.

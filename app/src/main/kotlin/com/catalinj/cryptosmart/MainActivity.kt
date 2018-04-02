@@ -2,9 +2,10 @@ package com.catalinj.cryptosmart
 
 import android.os.Bundle
 import android.util.Log
-import com.catalinj.cryptosmart.common.markers.NamedComponent
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
+import com.catalinjurjiu.common.NamedComponent
+import com.catalinjurjiu.smartpersist.DaggerActivity
 
 class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
 

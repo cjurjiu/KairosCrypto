@@ -1,6 +1,6 @@
 @file:Suppress("AddVarianceModifier")
 
-package com.catalinj.cryptosmart
+package com.catalinjurjiu.common
 
 interface Holder<ComponentType : Any> {
     val component: ComponentType

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/portfolio"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_portfolio_black_24dp"
+        android:title="@string/portfolio"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bookmarks"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_bookmark_black_24dp"
+        android:title="@string/bookmarks"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/coin_list"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_list_black_24dp"
+        android:title="@string/coin_list"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_settings_black_24dp"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom" />
+</menu>

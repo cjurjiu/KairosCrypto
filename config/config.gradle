@@ -1,0 +1,38 @@
+def library_versions = [
+        kotlin             : '1.2.31',
+        support_library    : '27.1.1',
+        room               : '1.1.0-beta1',
+        //constraint layout
+        constraint_layout  : '1.0.2',
+        //play services
+        play_services_plus : '12.0.1',
+        //retrofit
+        retrofit           : '2.3.0',
+        converter_gson     : '2.3.0',
+        //gson
+        gson               : '2.8.2',
+        //dagger2
+        dagger             : '2.14.1',
+        dagger_compiler    : '2.14.1',
+        //viewmodel & extensions
+        viewmodel          : '1.1.1',
+        extensions         : '1.1.1',
+        //leak canary
+        leak_canary        : '1.5.4',
+        junit              : '4.12',
+        android_test_runner: '1.0.1',
+        espresso_core      : '3.0.1'
+]
+
+def build_versions = [
+        compileSdkVersion  : "27",
+        minSdkVersion      : "21",
+        targetSdkVersion   : "27",
+        targetCompatibility: '1.8',
+        sourceCompatibility: '1.8'
+]
+
+ext.config = [
+        "lib_versions"  : library_versions,
+        "build_versions": build_versions
+]

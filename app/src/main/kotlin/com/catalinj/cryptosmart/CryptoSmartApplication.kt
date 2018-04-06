@@ -26,7 +26,7 @@ class CryptoSmartApplication : Application(), Holder<AppComponent> {
         DaggerAppComponent.builder()
                 .appModule(AppModule(applicationContext))
                 .networkModule(NetworkModule())
-                .persistanceModule(PersistenceModule())
+                .persistenceModule(PersistenceModule())
                 .build()
     }
 

@@ -46,7 +46,7 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
         Log.d(TAG, "CoinDetailsFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinDetailsPresenter.hashCode().toString(16))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinDetailsFragment#onCreateView")
         // Inflate the layout for this fragment
@@ -57,7 +57,7 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
         return view
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "CoinDetailsFragment#onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         coinDetailsPresenter.onViewAvailable(this)
@@ -79,30 +79,30 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
         super.onStop()
         Log.d(TAG, "CoinDetailsFragment#onStop")
         coinDetailsPresenter.stopPresenting()
-        Log.d(TAG, "CoinDetailsFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinDetailsFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Log.d(TAG, "CoinDetailsFragment#onSaveInstanceState. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinDetailsFragment#onSaveInstanceState. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG, "CoinDetailsFragment#onDestroyView")
         coinDetailsPresenter.onViewDestroyed()
-        Log.d(TAG, "CoinDetailsFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinDetailsFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "CoinDetailsFragment#onDestroy")
         //TODO release presenter reference?
-        Log.d(TAG, "CoinDetailsFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinDetailsFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDetach() {

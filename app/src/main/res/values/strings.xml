@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CryptoSmart</string>
+    <string name="portfolio">Portfolio</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="coin_list">List</string>
+    <string name="settings">Settings</string>
 </resources>

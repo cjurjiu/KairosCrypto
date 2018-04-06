@@ -8,10 +8,10 @@ import android.arch.persistence.room.PrimaryKey
  * Created by catalinj on 27.01.2018.
  */
 @Entity(tableName = "coins")
-data class DbCryptoCoin(@PrimaryKey @ColumnInfo(name = "id") val id: String,
+data class DbCryptoCoin(@ColumnInfo(name = "id") val id: String,
                         @ColumnInfo(name = "name") val name: String,
                         @ColumnInfo(name = "symbol") val symbol: String,
-                        @ColumnInfo(name = "rank") val rank: Int,
+                        @PrimaryKey @ColumnInfo(name = "rank") val rank: Int,
                         @ColumnInfo(name = "price_usd") val priceUsd: Float,
                         @ColumnInfo(name = "price_btc") val priceBtc: Float,
                         @ColumnInfo(name = "volume_usd_24h") val volumeUsd24h: Double,

@@ -56,25 +56,25 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
         Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinListPresenter.hashCode().toString(16))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinsListFragment#onCreateView")
         val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
-        recyclerViewAdapter = CoinListAdapter(activity.baseContext, emptyList()) {
+        recyclerViewAdapter = CoinListAdapter(activity!!.baseContext, emptyList()) {
             val activityComponent = (activity as MainActivity).injector
             val fragmentFactory = CoinDetailsFragment.Factory(activityComponent)
             val frag = fragmentFactory.create()
-            fragmentManager.beginTransaction()
+            fragmentManager!!.beginTransaction()
                     .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)
                     .addToBackStack(CoinDetailsFragment.TAG)
                     .commit()
         }
         recyclerView.adapter = recyclerViewAdapter
-        recyclerView.layoutManager = LinearLayoutManager(activity.baseContext)
+        recyclerView.layoutManager = LinearLayoutManager(activity!!.baseContext)
         return v
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "CoinsListFragment#onViewCreated")
         coinListPresenter.onViewAvailable(this)
@@ -90,30 +90,30 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
         super.onStop()
         Log.d(TAG, "CoinsListFragment#onStop")
         coinListPresenter.stopPresenting()
-        Log.d(TAG, "CoinsListFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinsListFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Log.d(TAG, "CoinsListFragment#onSaveInstanceState. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinsListFragment#onSaveInstanceState. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG, "CoinsListFragment#onDestroyView")
         coinListPresenter.onViewDestroyed()
-        Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "CoinsListFragment#onDestroy")
         //TODO release presenter reference?
-        Log.d(TAG, "CoinsListFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity.isFinishing} " +
-                "a2:${activity.isChangingConfigurations}")
+        Log.d(TAG, "CoinsListFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDetach() {
@@ -136,11 +136,11 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
     }
 
     override fun showLoadingIndicator() {
-        Toast.makeText(activity.baseContext, "Loading started", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity!!.baseContext, "Loading started", Toast.LENGTH_SHORT).show()
     }
 
     override fun hideLoadingIndicator() {
-        Toast.makeText(activity.baseContext, "Loading stopped", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity!!.baseContext, "Loading stopped", Toast.LENGTH_SHORT).show()
     }
 
     companion object {

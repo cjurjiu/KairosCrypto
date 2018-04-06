@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion "$config.build_versions.compileSdkVersion".toInteger()
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion "$config.build_versions.minSdkVersion".toInteger()
+        targetSdkVersion "$config.build_versions.targetSdkVersion".toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -26,17 +26,23 @@ android {
         }
     }
 
+    compileOptions {
+        targetCompatibility "$config.build_versions.targetCompatibility"
+        sourceCompatibility "$config.build_versions.targetCompatibility"
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'android.arch.lifecycle:viewmodel:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation "com.android.support:appcompat-v7:$config.lib_versions.support_library"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$config.lib_versions.kotlin"
+    //viewmodel & extensions
+    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
+    implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
     implementation project(':common')
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation "junit:junit:$config.lib_versions.junit"
+    //instrumentation tests
+    androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$config.lib_versions.espresso_core"
 }

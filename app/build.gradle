@@ -7,11 +7,13 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion "$config.build_versions.compileSdkVersion".toInteger()
+
     defaultConfig {
+        minSdkVersion "$config.build_versions.minSdkVersion".toInteger()
+        targetSdkVersion "$config.build_versions.targetSdkVersion".toInteger()
+
         applicationId "com.catalinj.cryptosmart"
-        minSdkVersion 21
-        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -29,58 +31,58 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
-    configurations.all {
-        resolutionStrategy {
-
-        }
-    }
-
     kapt {
         arguments {
             ["room.schemaLocation": "$projectDir/schemas".toString()]
         }
     }
+
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility "$config.build_versions.targetCompatibility"
+        sourceCompatibility "$config.build_versions.targetCompatibility"
     }
 }
 
-def roomVersion = "1.1.0-beta1"
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //kotlin stdlib
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.2.30'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$config.lib_versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$config.lib_versions.kotlin"
     //support libraries
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    //gson
-    implementation 'com.google.code.gson:gson:2.8.2'
-    //dagger2
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.google.android.gms:play-services-plus:12.0.1'
-    implementation 'com.google.dagger:dagger:2.14.1'
-    kapt 'com.google.dagger:dagger-compiler:2.14.1'
-    //room
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
-    //viewmodel & extensions
-    implementation 'android.arch.lifecycle:viewmodel:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation "com.android.support:support-v4:$config.lib_versions.support_library"
+    implementation "com.android.support:appcompat-v7:$config.lib_versions.support_library"
+    implementation "com.android.support:design:$config.lib_versions.support_library"
     //recyclerview
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    //test
-    testImplementation 'junit:junit:4.12'
-    //instrumentation tests
-    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "com.android.support:recyclerview-v7:$config.lib_versions.support_library"
+    //constraint layout
+    implementation "com.android.support.constraint:constraint-layout:$config.lib_versions.constraint_layout"
+    //play services
+    implementation "com.google.android.gms:play-services-plus:$config.lib_versions.play_services_plus"
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:$config.lib_versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$config.lib_versions.converter_gson"
+    //gson
+    implementation "com.google.code.gson:gson:$config.lib_versions.gson"
+    //dagger2
+    implementation "com.google.dagger:dagger:$config.lib_versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$config.lib_versions.dagger_compiler"
+    //viewmodel & extensions
+    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
+    implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
+    //room
+    implementation "android.arch.persistence.room:runtime:$config.lib_versions.room"
+    kapt "android.arch.persistence.room:compiler:$config.lib_versions.room"
+    //local dependencies
     implementation project(':smartpersist')
     implementation project(':common')
+    implementation project(':cryptodrawablesprovider')
+    //leak canary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$config.lib_versions.leak_canary"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$config.lib_versions.leak_canary"
+    //test
+    testImplementation "junit:junit:$config.lib_versions.junit"
+    //instrumentation tests
+    androidTestImplementation "android.arch.persistence.room:testing:$config.lib_versions.room"
+    androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$config.lib_versions.espresso_core"
 }

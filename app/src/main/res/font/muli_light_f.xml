@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--light-->
+    <font
+        android:font="@font/muli_light"
+        android:fontStyle="normal"
+        android:fontWeight="300"
+
+        app:font="@font/muli_light"
+        app:fontStyle="normal"
+        app:fontWeight="300" />
+
+    <!--light italic-->
+    <font
+        android:font="@font/muli_lightitalic"
+        android:fontStyle="italic"
+        android:fontWeight="300"
+
+        app:font="@font/muli_lightitalic"
+        app:fontStyle="italic"
+        app:fontWeight="300" />
+</font-family>

@@ -7,8 +7,8 @@
         <item name="colorPrimary">@color/gray_primary</item>
         <item name="colorPrimaryDark">@color/gray_primary_dark</item>
         <item name="colorAccent">@color/gray_secondary</item>
-        <!--<item name="colorBackground">@color/colorBackgroundLight</item>-->
-        <item name="android:background">@color/white</item>
+        <item name="colorBackground">@color/white</item>
+        <!--<item name="android:background">@color/white</item>-->
     </style>
 
     <!-- Base application dark theme. -->
@@ -17,8 +17,12 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white_50_opacity</item>
         <item name="colorAccent">@color/gray_secondary_dark</item>
-        <!--<item name="colorBackground">@color/colorBackgroundDark</item>-->
-        <item name="android:background">@color/gray900</item>
+        <item name="colorBackground">@color/gray900</item>
+        <!--<item name="android:background">@color/gray900</item>-->
+    </style>
+
+    <style name="CryptoSmartBackground">
+        <item name="android:background">?attr/colorBackground</item>
     </style>
 
 </resources>

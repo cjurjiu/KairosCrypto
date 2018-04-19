@@ -9,6 +9,7 @@ def library_versions = [
         //retrofit
         retrofit           : '2.3.0',
         converter_gson     : '2.3.0',
+        retrofit_rxadapter : '2.4.0',
         //gson
         gson               : '2.8.2',
         //dagger2
@@ -21,7 +22,11 @@ def library_versions = [
         leak_canary        : '1.5.4',
         junit              : '4.12',
         android_test_runner: '1.0.1',
-        espresso_core      : '3.0.1'
+        espresso_core      : '3.0.1',
+        //rxjava
+        rxjava             : '2.1.12',
+        rxandroid          : '2.0.2',
+        rxrelay            : '2.0.0'
 ]
 
 def build_versions = [

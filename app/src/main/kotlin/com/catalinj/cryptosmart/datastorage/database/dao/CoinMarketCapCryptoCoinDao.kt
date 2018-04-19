@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.datastorage.database.dao
 
 import android.arch.persistence.room.*
 import com.catalinj.cryptosmart.datastorage.database.models.DbCryptoCoin
+import io.reactivex.Flowable
 
 /**
  * Created by catalinj on 28.01.2018.
@@ -12,6 +13,9 @@ interface CoinMarketCapCryptoCoinDao {
 
     @Query("SELECT * FROM coins")
     fun getAll(): List<DbCryptoCoin>
+
+    @Query("SELECT * FROM coins")
+    fun monitorRx(): Flowable<List<DbCryptoCoin>>
 
     @Query("SELECT * FROM coins WHERE id LIKE :id")
     fun getCoin(id: String): List<DbCryptoCoin>

@@ -2,7 +2,7 @@ package com.catalinj.cryptosmart.features.coinslist.contract
 
 import com.catalinj.cryptosmart.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.common.view.MvpView
-import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 
 /**
  * Created by catalinj on 21.01.2018.

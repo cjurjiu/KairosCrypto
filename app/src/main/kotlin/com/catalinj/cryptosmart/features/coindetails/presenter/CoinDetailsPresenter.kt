@@ -9,7 +9,7 @@ import com.catalinj.cryptosmart.repository.CoinsRepository
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinDetailsPresenter constructor(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapService) : CoinDetailsContract.CoinDetailsPresenter {
+class CoinDetailsPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapService) : CoinDetailsContract.CoinDetailsPresenter {
 
     private val repository = CoinsRepository(db, coinMarketCapService)
     private var view: CoinDetailsContract.CoinDetailsView? = null

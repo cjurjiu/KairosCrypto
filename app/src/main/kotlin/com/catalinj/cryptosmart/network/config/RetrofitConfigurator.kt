@@ -3,6 +3,7 @@ package com.catalinj.cryptosmart.network.config
 import com.catalinjurjiu.common.Configurator
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
@@ -16,6 +17,7 @@ class RetrofitConfigurator(private val baseUrl: String,
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 }

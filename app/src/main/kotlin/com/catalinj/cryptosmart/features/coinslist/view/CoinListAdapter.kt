@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.example.cryptodrawablesprovider.getCryptoDrawable
 import kotlinx.android.synthetic.main.layout_list_item.view.*
 

@@ -1,13 +1,15 @@
 package com.catalinj.cryptosmart.features.coinslist.view
 
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.catalinj.cryptosmart.MainActivity
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.common.functional.BackEventAwareComponent
@@ -16,7 +18,7 @@ import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
-import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
@@ -33,9 +35,13 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
     @Inject
     protected lateinit var coinListPresenter: CoinsListContract.CoinsListPresenter
 
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var recyclerViewAdapter: CoinListAdapter
+
+    private lateinit var recyclerViewLayoutManager: LinearLayoutManager
 
     class Factory(private val activityComponent: ActivityComponent) : DaggerFragmentFactory<CoinListComponent>() {
 
@@ -50,15 +56,18 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
         }
     }
 
+    //view methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
+        coinListPresenter.startPresenting()
         Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinListPresenter.hashCode().toString(16))
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinsListFragment#onCreateView")
-        val v: View = inflater?.inflate(R.layout.layout_fragment_coin_list, container, false)!!
+        val v: View = inflater.inflate(R.layout.layout_fragment_coin_list, container, false)!!
         recyclerView = v.recyclerview_coins_list!!
         recyclerViewAdapter = CoinListAdapter(activity!!.baseContext, emptyList()) {
             val activityComponent = (activity as MainActivity).injector
@@ -69,8 +78,24 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
                     .addToBackStack(CoinDetailsFragment.TAG)
                     .commit()
         }
+        recyclerViewLayoutManager = LinearLayoutManager(activity!!.baseContext)
+
+        swipeRefreshLayout = v.swiperefreshlayout_coin_lists
+        swipeRefreshLayout.setOnRefreshListener { coinListPresenter.userPullToRefresh() }
         recyclerView.adapter = recyclerViewAdapter
-        recyclerView.layoutManager = LinearLayoutManager(activity!!.baseContext)
+        recyclerView.layoutManager = recyclerViewLayoutManager
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(scrolledRecyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                coinListPresenter.viewScrolled(recyclerView.computeVerticalScrollOffset(),
+                        recyclerView.computeVerticalScrollRange())
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
         return v
     }
 
@@ -83,7 +108,6 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "CoinsListFragment#onStart")
-        coinListPresenter.startPresenting()
     }
 
     override fun onStop() {
@@ -103,6 +127,7 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG, "CoinsListFragment#onDestroyView")
+        recyclerView.clearOnScrollListeners()
         coinListPresenter.onViewDestroyed()
         Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
@@ -130,17 +155,24 @@ class CoinsListFragment : DaggerFragment<CoinListComponent>(), NamedComponent, B
         return coinListPresenter
     }
 
+    //coin list view presenter
     override fun setListData(data: List<CoinMarketCapCryptoCoin>) {
         (recyclerView.adapter as CoinListAdapter).coins = data
         recyclerView.adapter.notifyDataSetChanged()
     }
 
     override fun showLoadingIndicator() {
-        Toast.makeText(activity!!.baseContext, "Loading started", Toast.LENGTH_SHORT).show()
+        Log.d("Cata", "Loading started")
+        swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideLoadingIndicator() {
-        Toast.makeText(activity!!.baseContext, "Loading stopped", Toast.LENGTH_SHORT).show()
+        Log.d("Cata", "Loading stopped")
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun scrollTo(scrollPosition: Int) {
+        recyclerView.scrollToPosition(scrollPosition)
     }
 
     companion object {

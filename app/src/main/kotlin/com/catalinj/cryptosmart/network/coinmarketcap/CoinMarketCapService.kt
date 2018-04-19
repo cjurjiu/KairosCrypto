@@ -1,8 +1,9 @@
 package com.catalinj.cryptosmart.network.coinmarketcap
 
+import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -17,44 +18,35 @@ interface CoinMarketCapService {
      * @return an immutable list of CoinMarketCapCryptoCoin objects.
      */
     @GET(V1_TICKER_ENDPOINT)
-//    +
-//            "$LIMIT_URL_PARAM=$LIMIT_URL_PARAM_TOKEN")
-    fun fetchCoinsListWithLimit(@Query(LIMIT_URL_PARAM_TOKEN) limit: Int = 0): Call<List<CoinMarketCapCryptoCoin>>
+    fun fetchCoinsListWithLimit(@Query(LIMIT_URL_PARAM) limit: Int = 0): Call<List<CoinMarketCapCryptoCoin>>
+
+    @GET(V1_TICKER_ENDPOINT)
+    fun rxFetchCoinsListWithLimit(@Query(LIMIT_URL_PARAM) limit: Int = 100): Observable<List<CoinMarketCapCryptoCoin>>
 
     /**
-     * Fetches the list of coins, starting at index 0. The currency in which the value of the coins
-     * is expressed, can be configured through the second parameter.
+     * Fetches the list of coins, starting at the specified index on CoinMarketCap. The currency in
+     * which the value of the coins is expressed, can be configured through the second parameter.
      *
-     * @param limit how many coins to return. default param, with value of 0.
+     * @param start the index at which the list of returned coins will start, default 0.
+     * @param limit how many coins to return. default param with value of 0.
      * @param currency a CurrencyRepresentation instance which represents the currency in which the
      * coins value should be expressed.
      * @return an immutable list of CoinMarketCapCryptoCoin objects.
      */
-    @GET("${V1_TICKER_ENDPOINT}/?" +
-            "${LIMIT_URL_PARAM}=${LIMIT_URL_PARAM_TOKEN}&" +
-            "${CONVERT_URL_PARAM}=${CONVERT_URL_PARAM_TOKEN}")
-    fun fetchCoinsListWithLimitConverted(@Path(LIMIT_URL_PARAM_TOKEN) limit: Int = 0,
-                                         @Path(CONVERT_URL_PARAM_TOKEN) currency: Int): List<CoinMarketCapCryptoCoin>
+    @GET(V1_TICKER_ENDPOINT)
+    fun rxFetchCoinsListBounded(@Query(START_URL_PARAM)
+                                start: Int = 0,
+                                @Query(LIMIT_URL_PARAM)
+                                limit: Int = 0,
+                                @Query(CONVERT_URL_PARAM)
+                                currency: String = CurrencyRepresentation.USD.currency):
+            Observable<List<CoinMarketCapCryptoCoin>>
 
-    @GET("${V1_TICKER_ENDPOINT}/?" +
-            "${LIMIT_URL_PARAM}=${LIMIT_URL_PARAM_TOKEN}&" +
-            "${START_URL_PARAM}=${START_URL_PARAM_TOKEN}")
-    fun fetchCoinsListWithStartAndLimit(@Path(START_URL_PARAM_TOKEN) start: Int = 0,
-                                        @Path(LIMIT_URL_PARAM_TOKEN) limit: Int = 0): List<CoinMarketCapCryptoCoin>
-
-    @GET("${V1_TICKER_ENDPOINT}/?" +
-            "${START_URL_PARAM}=${START_URL_PARAM_TOKEN}&" +
-            "${LIMIT_URL_PARAM}=${LIMIT_URL_PARAM_TOKEN}&" +
-            "${CONVERT_URL_PARAM}=${CONVERT_URL_PARAM_TOKEN}")
-    fun fetchCoinsListWithStartAndLimitConverted(@Path(START_URL_PARAM_TOKEN) start: Int = 0,
-                                                 @Path(LIMIT_URL_PARAM_TOKEN) limit: Int = 0,
-                                                 @Path(CONVERT_URL_PARAM_TOKEN) currency: Int): List<CoinMarketCapCryptoCoin>
-
-    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/")
-    fun fetchCoin(@Path(COIN_ID_TOKEN) id: String): CoinMarketCapCryptoCoin
-
-    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/?${CONVERT_URL_PARAM}=${CONVERT_URL_PARAM_TOKEN}")
-    fun fetchCoinConverted(@Path(CONVERT_URL_PARAM_TOKEN) id: String): CoinMarketCapCryptoCoin
+//    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/")
+//    fun fetchCoin(@Path(COIN_ID_TOKEN) id: String): CoinMarketCapCryptoCoin
+//
+//    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/?${CONVERT_URL_PARAM}=${CONVERT_URL_PARAM_TOKEN}")
+//    fun fetchCoinConverted(@Path(CONVERT_URL_PARAM_TOKEN) id: String): CoinMarketCapCryptoCoin
 
     companion object {
         //base url for the Rest API of cointmarketcap.com
@@ -62,16 +54,13 @@ interface CoinMarketCapService {
         //ticker endpoint
         const val V1_TICKER_ENDPOINT: String = "/v1/ticker"
         //id of the coin which we want to retrieve
-        const val COIN_ID_TOKEN = "{id}"
+        const val COIN_ID_NAME = "id"
         //coin  nr limit
         const val LIMIT_URL_PARAM: String = "limit"
-        const val LIMIT_URL_PARAM_TOKEN: String = "{limit}"
         //list coins start
         const val START_URL_PARAM: String = "start"
-        const val START_URL_PARAM_TOKEN: String = "{start}"
         //list coins start
         const val CONVERT_URL_PARAM: String = "convert"
-        const val CONVERT_URL_PARAM_TOKEN: String = "{convert}"
 
         enum class CurrencyRepresentation(val currency: String) {
             AUD("AUD"),
@@ -102,6 +91,7 @@ interface CoinMarketCapService {
             SEK("SEK"),
             SGD("SGD"),
             THB("THB"),
+            USD("USD"),
             TRY("TRY"),
             TWD("TWD"),
             ZAR("ZAR")

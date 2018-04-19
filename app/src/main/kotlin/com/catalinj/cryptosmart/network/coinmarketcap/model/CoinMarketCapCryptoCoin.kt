@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.network.coinmarketcap
+package com.catalinj.cryptosmart.network.coinmarketcap.model
 
 import com.google.gson.annotations.SerializedName
 

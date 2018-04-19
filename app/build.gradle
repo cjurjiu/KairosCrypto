@@ -61,6 +61,7 @@ dependencies {
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$config.lib_versions.retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$config.lib_versions.converter_gson"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$config.lib_versions.retrofit_rxadapter"
     //gson
     implementation "com.google.code.gson:gson:$config.lib_versions.gson"
     //dagger2
@@ -71,7 +72,14 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
     //room
     implementation "android.arch.persistence.room:runtime:$config.lib_versions.room"
+    // RxJava support for Room
+    implementation "android.arch.persistence.room:rxjava2:$config.lib_versions.room"
     kapt "android.arch.persistence.room:compiler:$config.lib_versions.room"
+    //rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$config.lib_versions.rxjava"
+    implementation "io.reactivex.rxjava2:rxandroid:$config.lib_versions.rxandroid"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$config.lib_versions.rxrelay"
+
     //local dependencies
     implementation project(':smartpersist')
     implementation project(':common')
@@ -80,6 +88,8 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$config.lib_versions.leak_canary"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$config.lib_versions.leak_canary"
     //test
+    //TODO testing was not taken into consideration so far.
+    //Add testing support
     testImplementation "junit:junit:$config.lib_versions.junit"
     //instrumentation tests
     androidTestImplementation "android.arch.persistence.room:testing:$config.lib_versions.room"

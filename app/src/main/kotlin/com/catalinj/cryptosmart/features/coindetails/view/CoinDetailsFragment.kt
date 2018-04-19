@@ -13,7 +13,7 @@ import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinDetailsContract
-import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import javax.inject.Inject
@@ -43,6 +43,7 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
+        coinDetailsPresenter.startPresenting()
         Log.d(TAG, "CoinDetailsFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinDetailsPresenter.hashCode().toString(16))
     }
 

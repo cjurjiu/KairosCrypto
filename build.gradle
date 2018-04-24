@@ -9,11 +9,21 @@ subprojects {
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.1.0'
+            classpath 'com.android.tools.build:gradle:3.1.2'
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${config.lib_versions.kotlin}"
 
             // NOTE: Do not place your application dependencies here; they belong
             // in the individual module build.gradle files
+        }
+    }
+    configurations.all {
+        //from here: https://github.com/Takhion/kotlin-metadata/issues/8
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.name == 'kotlin-compiler-embeddable') {
+                    details.useVersion "1.2.30"
+                }
+            }
         }
     }
 }

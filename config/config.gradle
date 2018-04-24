@@ -1,11 +1,11 @@
 def library_versions = [
-        kotlin             : '1.2.31',
+        kotlin             : '1.2.40',
         support_library    : '27.1.1',
-        room               : '1.1.0-beta1',
+        room               : '1.1.0-beta3',
         //constraint layout
-        constraint_layout  : '1.0.2',
+        constraint_layout  : '1.1.0',
         //play services
-        play_services_plus : '12.0.1',
+        play_services_plus : '15.0.0',
         //retrofit
         retrofit           : '2.3.0',
         converter_gson     : '2.3.0',

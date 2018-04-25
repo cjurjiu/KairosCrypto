@@ -4,6 +4,8 @@ import android.util.Log
 import com.catalinj.cryptosmart.common.controller.LoadingController
 import com.catalinj.cryptosmart.datastorage.database.CryptoSmartDb
 import com.catalinj.cryptosmart.features.coinslist.contract.CoinsListContract
+import com.catalinj.cryptosmart.features.coinslist.view.CoinListResourceDecoder
+import com.catalinj.cryptosmart.features.selectiondialog.model.SelectionItem
 import com.catalinj.cryptosmart.network.RequestState
 import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapService
 import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
@@ -16,16 +18,19 @@ import io.reactivex.functions.Consumer
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapService) :
+class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
+                         db: CryptoSmartDb,
+                         coinMarketCapService: CoinMarketCapService) :
         CoinsListContract.CoinsListPresenter {
 
     private val repository = CoinsRepository(db, coinMarketCapService)
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var active: Boolean = false
     private var availableCoins: List<CoinMarketCapCryptoCoin>? = null
-    private var loadingState: RequestState = RequestState.Idle
-    private var waitForLoad: Boolean = false
     private var view: CoinsListContract.CoinsListView? = null
+    //loading logic...
+    private var waitForLoad: Boolean = false
+    private var loadingState: RequestState = RequestState.Idle
     private var loadingController: LoadingController? = null
 
     init {
@@ -58,13 +63,24 @@ class CoinsListPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapS
         compositeDisposable.clear()
     }
 
-    override fun onViewAvailable(view: CoinsListContract.CoinsListView) {
+    override fun viewAvailable(view: CoinsListContract.CoinsListView) {
         this.view = view
+        view.initialise()
         this.loadingController = LoadingController(view)
-        initializeView()
     }
 
-    override fun onViewDestroyed() {
+    override fun viewInitialised() {
+        setLoadingState(loadingState)
+        availableCoins.orEmpty().apply {
+            if (size > 0) {
+                view?.setListData(this)
+            } else {
+                fetchMoreCoins()
+            }
+        }
+    }
+
+    override fun viewDestroyed() {
         this.loadingController?.cleanUp()
         this.view = null
         this.loadingController = null
@@ -79,6 +95,30 @@ class CoinsListPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapS
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun changeCurrencyPressed() {
+        view?.openChangeCurrencyDialog(resourceDecoder.decodeChangeCoinListItems())
+    }
+
+    override fun sortListButtonPressed() {
+        view?.openSortListDialog(resourceDecoder.decodeSortListItems())
+    }
+
+    override fun selectSnapshotButtonPressed() {
+        view?.openSelectSnapshotDialog(resourceDecoder.decodeSnapShotListItems())
+    }
+
+    override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {
+        Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
+    }
+
+    override fun listSortingChanged(newSortingOrder: SelectionItem) {
+        Log.d("Cata", "listSortingChanged: selectionItem:${newSortingOrder.name}")
+    }
+
+    override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {
+        Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
+    }
+
     override fun userPullToRefresh() {
         Log.d("Cata", "PULL TO REFRESH")
         refreshCoins()
@@ -89,17 +129,6 @@ class CoinsListPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapS
         if (currentScrollPosition / maxScrollPosition.toFloat() > 0.75f && !waitForLoad) {
             waitForLoad = true
             fetchMoreCoins()
-        }
-    }
-
-    private fun initializeView() {
-        setLoadingState(loadingState)
-        availableCoins.orEmpty().apply {
-            if (size > 0) {
-                view?.setListData(this)
-            } else {
-                fetchMoreCoins()
-            }
         }
     }
 

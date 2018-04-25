@@ -6,6 +6,7 @@ import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.features.coinslist.view.CoinsListFragment
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
 
@@ -15,7 +16,7 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d(TAG, "MainActivity#onCreate.")
-
+        setSupportActionBar(my_toolbar)
         if (savedInstanceState == null) {
             val frag = CoinsListFragment.Factory(activityComponent = injector).create()
 
@@ -24,7 +25,8 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
                     .commit()
         }
         injector.inject(this)
-        Log.d(TAG, "MainActivity${hashCode().toString(16)}#onCreate end. injector: ${injector.hashCode().toString(16)}")
+        Log.d(TAG, "MainActivity${hashCode().toString(16)}#onCreate end. injector: " +
+                injector.hashCode().toString(16))
     }
 
     override fun onCreateDaggerComponent(): ActivityComponent {

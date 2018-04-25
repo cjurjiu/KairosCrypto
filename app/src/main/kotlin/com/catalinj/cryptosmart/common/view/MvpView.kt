@@ -7,5 +7,8 @@ import com.catalinj.cryptosmart.common.presenter.MvpPresenter
  */
 
 interface MvpView<P : MvpPresenter<P, V>, V : MvpView<P, V>> {
+
+    fun initialise()
+
     fun getPresenter(): P
 }

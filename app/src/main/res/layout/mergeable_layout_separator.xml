@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <View
+        android:id="@+id/view_separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+        android:background="?attr/colorAccent" />
+</merge>

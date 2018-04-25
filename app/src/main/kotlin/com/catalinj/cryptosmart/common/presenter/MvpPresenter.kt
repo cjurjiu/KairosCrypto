@@ -12,15 +12,12 @@ interface MvpPresenter<P : MvpPresenter<P, V>, V : MvpView<P, V>> {
 
     fun stopPresenting()
 
-    fun onViewAvailable(view: V)
+    fun viewAvailable(view: V)
 
-    fun onViewDestroyed()
+    fun viewInitialised()
+
+    fun viewDestroyed()
 
     fun getView(): V?
 
 }
-
-//interface MvpPresenter<P : MvpPresenter<P, V>, V : MvpView<P, V>> {
-//    fun attachView(v: V)
-//    fun detachView()
-//}

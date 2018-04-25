@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="64dp">
@@ -10,9 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:textSize="16dp"
-        app:fontFamily="@font/muli_regular_f"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
         tools:text="1" />
 
     <ImageView
@@ -28,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
         android:layout_toEndOf="@id/image_coin_logo"
         android:orientation="vertical">
 
@@ -36,8 +34,7 @@
             android:id="@+id/text_coin_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            app:fontFamily="@font/muli_light_f"
+            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
             tools:text="Nano" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -45,8 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:textSize="12dp"
-            app:fontFamily="@font/muli_extralight_f"
+            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium"
             tools:text="10.53" />
     </LinearLayout>
 
@@ -55,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
         android:gravity="end"
         android:orientation="vertical">
 
@@ -63,8 +59,7 @@
             android:id="@+id/text_coin_increase_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
-            app:fontFamily="@font/muli_extralight_f"
+            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium"
             tools:text="+34.85%" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -72,16 +67,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:textSize="12dp"
-            app:fontFamily="@font/muli_extralight_f"
+            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium"
             tools:text="$3.23" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:background="#f0f0f0" />
+    <include layout="@layout/mergeable_layout_separator" />
 </RelativeLayout>

@@ -2,22 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CryptoSmartBackground"
+    style="@style/CryptoSmart.Style.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.catalinj.cryptosmart.MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        style="@style/CryptoSmart.Style.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true">
+
+        <include layout="@layout/include_toolbar_content" />
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation" />
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_below="@+id/my_toolbar" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@id/bottom_navigation"
-        android:layout_width="wrap_content"
+        style="@style/CryptoSmart.Style.BottomBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         app:menu="@menu/bottom_navigation" />
 
 </RelativeLayout>

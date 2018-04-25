@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/button_change_currency"
+        style="@style/CryptoSmart.Style.Toolbar.Button"
+        android:layout_width="@dimen/min_tap_area_side"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_vector_transform_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/button_sort"
+        style="@style/CryptoSmart.Style.Toolbar.Button"
+        android:layout_width="@dimen/min_tap_area_side"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="4dp"
+        android:layout_toStartOf="@+id/button_snapshots"
+        android:src="@drawable/ic_vector_sort_black_24dp" />
+
+    <ImageButton
+        android:id="@id/button_snapshots"
+        style="@style/CryptoSmart.Style.Toolbar.Button"
+        android:layout_width="@dimen/min_tap_area_side"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_vector_timeline_black_24dp" />
+</RelativeLayout>
+

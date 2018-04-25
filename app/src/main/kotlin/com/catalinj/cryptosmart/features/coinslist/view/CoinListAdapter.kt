@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.example.cryptodrawablesprovider.getCryptoDrawable
-import kotlinx.android.synthetic.main.layout_list_item.view.*
+import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
 
 /**
  * Created by catalinj on 03.02.2018.
@@ -23,7 +23,7 @@ class CoinListAdapter(context: Context,
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view: View = inflater.inflate(R.layout.layout_list_item, parent, false)
+        val view: View = inflater.inflate(R.layout.layout_coin_list_item, parent, false)
         view.setOnClickListener { click.invoke() }
         return MyViewHolder(view)
     }

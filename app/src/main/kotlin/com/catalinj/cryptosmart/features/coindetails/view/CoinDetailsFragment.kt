@@ -19,7 +19,10 @@ import com.catalinjurjiu.smartpersist.DaggerFragment
 import javax.inject.Inject
 
 
-class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedComponent, BackEventAwareComponent,
+class CoinDetailsFragment :
+        DaggerFragment<CoinDetailsComponent>(),
+        NamedComponent,
+        BackEventAwareComponent,
         CoinDetailsContract.CoinDetailsView {
 
     override val name: String = TAG
@@ -51,7 +54,7 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
                               savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinDetailsFragment#onCreateView")
         // Inflate the layout for this fragment
-        val view = inflater!!.inflate(R.layout.fragment_plus_one, container, false)
+        val view = inflater.inflate(R.layout.fragment_plus_one, container, false)
 
         //Find the +1 button
         mPlusOneButton = view.findViewById<View>(R.id.plus_one_button) as Button
@@ -61,7 +64,11 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "CoinDetailsFragment#onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        coinDetailsPresenter.onViewAvailable(this)
+        coinDetailsPresenter.viewAvailable(this)
+    }
+
+    override fun initialise() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onStart() {
@@ -93,7 +100,7 @@ class CoinDetailsFragment : DaggerFragment<CoinDetailsComponent>(), NamedCompone
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG, "CoinDetailsFragment#onDestroyView")
-        coinDetailsPresenter.onViewDestroyed()
+        coinDetailsPresenter.viewDestroyed()
         Log.d(TAG, "CoinDetailsFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }

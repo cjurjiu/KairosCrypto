@@ -26,13 +26,17 @@ class CoinDetailsPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCa
         Log.d("Cata", "CoinDetailsPresenter#stopPresenting")
     }
 
-    override fun onViewAvailable(view: CoinDetailsContract.CoinDetailsView) {
-        Log.d("Cata", "CoinDetailsPresenter#onViewAvailable")
+    override fun viewAvailable(view: CoinDetailsContract.CoinDetailsView) {
+        Log.d("Cata", "CoinDetailsPresenter#viewAvailable")
         this.view = view
     }
 
-    override fun onViewDestroyed() {
-        Log.d("Cata", "CoinDetailsPresenter#onViewDestroyed")
+    override fun viewInitialised() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun viewDestroyed() {
+        Log.d("Cata", "CoinDetailsPresenter#viewDestroyed")
         this.view = null
     }
 

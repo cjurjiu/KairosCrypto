@@ -3,13 +3,17 @@
     <!--direct colors-->
     <color name="white">#ffffff</color>
     <color name="white_50_opacity">#7bffffff</color>
-    <color name="gray_primary">#5b5b5c</color>
+    <color name="gray_primary">#616161</color>
     <color name="gray_secondary">#9e9e9e</color>
-    <color name="gray_primary_dark">#373737</color>
+    <color name="gray_primary_dark">#424242</color>
     <color name="gray_secondary_dark">#757575</color>
     <color name="gray900">#212121</color>
     <color name="red_primary">#e53935</color>
     <color name="green_primary">#388e3c</color>
     <color name="black">#000000</color>
+
+    <color name="color_primary_old">#3F51B5</color>
+    <color name="color_secondary_old">#303F9F</color>
+    <color name="color_accent_old">#FF4081</color>
 
 </resources>

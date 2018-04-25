@@ -4,4 +4,25 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="coin_list">List</string>
     <string name="settings">Settings</string>
+    <string name="dialog_pick_transform_type">Pick a currency</string>
+    <string name="dialog_action_text_positive">Done</string>
+    <string name="dialog_action_text_negative">Cancel</string>
+    <!--change currency dialog-->
+    <!--text-->
+    <string name="bitcoin">Bitcoin</string>
+    <string name="dollar_usd">Dollar(USD)</string>
+    <!--symbols-->
+    <string name="bitcoin_symbol" translatable="false">btc</string>
+    <string name="dollar_usd_symbol" translatable="false">usd</string>
+    <!--sort list dialog-->
+    <!--text-->
+
+    <!--symbols-->
+    <string name="rank_asc_symbol" translatable="false">rank_asc</string>
+    <string name="rank_desc_symbol" translatable="false">rank_desc</string>
+    <string name="val_asc_symbol" translatable="false">val_asc</string>
+    <string name="val_desc_symbol" translatable="false">val_desc</string>
+    <string name="change_prc_asc_symbol" translatable="false">change_prc_asc</string>
+    <string name="change_prc_desc_symbol" translatable="false">change_prc_desc</string>
+
 </resources>

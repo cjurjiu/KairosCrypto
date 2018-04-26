@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.features.selectiondialog.model.ParcelableSelectionItem
@@ -68,6 +69,7 @@ class SelectionListDialog : DialogFragment() {
 
     private inner class DialogListItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var textView: TextView = view.text_item_simple_list
+        var selectedItemIcon: ImageView = view.image_selected_item_simple_list
         var separator: View = view.view_separator
 
         init {
@@ -94,6 +96,11 @@ class SelectionListDialog : DialogFragment() {
 
         override fun onBindViewHolder(holder: DialogListItemViewHolder, position: Int) {
             holder.textView.text = data[position].name
+            holder.selectedItemIcon.visibility = if (data[position].activeItem) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
             if (position == data.size - 1) {
                 holder.separator.visibility = View.INVISIBLE
             } else {

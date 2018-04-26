@@ -13,6 +13,16 @@
         android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
         tools:text="USD" />
 
+    <ImageView
+        android:id="@+id/image_selected_item_simple_list"
+        style="@style/CryptoSmart.Style.Image.VectorDrawable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:padding="@dimen/min_margin_from_screen_edge"
+        android:src="@drawable/ic_vector_check_black_24dp"
+        android:visibility="gone" />
+
     <include layout="@layout/mergeable_layout_separator" />
 
 </FrameLayout>

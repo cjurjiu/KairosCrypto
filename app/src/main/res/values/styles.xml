@@ -48,13 +48,22 @@
         <item name="android:background">?attr/colorBackground</item>
     </style>
 
-    <!--WIDGETS-->
-    <style name="CryptoSmart.Style.Button">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
+    <!--IMAGES-->
+    <style name="CryptoSmart.Style.Image">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:minHeight">@dimen/min_tap_area_side</item>
         <item name="android:minWidth">@dimen/min_tap_area_side</item>
+    </style>
+
+    <style name="CryptoSmart.Style.Image.VectorDrawable" parent="CryptoSmart.Style.Image">
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:tint">?attr/colorPrimary</item>
+    </style>
+
+    <!--BUTTONS-->
+    <style name="CryptoSmart.Style.Button" parent="CryptoSmart.Style.Image">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="CryptoSmart.Style.Button.VectorDrawable" parent="CryptoSmart.Style.Button">

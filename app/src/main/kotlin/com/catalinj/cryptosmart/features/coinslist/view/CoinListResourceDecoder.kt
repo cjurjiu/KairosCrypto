@@ -1,47 +1,47 @@
 package com.catalinj.cryptosmart.features.coinslist.view
 
 import android.content.Context
+import android.support.annotation.ArrayRes
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.common.decoder.ResourceDecoder
 import com.catalinj.cryptosmart.features.selectiondialog.model.SelectionItem
 
 class CoinListResourceDecoder(context: Context) : ResourceDecoder(context) {
 
-    fun decodeChangeCoinListItems(): List<SelectionItem> {
-        val changeSelectionDialogOptions: Array<String> =
-                resources.getStringArray(R.array.change_currency_dialog_options)
-        val changeSelectionDialogValues: Array<String> =
-                resources.getStringArray(R.array.change_currency_dialog_options_values)
-
-        return listOf(SelectionItem(changeSelectionDialogOptions[0], changeSelectionDialogValues[0]),
-                SelectionItem(changeSelectionDialogOptions[1], changeSelectionDialogValues[1]))
+    fun decodeChangeCoinDialogItems(markedActive: String = ""): List<SelectionItem> {
+        return decodeSelectionItemList(
+                visibleValuesResId = R.array.change_currency_dialog_options,
+                valuesSymbolsResId = R.array.change_currency_dialog_options_values,
+                markedAsActiveItemSymbol = markedActive)
     }
 
-    fun decodeSortListItems(): List<SelectionItem> {
-        val sortSelectionDialogListItems: Array<String> =
-                resources.getStringArray(R.array.sort_list_dialog_options)
-        val sortSelectionDialogListValues =
-                resources.getStringArray(R.array.sort_list_dialog_options_values)
-
-        val selectionItemList = mutableListOf<SelectionItem>()
-        for (i in 0 until sortSelectionDialogListItems.size) {
-            selectionItemList.add(
-                    SelectionItem(sortSelectionDialogListItems[i], sortSelectionDialogListValues[i])
-            )
-        }
-        return selectionItemList
+    fun fetchSortOptionsDialogItems(markedActive: String = ""): List<SelectionItem> {
+        return decodeSelectionItemList(
+                visibleValuesResId = R.array.sort_list_dialog_options,
+                valuesSymbolsResId = R.array.sort_list_dialog_options_values,
+                markedAsActiveItemSymbol = markedActive)
     }
 
-    fun decodeSnapShotListItems(): List<SelectionItem> {
-        val snapShotDialogListItems: Array<String> =
-                resources.getStringArray(R.array.snapshot_list_dialog_options)
-        val snapShotDialogListValues =
-                resources.getStringArray(R.array.snapshot_dialog_options_values)
+    fun decodeSnapshotDialogItems(markedActive: String = ""): List<SelectionItem> {
+        return decodeSelectionItemList(
+                visibleValuesResId = R.array.snapshot_list_dialog_options,
+                valuesSymbolsResId = R.array.snapshot_dialog_options_values,
+                markedAsActiveItemSymbol = markedActive)
+    }
+
+    private fun decodeSelectionItemList(@ArrayRes visibleValuesResId: Int,
+                                        @ArrayRes valuesSymbolsResId: Int,
+                                        markedAsActiveItemSymbol: String): List<SelectionItem> {
+
+        val visibleValues: Array<String> = resources.getStringArray(visibleValuesResId)
+        val visibleValuesSymbols = resources.getStringArray(valuesSymbolsResId)
 
         val selectionItemList = mutableListOf<SelectionItem>()
-        for (i in 0 until snapShotDialogListItems.size) {
+        for (i in 0 until visibleValues.size) {
             selectionItemList.add(
-                    SelectionItem(snapShotDialogListItems[i], snapShotDialogListValues[i])
+                    SelectionItem(name = visibleValues[i],
+                            value = visibleValuesSymbols[i],
+                            activeItem = (visibleValuesSymbols[i] == markedAsActiveItemSymbol))
             )
         }
         return selectionItemList

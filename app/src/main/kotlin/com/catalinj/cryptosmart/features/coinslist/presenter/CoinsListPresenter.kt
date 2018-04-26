@@ -32,6 +32,12 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     private var waitForLoad: Boolean = false
     private var loadingState: RequestState = RequestState.Idle
     private var loadingController: LoadingController? = null
+    //init with default value. this will later be changed by user actions
+    private var activeCurrency: String = resourceDecoder.decodeChangeCoinDialogItems().first().value
+    //init with default value. this will later be changed by user actions
+    private var activeSortOrder: String = resourceDecoder.fetchSortOptionsDialogItems().first().value
+    //init with default value. this will later be changed by user actions
+    private var activeSnapshot: String = resourceDecoder.decodeSnapshotDialogItems().first().value
 
     init {
         Log.d("Cata", "Injected CoinListPresenter")
@@ -96,26 +102,35 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     }
 
     override fun changeCurrencyPressed() {
-        view?.openChangeCurrencyDialog(resourceDecoder.decodeChangeCoinListItems())
+        view?.openChangeCurrencyDialog(resourceDecoder.decodeChangeCoinDialogItems(
+                markedActive = activeCurrency
+        ))
     }
 
     override fun sortListButtonPressed() {
-        view?.openSortListDialog(resourceDecoder.decodeSortListItems())
+        view?.openSortListDialog(resourceDecoder.fetchSortOptionsDialogItems(
+                markedActive = activeSortOrder
+        ))
     }
 
     override fun selectSnapshotButtonPressed() {
-        view?.openSelectSnapshotDialog(resourceDecoder.decodeSnapShotListItems())
+        view?.openSelectSnapshotDialog(resourceDecoder.decodeSnapshotDialogItems(
+                markedActive = activeSnapshot
+        ))
     }
 
     override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {
+        activeCurrency = newSelectedCurrency.value
         Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
     }
 
     override fun listSortingChanged(newSortingOrder: SelectionItem) {
+        activeSortOrder = newSortingOrder.value
         Log.d("Cata", "listSortingChanged: selectionItem:${newSortingOrder.name}")
     }
 
     override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {
+        activeSnapshot = newSelectedSnapshot.value
         Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
     }
 

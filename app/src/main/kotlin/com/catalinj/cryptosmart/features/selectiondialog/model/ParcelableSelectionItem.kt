@@ -3,18 +3,25 @@ package com.catalinj.cryptosmart.features.selectiondialog.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.catalinjurjiu.common.ParcelableNamedComponent
+import com.catalinjurjiu.common.extensions.toBoolean
+import com.catalinjurjiu.common.extensions.toInt
 
 /**
  * Created by catalin on 24/04/2018.
  */
 data class ParcelableSelectionItem(override val name: String,
-                                   val value: String) : ParcelableNamedComponent {
-    constructor(parcel: Parcel) :
-            this(name = parcel.readString(), value = parcel.readString())
+                                   val value: String,
+                                   val activeItem: Boolean = false) : ParcelableNamedComponent {
+    constructor(parcel: Parcel) : this(
+            name = parcel.readString(),
+            value = parcel.readString(),
+            activeItem = parcel.readInt().toBoolean()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(value)
+        parcel.writeInt(activeItem.toInt())
     }
 
     override fun describeContents(): Int {
@@ -33,9 +40,9 @@ data class ParcelableSelectionItem(override val name: String,
 }
 
 fun SelectionItem.toParcelableSelectionItem(): ParcelableSelectionItem {
-    return ParcelableSelectionItem(this.name, this.value)
+    return ParcelableSelectionItem(this.name, this.value, this.activeItem)
 }
 
 fun ParcelableSelectionItem.toSelectionItem(): SelectionItem {
-    return SelectionItem(this.name, this.value)
+    return SelectionItem(this.name, this.value, this.activeItem)
 }

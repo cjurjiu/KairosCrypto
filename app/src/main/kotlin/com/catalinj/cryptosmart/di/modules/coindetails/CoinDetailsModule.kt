@@ -1,10 +1,10 @@
 package com.catalinj.cryptosmart.di.modules.coindetails;
 
-import com.catalinj.cryptosmart.datastorage.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinDetailsScope
-import com.catalinj.cryptosmart.features.coinslist.contract.CoinDetailsContract
-import com.catalinj.cryptosmart.features.coinslist.presenter.CoinDetailsPresenter
-import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter.CoinDetailsPresenter
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
 import dagger.Module
 import dagger.Provides
 

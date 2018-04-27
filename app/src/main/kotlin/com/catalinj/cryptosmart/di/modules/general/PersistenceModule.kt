@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.di.modules.general
 
 import android.content.Context
-import com.catalinj.cryptosmart.datastorage.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

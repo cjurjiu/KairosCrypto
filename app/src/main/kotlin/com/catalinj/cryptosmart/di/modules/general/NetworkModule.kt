@@ -1,9 +1,9 @@
 package com.catalinj.cryptosmart.di.modules.general
 
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
-import com.catalinj.cryptosmart.network.coinmarketcap.CoinMarketCapService
-import com.catalinj.cryptosmart.network.config.OkHttpConfigurator
-import com.catalinj.cryptosmart.network.config.RetrofitConfigurator
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.datalayer.network.config.OkHttpConfigurator
+import com.catalinj.cryptosmart.datalayer.network.config.RetrofitConfigurator
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

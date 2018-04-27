@@ -13,7 +13,7 @@
         android:text="@string/dialog_pick_transform_type"
         tools:text="@string/dialog_pick_transform_type" />
 
-    <com.catalinj.cryptosmart.common.view.custom.MaxHeightRecyclerView
+    <com.catalinj.cryptosmart.presentationlayer.common.view.custom.MaxHeightRecyclerView
         android:id="@+id/dialog_selection_list"
         style="@style/CryptoSmart.Style.Dialog.RecyclerView"
         android:layout_width="match_parent"

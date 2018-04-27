@@ -2,7 +2,7 @@ package com.catalinj.cryptosmart.di.components
 
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinDetailsScope
-import com.catalinj.cryptosmart.features.coindetails.view.CoinDetailsFragment
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.view.CoinDetailsFragment
 import dagger.Subcomponent
 
 /**

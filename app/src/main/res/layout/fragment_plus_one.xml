@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.coindetails.view.CoinDetailsFragment">
+    tools:context=".presentationlayer.features.coindetails.view.CoinDetailsFragment">
 
     <Button
         android:id="@+id/plus_one_button"

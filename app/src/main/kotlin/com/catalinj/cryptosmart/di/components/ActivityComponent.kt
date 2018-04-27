@@ -1,6 +1,6 @@
 package com.catalinj.cryptosmart.di.components
 
-import com.catalinj.cryptosmart.MainActivity
+import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.di.annotations.scopes.ActivityScope

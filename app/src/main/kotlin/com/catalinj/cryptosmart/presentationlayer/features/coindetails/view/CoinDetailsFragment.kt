@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
-import com.catalinj.cryptosmart.presentationlayer.converter.getCryptoCoin
-import com.catalinj.cryptosmart.presentationlayer.converter.toBundle
+import com.catalinj.cryptosmart.presentationlayer.common.converter.getCryptoCoin
+import com.catalinj.cryptosmart.presentationlayer.common.converter.toBundle
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule

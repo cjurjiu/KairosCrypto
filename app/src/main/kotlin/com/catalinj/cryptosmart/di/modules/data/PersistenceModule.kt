@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.di.modules.general
+package com.catalinj.cryptosmart.di.modules.data
 
 import android.content.Context
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb

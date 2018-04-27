@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.di.modules.general
+package com.catalinj.cryptosmart.di.modules.data
 
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService

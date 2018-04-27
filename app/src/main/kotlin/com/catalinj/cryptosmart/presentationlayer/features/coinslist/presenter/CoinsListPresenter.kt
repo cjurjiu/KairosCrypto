@@ -1,16 +1,17 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter
 
 import android.util.Log
-import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
+import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.CoinMarketCapCoinsRepository
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.network.RequestState
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
+import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinListResourceDecoder
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.datalayer.network.RequestState
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
-import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
-import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.CoinMarketCapCoinsRepository
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -23,6 +24,8 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
                          db: CryptoSmartDb,
                          coinMarketCapService: CoinMarketCapService) :
         CoinsListContract.CoinsListPresenter {
+
+    override var navigator: Navigator? = null
 
     private val repository: CoinsRepository = CoinMarketCapCoinsRepository(db, coinMarketCapService)
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -91,6 +94,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         this.loadingController?.cleanUp()
         this.view = null
         this.loadingController = null
+        this.navigator = null
     }
 
     override fun getView(): CoinsListContract.CoinsListView? {
@@ -99,7 +103,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
 
     //coin list presenter methods
     override fun coinSelected(selectedCoin: CryptoCoin) {
-        view?.openCoinDetailsScreen(selectedCoin)
+        navigator?.openCoinDetailsScreen(cryptoCoin = selectedCoin)
     }
 
     override fun changeCurrencyPressed() {

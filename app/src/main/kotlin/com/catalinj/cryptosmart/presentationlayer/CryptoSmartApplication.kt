@@ -3,9 +3,9 @@ package com.catalinj.cryptosmart.presentationlayer
 import android.app.Application
 import com.catalinj.cryptosmart.di.components.AppComponent
 import com.catalinj.cryptosmart.di.components.DaggerAppComponent
-import com.catalinj.cryptosmart.di.modules.general.AppModule
-import com.catalinj.cryptosmart.di.modules.general.NetworkModule
-import com.catalinj.cryptosmart.di.modules.general.PersistenceModule
+import com.catalinj.cryptosmart.di.modules.app.AppModule
+import com.catalinj.cryptosmart.di.modules.data.NetworkModule
+import com.catalinj.cryptosmart.di.modules.data.PersistenceModule
 import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
 

@@ -13,20 +13,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
-import com.catalinj.cryptosmart.presentationlayer.features.coindetails.view.CoinDetailsFragment
+import com.catalinj.cryptosmart.presentationlayer.MainActivity
+import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toParcelableSelectionItem
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toSelectionItem
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.ListenerType
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionListDialog
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
@@ -76,6 +75,7 @@ class CoinsListFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
+        coinListPresenter.navigator = (activity as MainActivity).navigator
         coinListPresenter.startPresenting()
         Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinListPresenter.hashCode().toString(16))
     }
@@ -184,17 +184,6 @@ class CoinsListFragment :
     override fun setListData(data: List<CryptoCoin>) {
         (recyclerView.adapter as CoinListAdapter).coins = data
         recyclerView.adapter.notifyDataSetChanged()
-    }
-
-    override fun openCoinDetailsScreen(cryptoCoin: CryptoCoin) {
-        val activityComponent = (activity as MainActivity).injector
-        val fragmentFactory = CoinDetailsFragment.Factory(activityComponent = activityComponent,
-                cryptoCoin = cryptoCoin)
-        val frag = fragmentFactory.create()
-        fragmentManager!!.beginTransaction()
-                .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)
-                .addToBackStack(CoinDetailsFragment.TAG)
-                .commit()
     }
 
     override fun showLoadingIndicator() {

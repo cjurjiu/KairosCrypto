@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.di.modules.general
+package com.catalinj.cryptosmart.di.modules.app
 
 import android.content.Context
 import dagger.Module

@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.converter
+package com.catalinj.cryptosmart.presentationlayer.common.converter
 
 import android.os.Bundle
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin

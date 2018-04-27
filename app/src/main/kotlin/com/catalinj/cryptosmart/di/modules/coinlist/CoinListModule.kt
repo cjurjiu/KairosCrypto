@@ -22,7 +22,8 @@ class CoinListModule {
                                   db: CryptoSmartDb,
                                   coinMarketCapService: CoinMarketCapService): CoinsListContract.CoinsListPresenter {
         return CoinsListPresenter(
-                CoinListResourceDecoder(context = context), db = db,
+                CoinListResourceDecoder(context = context),
+                db = db,
                 coinMarketCapService = coinMarketCapService)
     }
 }

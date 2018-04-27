@@ -1,8 +1,8 @@
 package com.catalinj.cryptosmart.di.components
 
-import com.catalinj.cryptosmart.di.modules.general.AppModule
-import com.catalinj.cryptosmart.di.modules.general.NetworkModule
-import com.catalinj.cryptosmart.di.modules.general.PersistenceModule
+import com.catalinj.cryptosmart.di.modules.app.AppModule
+import com.catalinj.cryptosmart.di.modules.data.NetworkModule
+import com.catalinj.cryptosmart.di.modules.data.PersistenceModule
 import dagger.Component
 import javax.inject.Singleton
 

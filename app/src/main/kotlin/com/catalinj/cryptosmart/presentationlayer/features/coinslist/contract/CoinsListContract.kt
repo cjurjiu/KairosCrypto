@@ -1,10 +1,11 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.LoadingView
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 
 /**
  * Created by catalinj on 21.01.2018.
@@ -12,6 +13,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 interface CoinsListContract {
 
     interface CoinsListPresenter : MvpPresenter<CoinsListPresenter, CoinsListView> {
+        var navigator: Navigator?
 
         fun coinSelected(selectedCoin: CryptoCoin)
 
@@ -39,8 +41,6 @@ interface CoinsListContract {
         fun openSortListDialog(selectionItems: List<SelectionItem>)
 
         fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>)
-
-        fun openCoinDetailsScreen(cryptoCoin: CryptoCoin)
 
         fun setListData(data: List<CryptoCoin>)
 

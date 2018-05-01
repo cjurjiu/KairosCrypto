@@ -39,11 +39,11 @@ interface CoinMarketCapService {
                                 @Query(LIMIT_URL_PARAM)
                                 limit: Int = 0,
                                 @Query(CONVERT_URL_PARAM)
-                                currency: String = CurrencyRepresentation.USD.currency):
-            Observable<List<CoinMarketCapCryptoCoin>>
+                                currency: String = CurrencyRepresentation.USD.currency)
+            : Observable<List<CoinMarketCapCryptoCoin>>
 
-//    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/")
-//    fun fetchCoin(@Path(COIN_ID_TOKEN) id: String): CoinMarketCapCryptoCoin
+    @GET(V1_TICKER_ENDPOINT)
+    fun fetchCoinDetails(@Query(COIN_ID_NAME) id: String): Observable<CoinMarketCapCryptoCoin>
 //
 //    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/?${CONVERT_URL_PARAM}=${CONVERT_URL_PARAM_TOKEN}")
 //    fun fetchCoinConverted(@Path(CONVERT_URL_PARAM_TOKEN) id: String): CoinMarketCapCryptoCoin

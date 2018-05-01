@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.businesslayer.repository
 
-import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.datalayer.network.RequestState
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 
@@ -31,4 +31,9 @@ interface CoinsRepository {
      * @param errorHandler consumer which will be notified if an error happens
      */
     fun fetchCoins(startIndex: Int, numberOfCoins: Int, errorHandler: Consumer<Throwable>)
+
+    /**
+     * Updates the details of a specific coin market cap coin.
+     */
+    fun fetchCoinDetails(coinId: String, errorHandler: Consumer<Throwable>)
 }

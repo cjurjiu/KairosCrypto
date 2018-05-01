@@ -1,15 +1,18 @@
 package com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap
 
 import android.util.Log
-import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
-import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoin
-import com.catalinj.cryptosmart.datalayer.network.RequestState
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedCryptoCoinsApiReq
-import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.converter.toBusinessLayerCoin
 import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerCoin
+import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerCoinDetails
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
+import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoin
+import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoinDetails
+import com.catalinj.cryptosmart.datalayer.network.RequestState
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedCryptoCoinsRequest
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
@@ -49,7 +52,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
     }
 
     override fun fetchCoins(startIndex: Int, numberOfCoins: Int, errorHandler: Consumer<Throwable>) {
-        val apiRequest = BoundedCryptoCoinsApiReq(startIndex = startIndex,
+        val apiRequest = BoundedCryptoCoinsRequest(startIndex = startIndex,
                 numberOfCoins = numberOfCoins,
                 coinMarketCapService = coinMarketCapService)
 
@@ -58,6 +61,21 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             val dbCoins: List<DbCryptoCoin> = it.map { coin -> coin.toDataLayerCoin() }
             cryptoSmartDb.getCoinMarketCapCryptoCoinDao().insert(dbCoins)
             Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.size)
+        }
+        apiRequest.errors.subscribe(errorHandler)
+        apiRequest.state.subscribe { loadingStateRelay.accept(it) }
+        apiRequest.execute()
+    }
+
+    override fun fetchCoinDetails(coinId: String, errorHandler: Consumer<Throwable>) {
+        val apiRequest = CryptoCoinDetailsRequest(coinId = coinId,
+                coinMarketCapService = coinMarketCapService)
+
+        apiRequest.response.observeOn(Schedulers.io()).subscribe {
+            Log.d("RxJ", "repo getFreshCoins response do next coins size:" + it.name)
+            val dbCoin: DbCryptoCoinDetails = it.toDataLayerCoinDetails()
+            cryptoSmartDb.getCoinMarketCapCryptoCoinDetailsDao().insert(dbCoin)
+            Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.name)
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }

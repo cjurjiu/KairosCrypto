@@ -6,13 +6,12 @@ import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapSer
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import io.reactivex.Observable
 
-class BoundedCryptoCoinsApiReq(private val startIndex: Int,
-                               private val numberOfCoins: Int,
+class CryptoCoinDetailsRequest(private val coinId: String,
                                private val coinMarketCapService: CoinMarketCapService) :
-        ApiRequest<List<CoinMarketCapCryptoCoin>>() {
+        ApiRequest<CoinMarketCapCryptoCoin>() {
 
-    override fun fetchData(): Observable<List<CoinMarketCapCryptoCoin>> {
+    override fun fetchData(): Observable<CoinMarketCapCryptoCoin> {
         Log.d("RxJ", "fetch data")
-        return coinMarketCapService.rxFetchCoinsListBounded(start = startIndex, limit = numberOfCoins)
+        return coinMarketCapService.fetchCoinDetails(id = coinId)
     }
 }

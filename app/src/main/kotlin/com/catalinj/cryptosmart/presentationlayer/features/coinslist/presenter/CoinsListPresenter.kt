@@ -3,10 +3,7 @@ package com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
-import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.CoinMarketCapCoinsRepository
-import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.network.RequestState
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
@@ -21,12 +18,10 @@ import io.reactivex.functions.Consumer
  * Created by catalinj on 21.01.2018.
  */
 class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
-                         db: CryptoSmartDb,
-                         coinMarketCapService: CoinMarketCapService) :
+                         private val repository: CoinsRepository) :
         CoinsListContract.CoinsListPresenter {
 
     override var navigator: Navigator? = null
-    private val repository: CoinsRepository = CoinMarketCapCoinsRepository(db, coinMarketCapService)
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var availableCoins: List<CryptoCoin>? = null

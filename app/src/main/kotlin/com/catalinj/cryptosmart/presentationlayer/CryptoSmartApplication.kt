@@ -6,6 +6,7 @@ import com.catalinj.cryptosmart.di.components.DaggerAppComponent
 import com.catalinj.cryptosmart.di.modules.app.AppModule
 import com.catalinj.cryptosmart.di.modules.data.NetworkModule
 import com.catalinj.cryptosmart.di.modules.data.PersistenceModule
+import com.catalinj.cryptosmart.di.modules.data.RepositoryModule
 import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
 
@@ -24,6 +25,7 @@ class CryptoSmartApplication : Application(), Holder<AppComponent> {
         DaggerAppComponent.builder()
                 .appModule(AppModule(applicationContext))
                 .networkModule(NetworkModule())
+                .repositoryModule(RepositoryModule())
                 .persistenceModule(PersistenceModule())
                 .build()
     }

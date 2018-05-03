@@ -1,9 +1,9 @@
 package com.catalinj.cryptosmart.di.modules.data
 
-import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
 import com.catalinj.cryptosmart.datalayer.network.config.OkHttpConfigurator
 import com.catalinj.cryptosmart.datalayer.network.config.RetrofitConfigurator
+import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -26,12 +26,7 @@ class NetworkModule {
     @Singleton
     @CoinMarketCapQualifier
     fun provideCoinMarketCapRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return RetrofitConfigurator(CoinMarketCapService.BASE_URL, okHttpClient).configure()
-    }
-
-    @Provides
-    @Singleton
-    fun provideCoinMarketCapService(@CoinMarketCapQualifier retrofit: Retrofit): CoinMarketCapService {
-        return retrofit.create(CoinMarketCapService::class.java)
+        return RetrofitConfigurator(CoinMarketCapService.BASE_URL, okHttpClient)
+                .configure()
     }
 }

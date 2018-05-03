@@ -15,7 +15,9 @@ import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedC
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.observables.ConnectableObservable
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -42,9 +44,16 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
 
     private val cryptoCoinsRelay = BehaviorRelay.create<List<CryptoCoin>>()
     private val loadingStateRelay = BehaviorRelay.create<RequestState>()
+    //worry about leaks later? sounds like a great idea!
+    //TODO properly dispose subscription whenever this repository will have to die
+    private val loadingSubscription: Disposable
 
     init {
-        loadingStateObservable = getLoadingObservable()
+
+        val connectableLoadingObservable = getLoadingObservable()
+        loadingSubscription = connectableLoadingObservable.connect()
+        loadingStateObservable = connectableLoadingObservable
+
         cryptoSmartDb.getCoinMarketCapCryptoCoinDao().monitorRx().subscribe({
             Log.d("RxJ", "monitor onNext")
             cryptoCoinsRelay.accept(it.map { coin -> coin.toBusinessLayerCoin() })
@@ -82,7 +91,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
         apiRequest.execute()
     }
 
-    private fun getLoadingObservable(): Observable<RequestState> {
+    private fun getLoadingObservable(): ConnectableObservable<RequestState> {
         return loadingStateRelay.map { requestState ->
             return@map when (requestState) {
                 RequestState.Idle -> 0
@@ -98,7 +107,9 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
                     } else {
                         RequestState.Idle
                     }
-                }.distinctUntilChanged()
+                }
+                .distinctUntilChanged()
+                .publish()
     }
 
 }

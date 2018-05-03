@@ -22,4 +22,11 @@ interface Navigator {
      * @param the coin for which the details are being displayed
      */
     fun openCoinDetailsScreen(cryptoCoin: CryptoCoin)
+
+    /**
+     * Navigates back.
+     *
+     * @return ```true``` if the Navigator was able to navigate back, ```false``` otherwise.
+     */
+    fun navigateBack(): Boolean
 }

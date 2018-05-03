@@ -72,10 +72,10 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
                 coinMarketCapService = coinMarketCapService)
 
         apiRequest.response.observeOn(Schedulers.io()).subscribe {
-            Log.d("RxJ", "repo getFreshCoins response do next coins size:" + it.name)
+            Log.d("RxJ", "repo fetchCoinDetails response do next coins size:" + it.name)
             val dbCoin: DbCryptoCoinDetails = it.toDataLayerCoinDetails()
             cryptoSmartDb.getCoinMarketCapCryptoCoinDetailsDao().insert(dbCoin)
-            Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.name)
+            Log.d("RxJ", "repo fetchCoinDetails response AFTER do next coins size:" + it.name)
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }

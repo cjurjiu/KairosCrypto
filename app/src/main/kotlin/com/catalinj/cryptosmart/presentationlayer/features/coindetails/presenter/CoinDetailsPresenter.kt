@@ -2,17 +2,15 @@ package com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter
 
 import android.util.Log
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
-import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
-import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
-import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.CoinMarketCapCoinsRepository
+import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinDetailsContract
 
 /**
  * Created by catalinj on 21.01.2018.
  */
 class CoinDetailsPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCapService) : CoinDetailsContract.CoinDetailsPresenter {
 
-    private val repository: CoinsRepository = CoinMarketCapCoinsRepository(db, coinMarketCapService)
+    //    private val repository: CoinsRepository = CoinMarketCapCoinsRepository(db, coinMarketCapService)
     private var view: CoinDetailsContract.CoinDetailsView? = null
 
     init {
@@ -21,6 +19,7 @@ class CoinDetailsPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCa
 
     override fun startPresenting() {
         Log.d("Cata", "CoinDetailsPresenter#startPresenting")
+        view?.increaseValue()
     }
 
     override fun stopPresenting() {
@@ -30,10 +29,6 @@ class CoinDetailsPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCa
     override fun viewAvailable(view: CoinDetailsContract.CoinDetailsView) {
         Log.d("Cata", "CoinDetailsPresenter#viewAvailable")
         this.view = view
-    }
-
-    override fun viewInitialised() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun viewDestroyed() {
@@ -51,9 +46,5 @@ class CoinDetailsPresenter(db: CryptoSmartDb, coinMarketCapService: CoinMarketCa
 
     override fun userPullToRefresh() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun receivedFocus() {
-        view?.increaseValue()
     }
 }

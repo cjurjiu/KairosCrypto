@@ -11,7 +11,6 @@ import com.catalinjurjiu.smartpersist.DaggerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
-
     override val name: String = TAG
 
     val navigator: Navigator by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
@@ -39,6 +38,12 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
         super.onStop()
         Log.d(TAG, "MainActivity#onStop. isActivityFinishing:$isFinishing " +
                 "a2:$isChangingConfigurations")
+    }
+
+    override fun onBackPressed() {
+        if (!navigator.navigateBack()) {
+            super.onBackPressed()
+        }
     }
 
     private companion object {

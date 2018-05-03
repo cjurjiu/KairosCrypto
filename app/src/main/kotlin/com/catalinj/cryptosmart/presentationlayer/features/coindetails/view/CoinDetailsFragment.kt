@@ -7,15 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
-import com.catalinj.cryptosmart.presentationlayer.common.converter.getCryptoCoin
-import com.catalinj.cryptosmart.presentationlayer.common.converter.toBundle
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
+import com.catalinj.cryptosmart.presentationlayer.common.converter.getCryptoCoin
+import com.catalinj.cryptosmart.presentationlayer.common.converter.toBundle
+import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinDetailsContract
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import javax.inject.Inject
@@ -88,13 +88,19 @@ class CoinDetailsFragment :
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "CoinDetailsFragment#onResume")
-        getPresenter().receivedFocus()
     }
 
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "CoinDetailsFragment#onStop")
         coinDetailsPresenter.stopPresenting()
+        Log.d(TAG, "CoinDetailsFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "CoinDetailsFragment#onStop")
         Log.d(TAG, "CoinDetailsFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }

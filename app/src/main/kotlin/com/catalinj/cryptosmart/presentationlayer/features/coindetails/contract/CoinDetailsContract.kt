@@ -14,8 +14,6 @@ interface CoinDetailsContract {
         fun userPressedBack(): Boolean
 
         fun userPullToRefresh()
-
-        fun receivedFocus()
     }
 
     interface CoinDetailsView : MvpView<CoinDetailsPresenter, CoinDetailsView> {

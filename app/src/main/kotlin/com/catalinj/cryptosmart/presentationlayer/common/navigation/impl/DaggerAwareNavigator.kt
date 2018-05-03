@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.di.components.ActivityComponent
+import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinsListFragment
@@ -32,5 +33,13 @@ class DaggerAwareNavigator(private val activity: DaggerActivity<ActivityComponen
                 .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)
                 .addToBackStack(CoinDetailsFragment.TAG)
                 .commit()
+    }
+
+    override fun navigateBack(): Boolean {
+        return fragmentManager.fragments
+                .filter { it.isVisible }
+                .filterIsInstance(BackEventAwareComponent::class.java)
+                .firstOrNull { it.onBack() }
+                ?.let { true } ?: fragmentManager.popBackStackImmediate()
     }
 }

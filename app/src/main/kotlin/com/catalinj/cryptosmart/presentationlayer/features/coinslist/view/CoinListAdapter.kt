@@ -24,7 +24,9 @@ class CoinListAdapter(context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View = inflater.inflate(R.layout.layout_coin_list_item, parent, false)
-        return MyViewHolder(view)
+        val viewHolder = MyViewHolder(view)
+        viewHolder.apply { view.setOnClickListener { click.invoke(coins[this.adapterPosition]) } }
+        return viewHolder
     }
 
     override fun getItemCount(): Int {
@@ -33,7 +35,6 @@ class CoinListAdapter(context: Context,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.apply {
-            view.setOnClickListener { click.invoke(coins[position]) }
             textCoinRank.text = coins[position].rank.toString()
             imageCoinLogo.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coins[position].symbol,
                     context = holder.itemView.context))

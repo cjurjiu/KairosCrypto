@@ -14,8 +14,6 @@ interface MvpPresenter<P : MvpPresenter<P, V>, V : MvpView<P, V>> {
 
     fun viewAvailable(view: V)
 
-    fun viewInitialised()
-
     fun viewDestroyed()
 
     fun getView(): V?

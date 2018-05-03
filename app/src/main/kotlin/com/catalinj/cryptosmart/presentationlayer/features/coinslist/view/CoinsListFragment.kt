@@ -75,8 +75,6 @@ class CoinsListFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
-        coinListPresenter.navigator = (activity as MainActivity).navigator
-        coinListPresenter.startPresenting()
         Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinListPresenter.hashCode().toString(16))
     }
 
@@ -88,6 +86,7 @@ class CoinsListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        coinListPresenter.navigator = (activity as MainActivity).navigator
         Log.d(TAG, "CoinsListFragment#onViewCreated")
         coinListPresenter.viewAvailable(this)
     }
@@ -100,38 +99,19 @@ class CoinsListFragment :
         rebindDialogIfActive()
     }
 
-    private fun rebindDialogIfActive() {
-        val activeFragmentList = arrayOf(SelectionDialogType.ChangeCurrency,
-                SelectionDialogType.SortModes,
-                SelectionDialogType.SelectSnapshot)
-                .mapNotNull {
-                    val fragment = fragmentManager?.findFragmentByTag(it.typeName)
-                    return@mapNotNull if (fragment != null) {
-                        Pair(it, fragment)
-                    } else {
-                        null
-                    }
-                }
-                .apply {
-                    if (size > 1) {
-                        val activeFragments: String? = map { it.first.typeName }.reduce { acc, s -> "$acc, ${s}" }
-                        throw IllegalStateException("More than 1 selection dialogs present on screen." +
-                                "Active dialogs: $activeFragments")
-                    }
-                }
-        if (activeFragmentList.isNotEmpty()) {
-            activeFragmentList
-                    .first()
-                    .let {
-                        val selectionDialog = it.second as SelectionListDialog
-                        val listener = getListenerForDialogType(it.first)
-                        selectionDialog.setListener(listener)
-                    }
-        }
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "CoinsListFragment#onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "CoinsListFragment#onPause")
     }
 
     override fun onStart() {
         super.onStart()
+        coinListPresenter.startPresenting()
         Log.d(TAG, "CoinsListFragment#onStart")
     }
 
@@ -161,7 +141,6 @@ class CoinsListFragment :
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "CoinsListFragment#onDestroy")
-        //TODO release presenter reference?
         Log.d(TAG, "CoinsListFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }
@@ -210,6 +189,36 @@ class CoinsListFragment :
 
     override fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>) {
         showSelectionDialog(dialogType = SelectionDialogType.SelectSnapshot, data = selectionItems)
+    }
+
+    private fun rebindDialogIfActive() {
+        val activeFragmentList = arrayOf(SelectionDialogType.ChangeCurrency,
+                SelectionDialogType.SortModes,
+                SelectionDialogType.SelectSnapshot)
+                .mapNotNull {
+                    val fragment = fragmentManager?.findFragmentByTag(it.typeName)
+                    return@mapNotNull if (fragment != null) {
+                        Pair(it, fragment)
+                    } else {
+                        null
+                    }
+                }
+                .apply {
+                    if (size > 1) {
+                        val activeFragments: String? = map { it.first.typeName }.reduce { acc, s -> "$acc, ${s}" }
+                        throw IllegalStateException("More than 1 selection dialogs present on screen." +
+                                "Active dialogs: $activeFragments")
+                    }
+                }
+        if (activeFragmentList.isNotEmpty()) {
+            activeFragmentList
+                    .first()
+                    .let {
+                        val selectionDialog = it.second as SelectionListDialog
+                        val listener = getListenerForDialogType(it.first)
+                        selectionDialog.setListener(listener)
+                    }
+        }
     }
 
     private fun initToolbar(activity: Activity) {

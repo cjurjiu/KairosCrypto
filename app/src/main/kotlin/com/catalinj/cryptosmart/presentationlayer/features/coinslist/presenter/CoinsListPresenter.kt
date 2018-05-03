@@ -26,10 +26,9 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         CoinsListContract.CoinsListPresenter {
 
     override var navigator: Navigator? = null
-
     private val repository: CoinsRepository = CoinMarketCapCoinsRepository(db, coinMarketCapService)
+
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private var active: Boolean = false
     private var availableCoins: List<CryptoCoin>? = null
     private var view: CoinsListContract.CoinsListView? = null
     //loading logic...
@@ -43,16 +42,8 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     //init with default value. this will later be changed by user actions
     private var activeSnapshot: String = resourceDecoder.decodeSnapshotDialogItems().first().value
 
-    init {
-        Log.d("Cata", "Injected CoinListPresenter")
-    }
-
     //base presenter methods
     override fun startPresenting() {
-        if (active) {
-            //do nothing, already presenting
-        }
-        active = true
         val loadingStateDisposable: Disposable = repository.loadingStateObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ newLoadingState -> updateLoadingState(newLoadingState) })
@@ -66,10 +57,17 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
 
         compositeDisposable.add(loadingStateDisposable)
         compositeDisposable.add(cryptoObservable)
+
+        availableCoins.orEmpty().apply {
+            if (isNotEmpty()) {
+                view?.setListData(this)
+            } else {
+                refreshCoins()
+            }
+        }
     }
 
     override fun stopPresenting() {
-        active = false
         compositeDisposable.clear()
     }
 
@@ -77,17 +75,6 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         this.view = view
         view.initialise()
         this.loadingController = LoadingController(view)
-    }
-
-    override fun viewInitialised() {
-        setLoadingState(loadingState)
-        availableCoins.orEmpty().apply {
-            if (size > 0) {
-                view?.setListData(this)
-            } else {
-                fetchMoreCoins()
-            }
-        }
     }
 
     override fun viewDestroyed() {
@@ -147,6 +134,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     override fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int) {
         Log.d("Cata2", "Scroll! position:$currentScrollPosition maxScroll:$maxScrollPosition")
         if (currentScrollPosition / maxScrollPosition.toFloat() > 0.75f && !waitForLoad) {
+            Log.d("Cata2", "scroll trigger load!")
             waitForLoad = true
             fetchMoreCoins()
         }

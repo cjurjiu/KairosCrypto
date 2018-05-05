@@ -89,21 +89,21 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     }
 
     override fun changeCurrencyPressed() {
-        view?.openChangeCurrencyDialog(resourceDecoder.decodeChangeCoinDialogItems(
-                markedActive = activeCurrency
-        ))
+        view?.openChangeCurrencyDialog(
+                resourceDecoder.decodeChangeCoinDialogItems(markedActive = activeCurrency)
+        )
     }
 
     override fun sortListButtonPressed() {
-        view?.openSortListDialog(resourceDecoder.fetchSortOptionsDialogItems(
-                markedActive = activeSortOrder
-        ))
+        view?.openSortListDialog(
+                resourceDecoder.fetchSortOptionsDialogItems(markedActive = activeSortOrder)
+        )
     }
 
     override fun selectSnapshotButtonPressed() {
-        view?.openSelectSnapshotDialog(resourceDecoder.decodeSnapshotDialogItems(
-                markedActive = activeSnapshot
-        ))
+        view?.openSelectSnapshotDialog(
+                resourceDecoder.decodeSnapshotDialogItems(markedActive = activeSnapshot)
+        )
     }
 
     override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {

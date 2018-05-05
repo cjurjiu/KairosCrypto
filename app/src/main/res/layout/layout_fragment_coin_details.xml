@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentationlayer.features.coindetails.view.CoinDetailsFragment">
+    tools:context=".presentationlayer.features.coindetails.main.view.CoinDetailsFragment">
 
     <TextView
         android:id="@+id/coin_name"

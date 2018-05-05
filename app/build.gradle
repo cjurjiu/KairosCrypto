@@ -66,6 +66,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$config.lib_versions.gson"
     //dagger2
     implementation "com.google.dagger:dagger:$config.lib_versions.dagger"
+    implementation 'com.android.support:support-v4:27.1.1'
     kapt "com.google.dagger:dagger-compiler:$config.lib_versions.dagger_compiler"
     //viewmodel & extensions
     implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"

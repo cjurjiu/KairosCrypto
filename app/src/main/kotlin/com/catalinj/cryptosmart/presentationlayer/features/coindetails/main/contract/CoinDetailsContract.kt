@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.features.coindetails.contract
+package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter

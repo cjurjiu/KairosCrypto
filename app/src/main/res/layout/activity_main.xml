@@ -7,22 +7,11 @@
     android:layout_height="match_parent"
     tools:context="com.catalinj.cryptosmart.presentationlayer.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        style="@style/CryptoSmart.Style.Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true">
-
-        <include layout="@layout/include_toolbar_content" />
-    </android.support.v7.widget.Toolbar>
-
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"
-        android:layout_below="@+id/my_toolbar" />
+        android:layout_above="@+id/bottom_navigation" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@id/bottom_navigation"

@@ -5,7 +5,7 @@ import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
-import com.catalinj.cryptosmart.presentationlayer.features.coindetails.view.CoinDetailsFragment
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinsListFragment
 import com.catalinjurjiu.smartpersist.DaggerActivity
 

@@ -1,21 +1,21 @@
-package com.catalinj.cryptosmart.presentationlayer.features.coindetails.view
+package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.view
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
-import com.catalinj.cryptosmart.presentationlayer.features.coindetails.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
-import kotlinx.android.synthetic.main.layout_fragment_coin_details.view.*
+import kotlinx.android.synthetic.main.layout_fragment_main_coin_details.view.*
 import javax.inject.Inject
 
 class CoinDetailsFragment :
@@ -27,12 +27,6 @@ class CoinDetailsFragment :
     override val name: String = TAG
     @Inject
     protected lateinit var coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter
-    private lateinit var coinName: TextView
-    private lateinit var coinSymbol: TextView
-    private lateinit var coinValue: TextView
-    private lateinit var coinRank: TextView
-    private lateinit var coinChange: TextView
-    private lateinit var coinTimestamp: TextView
 
     class Factory(private val activityComponent: ActivityComponent,
                   private val cryptoCoinId: String)
@@ -66,23 +60,13 @@ class CoinDetailsFragment :
                               savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinDetailsFragment#onCreateView")
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.layout_fragment_coin_details, container, false)
+        return inflater.inflate(R.layout.layout_fragment_main_coin_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "CoinDetailsFragment#onViewCreated")
         coinDetailsPresenter.viewAvailable(this)
-    }
-
-    override fun initialise() {
-        val view = view!!
-        coinName = view.coin_name
-        coinSymbol = view.coin_symbol
-        coinValue = view.coin_value
-        coinRank = view.coin_rank
-        coinChange = view.coin_change
-        coinTimestamp = view.coin_timestamp
     }
 
     override fun onStart() {
@@ -137,6 +121,25 @@ class CoinDetailsFragment :
         Log.d(TAG, "CoinDetailsFragment#onDetach")
     }
 
+    override fun initialise() {
+        val view = view!!
+        initializeToolbar(view)
+        initializeViewPagerWithTabs(view)
+    }
+
+    override fun setCoinData(coinDetails: CryptoCoinDetails) {
+        //do just log for the moment
+        Log.d(TAG, "$TAG#setCoinData. coin name: ${coinDetails.name}")
+    }
+
+    override fun showLoadingIndicator() {
+        Log.d(TAG, "$TAG#showLoadingIndicator()")
+    }
+
+    override fun hideLoadingIndicator() {
+        Log.d(TAG, "$TAG#hideLoadingIndicator()")
+    }
+
     override fun onBack(): Boolean {
         Log.d("Cata", "CoinDetailsFragment back pressed")
         return false
@@ -146,21 +149,21 @@ class CoinDetailsFragment :
         return coinDetailsPresenter
     }
 
-    override fun setCoinData(coinDetails: CryptoCoinDetails) {
-        coinName.text = coinDetails.name
-        coinSymbol.text = coinDetails.symbol
-        coinValue.text = coinDetails.priceUsd.toString()
-        coinRank.text = coinDetails.rank.toString()
-        coinChange.text = coinDetails.percentChange1h.toString()
-        coinTimestamp.text = coinDetails.lastUpdated.toString()
+    private fun initializeToolbar(view: View) {
+        val toolbar = view.toolbar_coin_details
+        toolbar.title = ""
+        (activity!! as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity!! as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun showLoadingIndicator() {
-        Log.d(TAG, "$TAG#showLoadingIndicator()")
-    }
-
-    override fun hideLoadingIndicator() {
-        Log.d(TAG, "$TAG#hideLoadingIndicator()")
+    private fun initializeViewPagerWithTabs(view: View) {
+        //ViewPager config
+        val viewPager = view.view_pager_coin_details
+        val coinDetailsViewPagerAdapter = CoinDetailsViewPagerAdapter(childFragmentManager)
+        viewPager.adapter = coinDetailsViewPagerAdapter
+        //TabLayout config & setup with ViewPager
+        val tabLayout = view.tab_layout_coin_details
+        tabLayout.setupWithViewPager(viewPager)
     }
 
     internal companion object {

@@ -1,10 +1,10 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.view
 
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -93,9 +93,10 @@ class CoinsListFragment :
 
     override fun initialise() {
         val view = view!!
-        initToolbar(activity!! /*activity never null in onViewCreated*/)
-        initRecyclerView(view)
-        initSwipeRefreshLayout(view)
+        val appCompatActivity = (activity as AppCompatActivity)
+        initToolbar(rootView = view, appCompatActivity = appCompatActivity)
+        initRecyclerView(rootView = view, appCompatActivity = appCompatActivity)
+        initSwipeRefreshLayout(rootView = view)
         rebindDialogIfActive()
     }
 
@@ -221,8 +222,10 @@ class CoinsListFragment :
         }
     }
 
-    private fun initToolbar(activity: Activity) {
-        val toolbar: Toolbar = activity.findViewById(R.id.my_toolbar)
+    private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
+        val toolbar: Toolbar = rootView.findViewById(R.id.my_toolbar)
+        appCompatActivity.setSupportActionBar(toolbar)
+
         //set the change currency button clicked listener
         val changeCurrencyButton = toolbar.findViewById<ImageButton>(R.id.button_change_currency)
         changeCurrencyButton?.setOnClickListener(onChangeCurrencyButtonClickedListener)
@@ -236,17 +239,17 @@ class CoinsListFragment :
     }
 
 
-    private fun initSwipeRefreshLayout(v: View) {
-        swipeRefreshLayout = v.swiperefreshlayout_coin_lists
+    private fun initSwipeRefreshLayout(rootView: View) {
+        swipeRefreshLayout = rootView.swiperefreshlayout_coin_lists
         swipeRefreshLayout.setOnRefreshListener { coinListPresenter.userPullToRefresh() }
     }
 
-    private fun initRecyclerView(v: View) {
-        recyclerView = v.recyclerview_coins_list!!
-        recyclerViewAdapter = CoinListAdapter(activity!!.baseContext, emptyList()) {
+    private fun initRecyclerView(rootView: View, appCompatActivity: AppCompatActivity) {
+        recyclerView = rootView.recyclerview_coins_list
+        recyclerViewAdapter = CoinListAdapter(appCompatActivity.baseContext, emptyList()) {
             coinListPresenter.coinSelected(it)
         }
-        recyclerViewLayoutManager = LinearLayoutManager(activity!!.baseContext)
+        recyclerViewLayoutManager = LinearLayoutManager(appCompatActivity.baseContext)
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.layoutManager = recyclerViewLayoutManager
 

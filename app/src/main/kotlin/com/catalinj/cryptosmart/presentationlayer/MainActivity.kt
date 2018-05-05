@@ -21,7 +21,6 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d(TAG, "MainActivity#onCreate.")
-        setSupportActionBar(my_toolbar)
         if (savedInstanceState == null) {
             navigator.openCoinListScreen()
         }

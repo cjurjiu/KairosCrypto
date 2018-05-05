@@ -1,9 +1,9 @@
-package com.catalinj.cryptosmart.presentationlayer.features.coindetails.presenter
+package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.presenter
 
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
-import com.catalinj.cryptosmart.presentationlayer.features.coindetails.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer

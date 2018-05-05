@@ -25,4 +25,7 @@
     <string name="change_prc_asc_symbol" translatable="false">change_prc_asc</string>
     <string name="change_prc_desc_symbol" translatable="false">change_prc_desc</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

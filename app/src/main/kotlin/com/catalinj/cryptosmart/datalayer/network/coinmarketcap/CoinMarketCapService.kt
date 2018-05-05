@@ -1,9 +1,11 @@
 package com.catalinj.cryptosmart.datalayer.network.coinmarketcap
 
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinDetails
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -42,11 +44,9 @@ interface CoinMarketCapService {
                                 currency: String = CurrencyRepresentation.USD.currency)
             : Observable<List<CoinMarketCapCryptoCoin>>
 
-    @GET(V1_TICKER_ENDPOINT)
-    fun fetchCoinDetails(@Query(COIN_ID_NAME) id: String): Observable<CoinMarketCapCryptoCoin>
-//
-//    @GET("${V1_TICKER_ENDPOINT}/${COIN_ID_TOKEN}/?${CONVERT_URL_PARAM}=${CONVERT_URL_PARAM_TOKEN}")
-//    fun fetchCoinConverted(@Path(CONVERT_URL_PARAM_TOKEN) id: String): CoinMarketCapCryptoCoin
+    //this endpoint returns a list of just one item
+    @GET("$V1_TICKER_ENDPOINT/{$PATH_COIN_ID}")
+    fun fetchCoinDetails(@Path(PATH_COIN_ID) coinId: String): Observable<List<CoinMarketCapCryptoCoinDetails>>
 
     companion object {
         //base url for the Rest API of cointmarketcap.com
@@ -54,7 +54,7 @@ interface CoinMarketCapService {
         //ticker endpoint
         const val V1_TICKER_ENDPOINT: String = "/v1/ticker"
         //id of the coin which we want to retrieve
-        const val COIN_ID_NAME = "id"
+        const val PATH_COIN_ID = "id"
         //coin  nr limit
         const val LIMIT_URL_PARAM: String = "limit"
         //list coins start

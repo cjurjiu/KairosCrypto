@@ -2,13 +2,15 @@ package com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap
 
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.converter.toBusinessLayerCoin
+import com.catalinj.cryptosmart.businesslayer.converter.toBusinessLayerCoinDetails
 import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerCoin
 import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerCoinDetails
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
-import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoin
-import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoinDetails
+import com.catalinj.cryptosmart.datalayer.database.coindetails.DbCryptoCoinDetails
+import com.catalinj.cryptosmart.datalayer.database.coins.DbCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedCryptoCoinsRequest
@@ -76,15 +78,29 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
         apiRequest.execute()
     }
 
+    override fun getCoinDetailsObservable(coinId: String): Observable<CryptoCoinDetails> {
+        return cryptoSmartDb.getCoinMarketCapCryptoCoinDetailsDao()
+                .monitorRxSingleCoin(coinId)
+                .map { dbCoinDetails ->
+                    dbCoinDetails.toBusinessLayerCoinDetails()
+                }
+                .toObservable()
+    }
+
     override fun fetchCoinDetails(coinId: String, errorHandler: Consumer<Throwable>) {
         val apiRequest = CryptoCoinDetailsRequest(coinId = coinId,
                 coinMarketCapService = coinMarketCapService)
 
         apiRequest.response.observeOn(Schedulers.io()).subscribe {
-            Log.d("RxJ", "repo fetchCoinDetails response do next coins size:" + it.name)
-            val dbCoin: DbCryptoCoinDetails = it.toDataLayerCoinDetails()
-            cryptoSmartDb.getCoinMarketCapCryptoCoinDetailsDao().insert(dbCoin)
-            Log.d("RxJ", "repo fetchCoinDetails response AFTER do next coins size:" + it.name)
+            try {
+                val coin = it.first()
+                Log.d("RxJ", "repo fetchCoinDetails response do next coins size:" + coin.name)
+                val dbCoin: DbCryptoCoinDetails = coin.toDataLayerCoinDetails()
+                cryptoSmartDb.getCoinMarketCapCryptoCoinDetailsDao().insert(dbCoin)
+                Log.d("RxJ", "repo fetchCoinDetails response AFTER do next coins size:" + coin.name)
+            } catch (e: NoSuchElementException) {
+                errorHandler.accept(IllegalStateException("Server returned an empty list.", e))
+            }
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }

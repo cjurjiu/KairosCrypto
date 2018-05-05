@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.businesslayer.repository
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
@@ -36,4 +37,11 @@ interface CoinsRepository {
      * Updates the details of a specific coin market cap coin.
      */
     fun fetchCoinDetails(coinId: String, errorHandler: Consumer<Throwable>)
+
+    /**
+     * Observable which tracks changes to the details of a specific crypto coin.
+     *
+     * @param coinId the id of the coin to track.
+     */
+    fun getCoinDetailsObservable(coinId: String): Observable<CryptoCoinDetails>
 }

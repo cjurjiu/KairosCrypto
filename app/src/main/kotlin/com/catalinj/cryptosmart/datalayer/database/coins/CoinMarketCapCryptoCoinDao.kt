@@ -1,7 +1,6 @@
-package com.catalinj.cryptosmart.datalayer.database.dao
+package com.catalinj.cryptosmart.datalayer.database.coins
 
 import android.arch.persistence.room.*
-import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoin
 import io.reactivex.Flowable
 
 /**
@@ -11,16 +10,16 @@ import io.reactivex.Flowable
 @Dao
 interface CoinMarketCapCryptoCoinDao {
 
-    @Query("SELECT * FROM coins")
+    @Query("SELECT * FROM ${DbCryptoCoin.COIN_TABLE_NAME}")
     fun getAll(): List<DbCryptoCoin>
 
-    @Query("SELECT * FROM coins")
+    @Query("SELECT * FROM ${DbCryptoCoin.COIN_TABLE_NAME}")
     fun monitorRx(): Flowable<List<DbCryptoCoin>>
 
-    @Query("SELECT * FROM coins WHERE id LIKE :id")
+    @Query("SELECT * FROM ${DbCryptoCoin.COIN_TABLE_NAME} WHERE id LIKE :id")
     fun getCoin(id: String): List<DbCryptoCoin>
 
-    @Query("SELECT * FROM coins WHERE id IN (:coins)")
+    @Query("SELECT * FROM ${DbCryptoCoin.COIN_TABLE_NAME} WHERE id IN (:coins)")
     fun filter(coins: List<String>): List<DbCryptoCoin>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

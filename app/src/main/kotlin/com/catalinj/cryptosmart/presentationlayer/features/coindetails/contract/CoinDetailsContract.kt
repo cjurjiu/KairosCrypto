@@ -1,8 +1,8 @@
-package com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract
+package com.catalinj.cryptosmart.presentationlayer.features.coindetails.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 
 /**
  * Created by catalinj on 21.01.2018.
@@ -14,13 +14,13 @@ interface CoinDetailsContract {
         fun userPressedBack(): Boolean
 
         fun userPullToRefresh()
+
+        fun setCoinId(coinId: String)
     }
 
     interface CoinDetailsView : MvpView<CoinDetailsPresenter, CoinDetailsView> {
 
-        fun setCoinData(data: CoinMarketCapCryptoCoin)
-
-        fun increaseValue()
+        fun setCoinData(coinDetails: CryptoCoinDetails)
 
         fun showLoadingIndicator()
 

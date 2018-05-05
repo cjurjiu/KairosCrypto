@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentationlayer.features.coindetails.view.CoinDetailsFragment">
+
+    <TextView
+        android:id="@+id/coin_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some coin" />
+
+    <TextView
+        android:id="@+id/coin_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some coin" />
+
+    <TextView
+        android:id="@+id/coin_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some coin" />
+
+    <TextView
+        android:id="@+id/coin_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some coin" />
+
+    <TextView
+        android:id="@+id/coin_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some coin" />
+
+    <TextView
+        android:id="@+id/coin_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some coin" />
+
+</LinearLayout>

@@ -5,19 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
-import com.catalinj.cryptosmart.presentationlayer.common.converter.getCryptoCoin
-import com.catalinj.cryptosmart.presentationlayer.common.converter.toBundle
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
-import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.contract.CoinDetailsContract
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
+import kotlinx.android.synthetic.main.layout_fragment_coin_details.view.*
 import javax.inject.Inject
 
 class CoinDetailsFragment :
@@ -29,17 +27,23 @@ class CoinDetailsFragment :
     override val name: String = TAG
     @Inject
     protected lateinit var coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter
-    private lateinit var cryptoCoin: CryptoCoin
-    private var mPlusOneButton: Button? = null
+    private lateinit var coinName: TextView
+    private lateinit var coinSymbol: TextView
+    private lateinit var coinValue: TextView
+    private lateinit var coinRank: TextView
+    private lateinit var coinChange: TextView
+    private lateinit var coinTimestamp: TextView
 
     class Factory(private val activityComponent: ActivityComponent,
-                  private val cryptoCoin: CryptoCoin)
+                  private val cryptoCoinId: String)
         : DaggerFragmentFactory<CoinDetailsComponent>() {
 
         override fun onCreateFragment(): DaggerFragment<CoinDetailsComponent> {
             val f = CoinDetailsFragment()
+            val bundle = Bundle()
+            bundle.putString(ARG_KEY_COIN_ID, cryptoCoinId)
             //set selected coin
-            f.arguments = cryptoCoin.toBundle()
+            f.arguments = bundle
             //do some other initializations, set arguments
             return f
         }
@@ -51,10 +55,10 @@ class CoinDetailsFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cryptoCoin = arguments!!.getCryptoCoin()
-        Log.d("CataDetails", "Coin is: ${cryptoCoin.name}, ${cryptoCoin.id}")
+        val cryptoCoinId = arguments!!.getString(ARG_KEY_COIN_ID)
+        Log.d("CataDetails", "Coin id is: $cryptoCoinId")
         injector.inject(this)
-        coinDetailsPresenter.startPresenting()
+        coinDetailsPresenter.setCoinId(cryptoCoinId)
         Log.d(TAG, "CoinDetailsFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinDetailsPresenter.hashCode().toString(16))
     }
 
@@ -62,21 +66,23 @@ class CoinDetailsFragment :
                               savedInstanceState: Bundle?): View? {
         Log.d(TAG, "CoinDetailsFragment#onCreateView")
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_plus_one, container, false)
-
-        //Find the +1 button
-        mPlusOneButton = view.findViewById<View>(R.id.plus_one_button) as Button
-        return view
+        return inflater.inflate(R.layout.layout_fragment_coin_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d(TAG, "CoinDetailsFragment#onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "CoinDetailsFragment#onViewCreated")
         coinDetailsPresenter.viewAvailable(this)
     }
 
     override fun initialise() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val view = view!!
+        coinName = view.coin_name
+        coinSymbol = view.coin_symbol
+        coinValue = view.coin_value
+        coinRank = view.coin_rank
+        coinChange = view.coin_change
+        coinTimestamp = view.coin_timestamp
     }
 
     override fun onStart() {
@@ -122,7 +128,6 @@ class CoinDetailsFragment :
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "CoinDetailsFragment#onDestroy")
-        //TODO release presenter reference?
         Log.d(TAG, "CoinDetailsFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }
@@ -141,24 +146,25 @@ class CoinDetailsFragment :
         return coinDetailsPresenter
     }
 
-    override fun setCoinData(data: CoinMarketCapCryptoCoin) {
-        //todo
+    override fun setCoinData(coinDetails: CryptoCoinDetails) {
+        coinName.text = coinDetails.name
+        coinSymbol.text = coinDetails.symbol
+        coinValue.text = coinDetails.priceUsd.toString()
+        coinRank.text = coinDetails.rank.toString()
+        coinChange.text = coinDetails.percentChange1h.toString()
+        coinTimestamp.text = coinDetails.lastUpdated.toString()
     }
 
     override fun showLoadingIndicator() {
-        //todo
+        Log.d(TAG, "$TAG#showLoadingIndicator()")
     }
 
     override fun hideLoadingIndicator() {
-        //todo
-    }
-
-    override fun increaseValue() {
-        // Refresh the state of the +1 button each time the activity receives focus.
-        Log.d("Cata", "buttonText: ${mPlusOneButton!!}")
+        Log.d(TAG, "$TAG#hideLoadingIndicator()")
     }
 
     internal companion object {
         const val TAG: String = "CoinDetailsFragment"
+        private const val ARG_KEY_COIN_ID = "ARG::COIN_ID"
     }
 }

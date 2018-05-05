@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.datalayer.database.models
+package com.catalinj.cryptosmart.datalayer.database.coindetails
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 /**
  * Created by catalinj on 27.01.2018.
  */
-@Entity(tableName = "coin_details")
+@Entity(tableName = DbCryptoCoinDetails.COIN_DETAILS_TABLE_NAME)
 data class DbCryptoCoinDetails(@PrimaryKey @ColumnInfo(name = "id") val id: String,
                                @ColumnInfo(name = "name") val name: String,
                                @ColumnInfo(name = "symbol") val symbol: String,
@@ -22,4 +22,8 @@ data class DbCryptoCoinDetails(@PrimaryKey @ColumnInfo(name = "id") val id: Stri
                                @ColumnInfo(name = "percent_change_1h") val percentChange1h: Float,
                                @ColumnInfo(name = "percent_change_24h") val percentChange24h: Float,
                                @ColumnInfo(name = "percent_change_7d") val percentChange7d: Float,
-                               @ColumnInfo(name = "last_updated") val lastUpdated: Long)
+                               @ColumnInfo(name = "last_updated") val lastUpdated: Long) {
+    companion object {
+        const val COIN_DETAILS_TABLE_NAME: String = "coin_details"
+    }
+}

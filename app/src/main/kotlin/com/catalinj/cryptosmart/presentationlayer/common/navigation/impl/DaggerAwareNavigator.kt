@@ -3,17 +3,16 @@ package com.catalinj.cryptosmart.presentationlayer.common.navigation.impl
 import android.support.v4.app.FragmentManager
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
-import com.catalinj.cryptosmart.di.components.ActivityComponent
+import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinsListFragment
-import com.catalinjurjiu.smartpersist.DaggerActivity
 
 /**
  * Created by catalin on 27/04/2018.
  */
-class DaggerAwareNavigator(private val activity: DaggerActivity<ActivityComponent>) : Navigator {
+class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
 
     private val fragmentManager: FragmentManager = activity.supportFragmentManager
 
@@ -22,6 +21,7 @@ class DaggerAwareNavigator(private val activity: DaggerActivity<ActivityComponen
         fragmentManager.beginTransaction()
                 .add(R.id.fragment_container, frag, CoinsListFragment.TAG)
                 .commit()
+        activity.showBottomNavigation()
     }
 
     override fun openCoinDetailsScreen(cryptoCoin: CryptoCoin) {
@@ -33,6 +33,7 @@ class DaggerAwareNavigator(private val activity: DaggerActivity<ActivityComponen
                 .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)
                 .addToBackStack(CoinDetailsFragment.TAG)
                 .commit()
+        activity.hideBottomNavigation()
     }
 
     override fun navigateBack(): Boolean {

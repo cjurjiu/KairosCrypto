@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.presentationlayer
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.catalinj.cryptosmart.CryptoSmartApplication
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.di.components.ActivityComponent
@@ -43,6 +44,14 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
         if (!navigator.navigateBack()) {
             super.onBackPressed()
         }
+    }
+
+    fun showBottomNavigation() {
+        findViewById<View>(R.id.bottom_navigation).visibility = View.VISIBLE
+    }
+
+    fun hideBottomNavigation() {
+        findViewById<View>(R.id.bottom_navigation).visibility = View.INVISIBLE
     }
 
     private companion object {

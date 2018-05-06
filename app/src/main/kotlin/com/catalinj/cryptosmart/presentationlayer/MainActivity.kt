@@ -2,13 +2,13 @@ package com.catalinj.cryptosmart.presentationlayer
 
 import android.os.Bundle
 import android.util.Log
+import com.catalinj.cryptosmart.CryptoSmartApplication
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.impl.DaggerAwareNavigator
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
     override val name: String = TAG

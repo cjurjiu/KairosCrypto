@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer
+package com.catalinj.cryptosmart
 
 import android.app.Application
 import com.catalinj.cryptosmart.di.components.AppComponent
@@ -11,6 +11,11 @@ import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
 
 /**
+ * Represents the CryptoSmart application context. Used for App-Global config & acts as a injection
+ * root for Dagger2 components.
+ *
+ * Main Activity can be found in the "presentationlayer" package.
+ *
  * Created by catalinj on 04.02.2018.
  */
 @Suppress("unused")

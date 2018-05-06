@@ -3,6 +3,8 @@ package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscree
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
+import com.catalinj.cryptosmart.datalayer.network.RequestState
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -11,7 +13,9 @@ import io.reactivex.functions.Consumer
 /**
  * Created by catalin on 05/05/2018.
  */
-class CoinInfoPresenter(private val coinsRepository: CoinsRepository) : CoinInfoContract.CoinInfoPresenter {
+class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
+                        private val parentPresenter: CoinDetailsContract.CoinDetailsPresenter)
+    : CoinInfoContract.CoinInfoPresenter {
 
     private var view: CoinInfoContract.CoinInfoView? = null
     private lateinit var coinId: String
@@ -21,18 +25,34 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository) : CoinInfo
 
     private var availableData: CryptoCoinDetails? = null
 
+    init {
+        parentPresenter.registerChild(coinInfoPresenter = this)
+    }
+
     override fun startPresenting() {
         val coinDetailsDisposable = coinsRepository.getCoinDetailsObservable(coinId = coinId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("Cata", "CoinInfoPresenter-> coinDetailsObservable#onNext." +
                             "Coin id: ${it.id}")
-
                     //onNext
                     availableData = it
                     view?.setCoinInfo(it)
                 }
+
+        val loadingStateDisposable = coinsRepository.loadingStateObservable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    //onNext
+                    when (it) {
+                        is RequestState.Idle -> parentPresenter.childFinishedLoading()
+                        is RequestState.Loading -> parentPresenter.childStartedLoading()
+                        else -> Log.d(TAG, "Received unknown loading state")
+                    }
+                }
+
         compositeDisposable.add(coinDetailsDisposable)
+        compositeDisposable.add(loadingStateDisposable)
 
         val data = availableData
         if (data != null) {
@@ -69,10 +89,11 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository) : CoinInfo
         this.coinSymbol = coinSymbol
     }
 
-    override fun handleRefresh() {
+    override fun handleRefresh(): Boolean {
         coinsRepository.fetchCoinDetails(coinId, Consumer {
             Log.d("Cata", "CoinInfoPresenter: Error fetching coin: $it")
         })
+        return true
     }
 
     companion object {

@@ -9,11 +9,12 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
  */
 interface CoinInfoContract {
     interface CoinInfoPresenter : MvpPresenter<CoinInfoPresenter, CoinInfoView> {
+
         fun setCoinId(coinId: String)
 
         fun setCoinSymbol(coinSymbol: String)
 
-        fun handleRefresh()
+        fun handleRefresh(): Boolean
     }
 
     interface CoinInfoView : MvpView<CoinInfoPresenter, CoinInfoView> {

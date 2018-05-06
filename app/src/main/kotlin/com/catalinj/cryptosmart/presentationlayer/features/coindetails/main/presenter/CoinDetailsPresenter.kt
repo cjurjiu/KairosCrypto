@@ -2,6 +2,8 @@ package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.pre
 
 import android.util.Log
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -15,6 +17,8 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
     private lateinit var coinName: String
     private var coinChange1h: Float = 0F
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private var childCoinInfoPresenter: CoinInfoContract.CoinInfoPresenter? = null
+    private var childCoinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter? = null
 
     init {
         Log.d("Cata", "Injected CoinDetailsPresenter")
@@ -54,7 +58,14 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
 
     override fun userPullToRefresh() {
         Log.d("Cata", "CoinDetailsPresenter#userPullToRefresh")
-        //TODO
+        val activeView = view?.getActiveChildView()
+        when (activeView) {
+            is CoinInfoContract.CoinInfoView ->
+                childCoinInfoPresenter?.handleRefresh()
+            is CoinMarketsContract.CoinMarketsPresenter ->
+                childCoinMarketsPresenter?.handleRefresh()
+            else -> Log.d(TAG, "Received unknown view")
+        }
     }
 
     override fun getCoinId(): String {
@@ -64,4 +75,32 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
     override fun getCoinSymbol(): String {
         return coinSymbol
     }
+
+    override fun registerChild(coinInfoPresenter: CoinInfoContract.CoinInfoPresenter) {
+        this.childCoinInfoPresenter = coinInfoPresenter
+    }
+
+    override fun registerChild(coinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter) {
+        this.childCoinMarketsPresenter = coinMarketsPresenter
+    }
+
+    override fun childStartedLoading() {
+        view?.showLoadingIndicator()
+    }
+
+    override fun childFinishedLoading() {
+        view?.hideLoadingIndicator()
+    }
+
+    override fun updateChange1h(newChange1h: Float) {
+        this.coinChange1h = newChange1h
+        view?.setCoinInfo(coinName = coinName,
+                coinSymbol = coinSymbol,
+                change1h = newChange1h)
+    }
+
+    private companion object {
+        const val TAG = "CoinDetailsPresenter"
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.view
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
@@ -14,6 +15,7 @@ import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
+import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
@@ -30,11 +32,12 @@ class CoinDetailsFragment :
     override val name: String = TAG
     @Inject
     protected lateinit var coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter
-
-    private var coinNameTextView: AppCompatTextView? = null
-    private var coinSymbolTextView: AppCompatTextView? = null
-    private var coinLogoImageView: AppCompatImageView? = null
-    private var coinTrendImageView: AppCompatImageView? = null
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var coinDetailsViewPagerAdapter: CoinDetailsViewPagerAdapter
+    private lateinit var coinNameTextView: AppCompatTextView
+    private lateinit var coinSymbolTextView: AppCompatTextView
+    private lateinit var coinLogoImageView: AppCompatImageView
+    private lateinit var coinTrendImageView: AppCompatImageView
 
     class Factory(private val activityComponent: ActivityComponent,
                   private val cryptoCoin: CryptoCoin)
@@ -143,6 +146,10 @@ class CoinDetailsFragment :
 
     override fun initialise() {
         val view = view!!
+        swipeRefreshLayout = view.coin_details_swipe_refresh_layout
+        swipeRefreshLayout.setOnRefreshListener {
+            coinDetailsPresenter.userPullToRefresh()
+        }
         coinNameTextView = view.text_coin_details_coin_name
         coinSymbolTextView = view.text_coin_details_coin_symbol
         coinLogoImageView = view.image_coin_details_coin_logo
@@ -152,20 +159,22 @@ class CoinDetailsFragment :
     }
 
     override fun setCoinInfo(coinName: String, coinSymbol: String, change1h: Float) {
-        coinNameTextView?.text = coinName
-        coinSymbolTextView?.text = coinSymbol
-        coinLogoImageView?.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coinSymbol, context = activity!!))
-        coinTrendImageView?.setImageResource(R.drawable.ic_vector_trending_up_black_24dp)
+        coinNameTextView.text = coinName
+        coinSymbolTextView.text = coinSymbol
+        coinLogoImageView.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coinSymbol, context = activity!!))
+        coinTrendImageView.setImageResource(R.drawable.ic_vector_trending_up_black_24dp)
         //do just log for the moment
         Log.d(TAG, "$TAG#setCoinInfo.")
     }
 
     override fun showLoadingIndicator() {
         Log.d(TAG, "$TAG#showLoadingIndicator()")
+        swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideLoadingIndicator() {
         Log.d(TAG, "$TAG#hideLoadingIndicator()")
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onBack(): Boolean {
@@ -175,6 +184,12 @@ class CoinDetailsFragment :
 
     override fun getPresenter(): CoinDetailsContract.CoinDetailsPresenter {
         return coinDetailsPresenter
+    }
+
+    override fun getActiveChildView(): MvpView<*, *> {
+        val viewPager = view?.view_pager_coin_details
+        val activeFragment = coinDetailsViewPagerAdapter.getItem(viewPager!!.currentItem)
+        return (activeFragment as MvpView<*, *>)
     }
 
     private fun initializeToolbar(view: View) {
@@ -187,7 +202,7 @@ class CoinDetailsFragment :
     private fun initializeViewPagerWithTabs(view: View) {
         //ViewPager config
         val viewPager = view.view_pager_coin_details
-        val coinDetailsViewPagerAdapter = CoinDetailsViewPagerAdapter(
+        coinDetailsViewPagerAdapter = CoinDetailsViewPagerAdapter(
                 coinId = coinDetailsPresenter.getCoinId(),
                 coinSymbol = coinDetailsPresenter.getCoinSymbol(),
                 coinDetailsComponent = injector,

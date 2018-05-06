@@ -1,28 +1,42 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.presenter
 
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 
 /**
  * Created by catalin on 05/05/2018.
  */
-class CoinMarketsPresenter(coinId: String) : CoinMarketsContract.CoinMarketsPresenter {
+class CoinMarketsPresenter(private val coinId: String,
+                           private val parentPresenter: CoinDetailsContract.CoinDetailsPresenter) :
+        CoinMarketsContract.CoinMarketsPresenter {
+
+    init {
+        parentPresenter.registerChild(coinMarketsPresenter = this)
+    }
+
     override fun startPresenting() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo
     }
 
     override fun stopPresenting() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo
     }
 
     override fun viewAvailable(view: CoinMarketsContract.CoinMarketsView) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo
     }
 
     override fun viewDestroyed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo
     }
 
     override fun getView(): CoinMarketsContract.CoinMarketsView? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo
+        return null
+    }
+
+    override fun handleRefresh(): Boolean {
+        //todo
+        return false
     }
 }

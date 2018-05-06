@@ -9,7 +9,8 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 interface CoinMarketsContract {
 
     interface CoinMarketsPresenter : MvpPresenter<CoinMarketsPresenter, CoinMarketsView> {
-        //empty for now
+
+        fun handleRefresh(): Boolean
     }
 
     interface CoinMarketsView : MvpView<CoinMarketsPresenter, CoinMarketsView> {

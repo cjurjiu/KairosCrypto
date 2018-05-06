@@ -85,7 +85,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
 
     //coin list presenter methods
     override fun coinSelected(selectedCoin: CryptoCoin) {
-        navigator?.openCoinDetailsScreen(cryptoCoinId = selectedCoin.id)
+        navigator?.openCoinDetailsScreen(cryptoCoin = selectedCoin)
     }
 
     override fun changeCurrencyPressed() {

@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 
@@ -8,10 +9,15 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
  */
 interface CoinInfoContract {
     interface CoinInfoPresenter : MvpPresenter<CoinInfoPresenter, CoinInfoView> {
-        //empty for now
+        fun setCoinId(coinId: String)
+
+        fun setCoinSymbol(coinSymbol: String)
+
+        fun handleRefresh()
     }
 
     interface CoinInfoView : MvpView<CoinInfoPresenter, CoinInfoView> {
-        //empty for now
+
+        fun setCoinInfo(coinDetails: CryptoCoinDetails)
     }
 }

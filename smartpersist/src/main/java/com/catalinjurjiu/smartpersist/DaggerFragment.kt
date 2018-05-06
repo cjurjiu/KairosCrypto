@@ -8,6 +8,10 @@ import com.catalinjurjiu.common.Factory
 import com.catalinjurjiu.common.NamedComponent
 
 /**
+ * T is the type of the Dagger component to be stored during a configuration change.
+ *
+ * Name is used to identify the fragment in the ViewModelProvider's store. The Fragment TAG should be
+ * enough.
  * Created by catalinj on 27.02.2018.
  */
 @Suppress("UNCHECKED_CAST")
@@ -38,7 +42,7 @@ abstract class DaggerFragment<T : Any> : Fragment(), NamedComponent {
                 injector = daggerComponentStore.component
             } else {
                 Log.e("Cata", "injector wants to be initialized from the dagger comp store, but the store has no\n" +
-                        "component in it....an error? check flags?")
+                        "component in it....an error? check flags? this class ${this::class.simpleName}")
             }
         }
     }

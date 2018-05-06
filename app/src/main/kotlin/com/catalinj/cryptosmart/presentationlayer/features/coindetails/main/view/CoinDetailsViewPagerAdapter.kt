@@ -3,19 +3,30 @@ package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.vie
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.view.CoinInfoFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.view.CoinMarketsFragment
 
 /**
  * Created by catalin on 05/05/2018.
  */
-class CoinDetailsViewPagerAdapter(supportFragmentManager: FragmentManager)
+class CoinDetailsViewPagerAdapter(private val coinId: String,
+                                  private val coinSymbol: String,
+                                  private val coinDetailsComponent: CoinDetailsComponent,
+                                  supportFragmentManager: FragmentManager)
     : FragmentPagerAdapter(supportFragmentManager) {
+
     override fun getItem(position: Int): Fragment {
         return if (position == 0) {
-            CoinInfoFragment()
+            CoinInfoFragment.Factory(coinId = coinId,
+                    coinSymbol = coinSymbol,
+                    coinDetailsComponent = coinDetailsComponent)
+                    .create()
         } else {
-            CoinMarketsFragment()
+            CoinMarketsFragment.Factory(coinId = coinId,
+                    coinSymbol = coinSymbol,
+                    coinDetailsComponent = coinDetailsComponent)
+                    .create()
         }
     }
 

@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.presentationlayer.common.navigation.impl
 
 import android.support.v4.app.FragmentManager
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
@@ -23,10 +24,10 @@ class DaggerAwareNavigator(private val activity: DaggerActivity<ActivityComponen
                 .commit()
     }
 
-    override fun openCoinDetailsScreen(cryptoCoinId: String) {
+    override fun openCoinDetailsScreen(cryptoCoin: CryptoCoin) {
         val activityComponent = activity.injector
         val fragmentFactory = CoinDetailsFragment.Factory(activityComponent = activityComponent,
-                cryptoCoinId = cryptoCoinId)
+                cryptoCoin = cryptoCoin)
         val frag = fragmentFactory.create()
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)

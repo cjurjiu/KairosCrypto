@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.catalinjurjiu.common.NamedComponent
 
+/**
+ * T is the type of the Dagger component to be stored during a configuration change.
+ */
 @Suppress("UNCHECKED_CAST")
 abstract class DaggerActivity<ActivityComponent : Any> : AppCompatActivity(), NamedComponent {
 

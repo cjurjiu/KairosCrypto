@@ -5,7 +5,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreen
 /**
  * Created by catalin on 05/05/2018.
  */
-class CoinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter {
+class CoinMarketsPresenter(coinId: String) : CoinMarketsContract.CoinMarketsPresenter {
     override fun startPresenting() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -1,54 +1,35 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.presenter
 
 import android.util.Log
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
-import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinDetailsPresenter(private val repository: CoinsRepository) : CoinDetailsContract.CoinDetailsPresenter {
+class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
 
     private var view: CoinDetailsContract.CoinDetailsView? = null
     private lateinit var coinId: String
-    private var availableData: CryptoCoinDetails? = null
+    private lateinit var coinSymbol: String
+    private lateinit var coinName: String
+    private var coinChange1h: Float = 0F
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     init {
         Log.d("Cata", "Injected CoinDetailsPresenter")
     }
 
-    override fun setCoinId(coinId: String) {
+    override fun setInitialInfo(coinName: String, coinSymbol: String, coinId: String, change1h: Float) {
         this.coinId = coinId
+        this.coinName = coinName
+        this.coinSymbol = coinSymbol
+        this.coinChange1h = change1h
     }
 
     override fun startPresenting() {
         Log.d("Cata", "CoinDetailsPresenter#startPresenting")
-
-        val coinDetailsDisposable = repository.getCoinDetailsObservable(coinId = coinId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    Log.d("Cata", "CoinDetailsPresenter-> coinDetailsObservable#onNext." +
-                            "Coin id: ${it.id}")
-
-                    //onNext
-                    availableData = it
-                    view?.setCoinData(it)
-                }
-        compositeDisposable.add(coinDetailsDisposable)
-
-        val data = availableData
-        if (data != null) {
-            view?.setCoinData(data)
-        } else {
-            repository.fetchCoinDetails(coinId, Consumer {
-                Log.d("Cata", "CoinDetailsPresenter: Error fetching coin: $it")
-            })
-        }
+        view?.setCoinInfo(coinName, coinSymbol, coinChange1h)
     }
 
     override fun stopPresenting() {
@@ -71,13 +52,16 @@ class CoinDetailsPresenter(private val repository: CoinsRepository) : CoinDetail
         return view
     }
 
-    override fun userPressedBack(): Boolean {
-        Log.d("Cata", "CoinDetailsPresenter#userPressedBack")
-        return false
-    }
-
     override fun userPullToRefresh() {
         Log.d("Cata", "CoinDetailsPresenter#userPullToRefresh")
         //TODO
+    }
+
+    override fun getCoinId(): String {
+        return coinId
+    }
+
+    override fun getCoinSymbol(): String {
+        return coinSymbol
     }
 }

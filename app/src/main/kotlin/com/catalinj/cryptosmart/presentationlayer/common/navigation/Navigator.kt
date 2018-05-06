@@ -1,5 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.common.navigation
 
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+
 /**
  * Component charged with navigation across various screens.
  *
@@ -17,9 +19,9 @@ interface Navigator {
     /**
      * Opens the coin details screen.
      *
-     * @param cryptoCoinId the id of the coin for which the details are being displayed
+     * @param cryptoCoin the id of the coin for which the details are being displayed
      */
-    fun openCoinDetailsScreen(cryptoCoinId: String)
+    fun openCoinDetailsScreen(cryptoCoin: CryptoCoin)
 
     /**
      * Navigates back.

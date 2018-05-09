@@ -49,7 +49,7 @@ class CoinDetailsFragment :
             bundle.putString(ARG_KEY_COIN_ID, cryptoCoin.id)
             bundle.putString(ARG_KEY_COIN_NAME, cryptoCoin.name)
             bundle.putString(ARG_KEY_COIN_SYMBOL, cryptoCoin.symbol)
-            bundle.putFloat(ARG_KEY_COIN_CHANGE_1H, cryptoCoin.percentChange1h)
+            bundle.putFloat(ARG_KEY_COIN_CHANGE_1H, cryptoCoin.priceData.percentChange1h)
             //set selected coin
             f.arguments = bundle
             //do some other initializations, set arguments
@@ -67,7 +67,7 @@ class CoinDetailsFragment :
         val cryptoCoinName = arguments!!.getString(ARG_KEY_COIN_NAME)
         val cryptoCoinSymbol = arguments!!.getString(ARG_KEY_COIN_SYMBOL)
         val cryptoCoinChange1h = arguments!!.getFloat(ARG_KEY_COIN_CHANGE_1H)
-        Log.d("CataDetails", "Coin id is: $cryptoCoinId")
+        Log.d("CataDetails", "Coin serverId is: $cryptoCoinId")
         injector.inject(this)
         coinDetailsPresenter.setInitialInfo(coinName = cryptoCoinName,
                 coinId = cryptoCoinId,

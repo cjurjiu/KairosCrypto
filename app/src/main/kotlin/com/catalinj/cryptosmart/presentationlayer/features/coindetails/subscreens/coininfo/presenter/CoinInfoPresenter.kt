@@ -30,11 +30,11 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
     }
 
     override fun startPresenting() {
-        val coinDetailsDisposable = coinsRepository.getCoinDetailsObservable(coinId = coinId)
+        val coinDetailsDisposable = coinsRepository.getCoinDetailsObservable(coinSymbol = coinSymbol)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("Cata", "CoinInfoPresenter-> coinDetailsObservable#onNext." +
-                            "Coin id: ${it.id}")
+                            "Coin serverId: ${it.id}")
                     //onNext
                     availableData = it
                     view?.setCoinInfo(it)

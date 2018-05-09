@@ -1,9 +1,8 @@
 package com.catalinj.cryptosmart.datalayer.network.coinmarketcap
 
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinDetails
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinListResponse
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -14,18 +13,6 @@ import retrofit2.http.Query
 interface CoinMarketCapService {
 
     /**
-     * Fetches the specified number of coins, starting at index 0.
-     *
-     * @param limit how many coins to return. default param, with value of 0.
-     * @return an immutable list of CoinMarketCapCryptoCoin objects.
-     */
-    @GET(V1_TICKER_ENDPOINT)
-    fun fetchCoinsListWithLimit(@Query(LIMIT_URL_PARAM) limit: Int = 0): Call<List<CoinMarketCapCryptoCoin>>
-
-    @GET(V1_TICKER_ENDPOINT)
-    fun rxFetchCoinsListWithLimit(@Query(LIMIT_URL_PARAM) limit: Int = 100): Observable<List<CoinMarketCapCryptoCoin>>
-
-    /**
      * Fetches the list of coins, starting at the specified index on CoinMarketCap. The currency in
      * which the value of the coins is expressed, can be configured through the second parameter.
      *
@@ -33,28 +20,28 @@ interface CoinMarketCapService {
      * @param limit how many coins to return. default param with value of 0.
      * @param currency a CurrencyRepresentation instance which represents the currency in which the
      * coins value should be expressed.
-     * @return an immutable list of CoinMarketCapCryptoCoin objects.
+     * @return an immutable list of CoinMarketCapCryptoCoinV1 objects.
      */
-    @GET(V1_TICKER_ENDPOINT)
+    @GET(V2_TICKER_ENDPOINT)
     fun rxFetchCoinsListBounded(@Query(START_URL_PARAM)
                                 start: Int = 0,
                                 @Query(LIMIT_URL_PARAM)
                                 limit: Int = 0,
                                 @Query(CONVERT_URL_PARAM)
                                 currency: String = CurrencyRepresentation.USD.currency)
-            : Observable<List<CoinMarketCapCryptoCoin>>
+            : Observable<CoinMarketCapCryptoCoinListResponse>
 
     //this endpoint returns a list of just one item
-    @GET("$V1_TICKER_ENDPOINT/{$PATH_COIN_ID}")
-    fun fetchCoinDetails(@Path(PATH_COIN_ID) coinId: String): Observable<List<CoinMarketCapCryptoCoinDetails>>
+    @GET("${V2_TICKER_ENDPOINT}/{${PATH_COIN_ID}}")
+    fun fetchCoinDetails(@Path(PATH_COIN_ID) coinId: String): Observable<CoinMarketCapCryptoCoinDetails>
 
     companion object {
         //base url for the Rest API of cointmarketcap.com
         const val BASE_URL: String = "https://api.coinmarketcap.com"
         //ticker endpoint
-        const val V1_TICKER_ENDPOINT: String = "/v1/ticker"
-        //id of the coin which we want to retrieve
-        const val PATH_COIN_ID = "id"
+        const val V2_TICKER_ENDPOINT: String = "/v2/ticker"
+        //serverId of the coin which we want to retrieve
+        const val PATH_COIN_ID = "serverId"
         //coin  nr limit
         const val LIMIT_URL_PARAM: String = "limit"
         //list coins start

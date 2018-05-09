@@ -15,7 +15,7 @@ import com.catalinj.cryptosmart.R
  * a max height of `240dp`:
  * ```
  *     <com.catalinj.cryptosmart.presentationlayer.common.view.custom.MaxHeightRecyclerView
- *       android:id="@+id/my_height_bound_recycler_view"
+ *       android:serverId="@+serverId/my_height_bound_recycler_view"
  *       android:layout_width="match_parent"
  *       android:layout_height="match_parent"
  *       app:maxHeight="240dp" />

@@ -43,7 +43,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ newLoadingState -> updateLoadingState(newLoadingState) })
 
-        val cryptoObservable: Disposable = repository.cryptoCoinObservable
+        val cryptoObservable: Disposable = repository.getCoinListObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("RxJ", "Update coins")

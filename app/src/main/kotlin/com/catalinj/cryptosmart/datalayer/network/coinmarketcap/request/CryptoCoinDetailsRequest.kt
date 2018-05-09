@@ -8,9 +8,9 @@ import io.reactivex.Observable
 
 class CryptoCoinDetailsRequest(private val coinId: String,
                                private val coinMarketCapService: CoinMarketCapService) :
-        ApiRequest<List<CoinMarketCapCryptoCoinDetails>>() {
+        ApiRequest<CoinMarketCapCryptoCoinDetails>() {
 
-    override fun fetchData(): Observable<List<CoinMarketCapCryptoCoinDetails>> {
+    override fun fetchData(): Observable<CoinMarketCapCryptoCoinDetails> {
         Log.d("RxJ", "fetch data")
         return coinMarketCapService.fetchCoinDetails(coinId = coinId)
     }

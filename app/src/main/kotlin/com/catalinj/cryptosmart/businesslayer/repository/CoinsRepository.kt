@@ -13,11 +13,6 @@ import io.reactivex.functions.Consumer
 interface CoinsRepository {
 
     /**
-     * Observable that notifies when the available list of [CryptoCoin]s has been updated.
-     */
-    val cryptoCoinObservable: Observable<List<CryptoCoin>>
-
-    /**
      * Observable that notifies when the loading state of this Repository changes. This always
      * notifies with the most recent value, when an observer subscribes.
      */
@@ -26,7 +21,8 @@ interface CoinsRepository {
     /**
      * Updates the known list of coins.
      *
-     * Once the coins have been updated, the [cryptoCoinObservable] will notify its observers.
+     * Once the coins have been updated, the observable returned by [getCoinDetailsObservable] will
+     * notify its observers.
      * @param startIndex the index of the first coin in the list
      * @param numberOfCoins the number of coins to fetch
      * @param errorHandler consumer which will be notified if an error happens
@@ -41,7 +37,12 @@ interface CoinsRepository {
     /**
      * Observable which tracks changes to the details of a specific crypto coin.
      *
-     * @param coinId the id of the coin to track.
+     * @param coinSymbol the serverId of the coin to track.
      */
-    fun getCoinDetailsObservable(coinId: String): Observable<CryptoCoinDetails>
+    fun getCoinDetailsObservable(coinSymbol: String): Observable<CryptoCoinDetails>
+
+    /**
+     * Observable that notifies when the available list of [CryptoCoin]s has been updated.
+     */
+    fun getCoinListObservable(): Observable<List<CryptoCoin>>
 }

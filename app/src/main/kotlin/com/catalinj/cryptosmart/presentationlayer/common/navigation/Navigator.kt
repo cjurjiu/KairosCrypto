@@ -19,7 +19,7 @@ interface Navigator {
     /**
      * Opens the coin details screen.
      *
-     * @param cryptoCoin the id of the coin for which the details are being displayed
+     * @param cryptoCoin the serverId of the coin for which the details are being displayed
      */
     fun openCoinDetailsScreen(cryptoCoin: CryptoCoin)
 

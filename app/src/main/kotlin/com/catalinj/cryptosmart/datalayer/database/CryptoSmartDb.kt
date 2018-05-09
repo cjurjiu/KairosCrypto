@@ -4,21 +4,23 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.catalinj.cryptosmart.datalayer.database.coindetails.CoinMarketCapCryptoCoinDetailsDao
-import com.catalinj.cryptosmart.datalayer.database.coindetails.DbCryptoCoinDetails
-import com.catalinj.cryptosmart.datalayer.database.coins.CoinMarketCapCryptoCoinDao
-import com.catalinj.cryptosmart.datalayer.database.coins.DbCryptoCoin
+import com.catalinj.cryptosmart.datalayer.database.dao.CryptoCoinDao
+import com.catalinj.cryptosmart.datalayer.database.dao.PartialCryptoCoinDao
+import com.catalinj.cryptosmart.datalayer.database.dao.PriceDataDao
+import com.catalinj.cryptosmart.datalayer.database.models.DbPartialCryptoCoin
+import com.catalinj.cryptosmart.datalayer.database.models.DbPriceData
 
 /**
  * Created by catalinj on 27.01.2018.
  */
-@Database(version = 1,
-        entities = [(DbCryptoCoin::class), (DbCryptoCoinDetails::class)])
+@Database(version = 1, entities = [DbPartialCryptoCoin::class, DbPriceData::class])
 abstract class CryptoSmartDb : RoomDatabase() {
 
-    abstract fun getCoinMarketCapCryptoCoinDao(): CoinMarketCapCryptoCoinDao
+    abstract fun getCryptoCoinDao(): CryptoCoinDao
 
-    abstract fun getCoinMarketCapCryptoCoinDetailsDao(): CoinMarketCapCryptoCoinDetailsDao
+    abstract fun getPlainCryptoCoinDao(): PartialCryptoCoinDao
+
+    abstract fun getCoinMarketCapPriceDataDao(): PriceDataDao
 
     companion object InstanceHolder {
 

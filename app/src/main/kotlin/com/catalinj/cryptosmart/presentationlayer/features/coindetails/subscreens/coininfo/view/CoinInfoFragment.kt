@@ -93,9 +93,9 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(), CoinInfoContract.C
     override fun setCoinInfo(coinDetails: CryptoCoinDetails) {
         coinName.text = coinDetails.name
         coinSymbol.text = coinDetails.symbol
-        coinValue.text = coinDetails.priceUsd.toString()
+        coinValue.text = coinDetails.priceData.price.toString()
         coinRank.text = coinDetails.rank.toString()
-        coinChange.text = coinDetails.percentChange1h.toString()
+        coinChange.text = coinDetails.priceData.percentChange1h.toString()
         coinTimestamp.text = coinDetails.lastUpdated.toString()
     }
 

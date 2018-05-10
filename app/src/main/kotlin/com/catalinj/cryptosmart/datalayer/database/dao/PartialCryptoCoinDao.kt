@@ -13,6 +13,9 @@ import io.reactivex.Flowable
 @Dao
 interface PartialCryptoCoinDao {
 
+    /**
+     * Get a Flowable which monitors the list of known [DbPartialCryptoCoin].
+     */
     @Query("SELECT * FROM ${DbPartialCryptoCoin.COIN_TABLE_NAME}")
     fun getPartialCryptoCoinsFlowable(): Flowable<List<DbPartialCryptoCoin>>
 

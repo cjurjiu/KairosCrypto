@@ -13,6 +13,9 @@ import io.reactivex.Flowable
 @Dao
 interface CryptoCoinDao {
 
+    /**
+     * Gets all available [DbCryptoCoin]s, ordered by rank, ascending.
+     */
     @Query("SELECT * FROM ${DbPartialCryptoCoin.COIN_TABLE_NAME}" +
             " INNER JOIN ${DbPriceData.PRICE_DATA_TABLE_NAME}" +
             " ON ${DbPartialCryptoCoin.COIN_TABLE_NAME}.${DbPartialCryptoCoin.ColumnNames.SYMBOL} = " +
@@ -20,6 +23,9 @@ interface CryptoCoinDao {
             " ORDER BY ${DbPartialCryptoCoin.COIN_TABLE_NAME}.${DbPartialCryptoCoin.ColumnNames.RANK}")
     fun getCoins(): List<DbCryptoCoin>
 
+    /**
+     * Get a Flowable which monitors the list of known coins.
+     */
     @Query("SELECT * FROM ${DbPartialCryptoCoin.COIN_TABLE_NAME}" +
             " INNER JOIN ${DbPriceData.PRICE_DATA_TABLE_NAME}" +
             " ON ${DbPartialCryptoCoin.COIN_TABLE_NAME}.${DbPartialCryptoCoin.ColumnNames.SYMBOL} = " +
@@ -27,6 +33,11 @@ interface CryptoCoinDao {
             " ORDER BY ${DbPartialCryptoCoin.COIN_TABLE_NAME}.${DbPartialCryptoCoin.ColumnNames.RANK}")
     fun getCryptoCoinsFlowable(): Flowable<List<DbCryptoCoin>>
 
+    /**
+     * Get a Flowable which monitors a specific crypto coin.
+     *
+     * @param coinSymbol the symbol of the cryptocurrency to track
+     */
     @Query("SELECT * FROM ${DbPartialCryptoCoin.COIN_TABLE_NAME}" +
             " INNER JOIN ${DbPriceData.PRICE_DATA_TABLE_NAME}" +
             " ON ${DbPartialCryptoCoin.COIN_TABLE_NAME}.${DbPartialCryptoCoin.ColumnNames.SYMBOL} = " +

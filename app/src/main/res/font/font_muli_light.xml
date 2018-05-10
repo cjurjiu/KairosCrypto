@@ -6,19 +6,15 @@
     <font
         android:font="@font/muli_light"
         android:fontStyle="normal"
-        android:fontWeight="300"
 
         app:font="@font/muli_light"
-        app:fontStyle="normal"
-        app:fontWeight="300" />
+        app:fontStyle="normal" />
 
     <!--light italic-->
     <font
-        android:font="@font/muli_lightitalic"
+        android:font="@font/muli_light_italic"
         android:fontStyle="italic"
-        android:fontWeight="300"
 
-        app:font="@font/muli_lightitalic"
-        app:fontStyle="italic"
-        app:fontWeight="300" />
+        app:font="@font/muli_light_italic"
+        app:fontStyle="italic" />
 </font-family>

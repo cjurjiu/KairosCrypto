@@ -5,20 +5,16 @@
     <font
         android:font="@font/muli_regular"
         android:fontStyle="normal"
-        android:fontWeight="400"
 
         app:font="@font/muli_regular"
-        app:fontStyle="normal"
-        app:fontWeight="400" />
+        app:fontStyle="normal" />
 
     <!-- regular italic-->
     <font
         android:font="@font/muli_italic"
         android:fontStyle="italic"
-        android:fontWeight="400"
 
         app:font="@font/muli_italic"
-        app:fontStyle="italic"
-        app:fontWeight="400" />
+        app:fontStyle="italic" />
 
 </font-family>

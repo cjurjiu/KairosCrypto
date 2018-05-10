@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--extra light-->
+    <font
+        android:font="@font/muli_extra_light"
+        android:fontStyle="normal"
+
+        app:font="@font/muli_extra_light"
+        app:fontStyle="normal" />
+
+    <!--extra light italic-->
+    <font
+        android:font="@font/muli_extra_light_italic"
+        android:fontStyle="italic"
+
+        app:font="@font/muli_extra_light_italic"
+        app:fontStyle="italic" />
+</font-family>

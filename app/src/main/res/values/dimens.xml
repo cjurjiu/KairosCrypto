@@ -5,7 +5,8 @@
     <!--MARGINS-->
     <dimen name="min_margin_from_screen_edge">16dp</dimen>
     <!--TEXT SIZES-->
-    <dimen name="text_size_medium">12dp</dimen>
-    <dimen name="text_size_large">16dp</dimen>
-    <dimen name="text_size_extra_large">28dp</dimen>
+    <dimen name="text_size_small">12dp</dimen>
+    <dimen name="text_size_medium">14dp</dimen>
+    <dimen name="text_size_medium_large">16dp</dimen>
+    <dimen name="text_size_large">18dp</dimen>
 </resources>

@@ -76,7 +76,7 @@
         <item name="android:elevation">0dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:background">@drawable/themed_background_with_ripple</item>
-        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Large</item>
+        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Medium_Large</item>
     </style>
 
     <style name="CryptoSmart.Style.Button.Flat.WithRippleMask" parent="CryptoSmart.Style.Button.Flat">
@@ -102,25 +102,58 @@
         <item name="android:elevation">8dp</item>
     </style>
 
+    <!--VIEW PAGER TABS-->
+    <style name="CryptoSmart.Style.TabLayout">
+        <item name="android:background">?attr/colorBackground</item>
+        <item name="android:elevation">4dp</item>
+        <item name="tabTextAppearance">@style/CryptoSmart.Style.Text.Muli.Medium</item>
+        <item name="tabSelectedTextColor">?attr/colorPrimaryDark</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">0.5dp</item>
+    </style>
     <!--TEXT STYLES-->
 
     <!--MULI FONT-->
+    <style name="CryptoSmart.Style.Text.Muli.Small" parent="CryptoSmart">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontFamily">@font/font_muli_extra_light</item>
+    </style>
+
+    <style name="CryptoSmart.Style.Text.Muli.Small.Light" parent="CryptoSmart">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontFamily">@font/font_muli_light</item>
+    </style>
+
     <style name="CryptoSmart.Style.Text.Muli.Medium" parent="CryptoSmart">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="fontFamily">@font/muli_extralight_f</item>
+        <item name="fontFamily">@font/font_muli_extra_light</item>
+    </style>
+
+    <style name="CryptoSmart.Style.Text.Muli.Medium.Light" parent="CryptoSmart">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontFamily">@font/font_muli_light</item>
+    </style>
+
+    <style name="CryptoSmart.Style.Text.Muli.Medium_Large" parent="CryptoSmart">
+        <item name="android:textSize">@dimen/text_size_medium_large</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontFamily">@font/font_muli_light</item>
+    </style>
+
+    <style name="CryptoSmart.Style.Text.Muli.Medium_Large.Regular" parent="CryptoSmart">
+        <item name="android:textSize">@dimen/text_size_medium_large</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontFamily">@font/font_muli_regular</item>
     </style>
 
     <style name="CryptoSmart.Style.Text.Muli.Large" parent="CryptoSmart">
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="fontFamily">@font/muli_regular_f</item>
-    </style>
-
-    <style name="CryptoSmart.Style.Text.Muli.ExtraLarge" parent="CryptoSmart">
-        <item name="android:textSize">@dimen/text_size_large</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="fontFamily">@font/muli_regular_f</item>
+        <item name="fontFamily">@font/font_muli_regular</item>
     </style>
 
     <!--DIALOGS-->
@@ -132,7 +165,7 @@
 
     <style name="CryptoSmart.Style.Dialog.TitleText">
         <item name="android:layout_margin">16dp</item>
-        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.ExtraLarge</item>
+        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Large</item>
     </style>
 
     <style name="CryptoSmart.Style.Dialog.RecyclerView">

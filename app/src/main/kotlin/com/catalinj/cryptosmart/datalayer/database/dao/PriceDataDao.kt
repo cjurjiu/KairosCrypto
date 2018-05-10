@@ -9,20 +9,24 @@ import io.reactivex.Flowable
  */
 @Dao
 interface PriceDataDao {
-    @Query("SELECT * FROM ${DbPriceData.PRICE_DATA_TABLE_NAME}")
-    fun getAll(): List<DbPriceData>
 
-    @Query("SELECT * FROM ${DbPriceData.PRICE_DATA_TABLE_NAME}")
-    fun monitorRx(): Flowable<List<DbPriceData>>
+    @Query("SELECT * FROM ${DbPriceData.PRICE_DATA_TABLE_NAME}" +
+            " WHERE ${DbPriceData.ColumnNames.COIN_SYMBOL} = :coinSymbol" +
+            " AND ${DbPriceData.ColumnNames.CURRENCY} LIKE :currency")
+    fun getPriceDataFlowable(coinSymbol: String, currency: String = ANY_VALUE): Flowable<List<DbPriceData>>
 
     @Query("SELECT * FROM ${DbPriceData.PRICE_DATA_TABLE_NAME}" +
             " WHERE ${DbPriceData.ColumnNames.COIN_SYMBOL} LIKE :cryptoCoinSymbol" +
-            " AND ${DbPriceData.ColumnNames.CURRENCY} LIKE :desiredCurrency")
-    fun getPriceForCrypto(cryptoCoinSymbol: String, desiredCurrency: String): List<DbPriceData>
+            " AND ${DbPriceData.ColumnNames.CURRENCY} LIKE :currency")
+    fun getPriceData(cryptoCoinSymbol: String, currency: String = ANY_VALUE): List<DbPriceData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(coinsPriceData: List<DbPriceData>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(coinsPriceData: List<DbPriceData>)
+
+    private companion object {
+        const val ANY_VALUE = "%"
+    }
 }

@@ -49,7 +49,6 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-
         val connectableLoadingObservable = getLoadingObservable()
         disposables.add(connectableLoadingObservable.connect())
         loadingStateObservable = connectableLoadingObservable
@@ -59,7 +58,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
     }
 
     private fun setupCoinListObservable(): Disposable {
-        return cryptoSmartDb.getCryptoCoinDao().getAllRx()
+        return cryptoSmartDb.getCryptoCoinDao().getCryptoCoinsFlowable()
                 .map { it.map { it.toBusinessLayerCoin() } }
                 .debounce(200L, TimeUnit.MILLISECONDS)
                 .subscribe {
@@ -97,7 +96,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
 
     override fun getCoinDetailsObservable(coinSymbol: String): Observable<CryptoCoinDetails> {
         return cryptoSmartDb.getCryptoCoinDao()
-                .getCoinRx(coinSymbol)
+                .getSingleCoinFlowable(coinSymbol)
                 .map { dbCoinDetails ->
                     dbCoinDetails.toBusinessLayerCoinDetails()
                 }

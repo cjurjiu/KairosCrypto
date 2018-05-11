@@ -78,12 +78,12 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(), CoinInfoContract.C
 
     override fun initialise() {
         val view = view!!
-        coinName = view.coin_name
-        coinSymbol = view.coin_symbol
-        coinValue = view.coin_value
-        coinRank = view.coin_rank
-        coinChange = view.coin_change
-        coinTimestamp = view.coin_timestamp
+//        coinName = view.coin_name
+//        coinSymbol = view.coin_symbol
+//        coinValue = view.coin_value
+//        coinRank = view.coin_rank
+//        coinChange = view.coin_change
+//        coinTimestamp = view.coin_timestamp
     }
 
     override fun getPresenter(): CoinInfoContract.CoinInfoPresenter {
@@ -91,12 +91,12 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(), CoinInfoContract.C
     }
 
     override fun setCoinInfo(coinDetails: CryptoCoinDetails) {
-        coinName.text = coinDetails.name
-        coinSymbol.text = coinDetails.symbol
-        coinValue.text = coinDetails.priceData.price.toString()
-        coinRank.text = coinDetails.rank.toString()
-        coinChange.text = coinDetails.priceData.percentChange1h.toString()
-        coinTimestamp.text = coinDetails.lastUpdated.toString()
+//        coinName.text = coinDetails.name
+//        coinSymbol.text = coinDetails.symbol
+//        coinValue.text = coinDetails.priceData.price.toString()
+//        coinRank.text = coinDetails.rank.toString()
+//        coinChange.text = coinDetails.priceData.percentChange1h.toString()
+//        coinTimestamp.text = coinDetails.lastUpdated.toString()
     }
 
     override fun onStart() {

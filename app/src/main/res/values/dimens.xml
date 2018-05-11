@@ -2,6 +2,7 @@
 <resources>
     <!--DIMENSIONS-->
     <dimen name="min_tap_area_side">48dp</dimen>
+    <dimen name="min_tap_area_side_small">24dp</dimen>
     <!--MARGINS-->
     <dimen name="min_margin_from_screen_edge">16dp</dimen>
     <!--TEXT SIZES-->

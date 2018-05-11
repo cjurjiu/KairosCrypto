@@ -27,5 +27,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="time_period_24h">24H</string>
+    <string name="time_period_24h_wrapped">(24H)</string>
+    <string name="time_period_7d">7D</string>
+    <string name="time_period_1m">1M</string>
+    <string name="time_period_3m">3M</string>
+    <string name="coin_info_string_value">Value</string>
+    <string name="coin_info_string_market_cap">Market cap</string>
+    <string name="coin_info_string_volume">Volume</string>
+    <string name="coin_info_string_supply">Supply</string>
+    <string name="coin_info_string_circulating_supply">Circulating Supply</string>
+    <string name="coin_info_string_available_supply">Available Supply</string>
+    <string name="coin_info_string_max_possible_supply">Max Possible Supply</string>
 
 </resources>

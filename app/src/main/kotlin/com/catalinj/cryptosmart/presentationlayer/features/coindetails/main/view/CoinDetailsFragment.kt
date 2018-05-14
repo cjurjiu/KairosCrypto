@@ -14,6 +14,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
+import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
@@ -49,7 +50,7 @@ class CoinDetailsFragment :
             bundle.putString(ARG_KEY_COIN_ID, cryptoCoin.id)
             bundle.putString(ARG_KEY_COIN_NAME, cryptoCoin.name)
             bundle.putString(ARG_KEY_COIN_SYMBOL, cryptoCoin.symbol)
-            bundle.putFloat(ARG_KEY_COIN_CHANGE_1H, cryptoCoin.priceData.percentChange1h)
+//            bundle.putFloat(ARG_KEY_COIN_CHANGE_1H, cryptoCoin.priceData[].percentChange1h)
             //set selected coin
             f.arguments = bundle
             //do some other initializations, set arguments
@@ -88,6 +89,7 @@ class CoinDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "CoinDetailsFragment#onViewCreated")
+        coinDetailsPresenter.navigator = (activity as MainActivity).navigator
         coinDetailsPresenter.viewAvailable(this)
     }
 
@@ -194,6 +196,7 @@ class CoinDetailsFragment :
 
     private fun initializeToolbar(view: View) {
         val toolbar = view.toolbar_coin_details
+        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_vector_arrow_back_black_24dp, null)
         toolbar.title = ""
         (activity!! as AppCompatActivity).setSupportActionBar(toolbar)
         (activity!! as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)

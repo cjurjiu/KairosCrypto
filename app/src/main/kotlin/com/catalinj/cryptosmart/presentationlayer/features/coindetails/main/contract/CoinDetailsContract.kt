@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract
 
+import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.LoadingView
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
@@ -12,6 +13,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreen
 interface CoinDetailsContract {
 
     interface CoinDetailsPresenter : MvpPresenter<CoinDetailsPresenter, CoinDetailsView> {
+        var navigator: Navigator?
 
         fun userPullToRefresh()
 
@@ -30,6 +32,8 @@ interface CoinDetailsContract {
         fun childFinishedLoading()
 
         fun updateChange1h(newChange1h: Float)
+
+        fun userPressedBack()
     }
 
     interface CoinDetailsView : MvpView<CoinDetailsPresenter, CoinDetailsView>, LoadingView {

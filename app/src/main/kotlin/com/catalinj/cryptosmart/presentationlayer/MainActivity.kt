@@ -30,6 +30,11 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
                 injector.hashCode().toString(16))
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun onCreateDaggerComponent(): ActivityComponent {
         return (application as CryptoSmartApplication).component.getActivityComponent()
     }

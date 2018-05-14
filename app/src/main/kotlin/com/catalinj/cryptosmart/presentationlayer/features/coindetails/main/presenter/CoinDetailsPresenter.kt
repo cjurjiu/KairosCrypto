@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.presenter
 
 import android.util.Log
+import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
@@ -10,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
  * Created by catalinj on 21.01.2018.
  */
 class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
+    override var navigator: Navigator? = null
 
     private var view: CoinDetailsContract.CoinDetailsView? = null
     private lateinit var coinId: String
@@ -49,7 +51,8 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
 
     override fun viewDestroyed() {
         Log.d("Cata", "CoinDetailsPresenter#viewDestroyed")
-        this.view = null
+        view = null
+        navigator = null
     }
 
     override fun getView(): CoinDetailsContract.CoinDetailsView? {
@@ -97,6 +100,10 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
         view?.setCoinInfo(coinName = coinName,
                 coinSymbol = coinSymbol,
                 change1h = newChange1h)
+    }
+
+    override fun userPressedBack() {
+        navigator?.navigateBack()
     }
 
     private companion object {

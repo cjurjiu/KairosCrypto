@@ -12,6 +12,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view.BookmarksFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinsListFragment
+import com.catalinj.cryptosmart.presentationlayer.features.settings.SettingsFragment
 
 /**
  * Created by catalin on 27/04/2018.
@@ -35,10 +36,18 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
         activity.showBottomNavigation()
     }
 
-    override fun openBookmarsScreen() {
+    override fun openBookmarksScreen() {
         val frag = BookmarksFragment.Factory(activityComponent = activity.injector).create()
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, BookmarksFragment.TAG)
+                .commit()
+        activity.showBottomNavigation()
+    }
+
+    override fun openSettingsScreen() {
+        val frag = SettingsFragment()
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, frag, SettingsFragment.TAG)
                 .commit()
         activity.showBottomNavigation()
     }
@@ -65,9 +74,9 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
 
     private fun handleBottomNavigationClick(it: MenuItem): Boolean {
         when (it.itemId) {
-            R.id.bookmarks -> openBookmarsScreen()
+            R.id.bookmarks -> openBookmarksScreen()
             R.id.coin_list -> openCoinListScreen()
-            R.id.settings -> Log.d("Cata", "User selected settings bottom nav option")
+            R.id.settings -> openSettingsScreen()
             else -> Log.d("Cata", "User selected unknown bottom nav option")
         }
         //we always want to mark the clicked item as selected

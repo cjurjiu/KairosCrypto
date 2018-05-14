@@ -10,7 +10,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 interface Navigator {
 
     /**
-     * Opens the coin list screen.
+     * Opens the CoinsList screen.
      *
      * Clears the backstack prior to navigation to the coin list screen. This transaction is not
      * added to the backstack.
@@ -18,15 +18,24 @@ interface Navigator {
     fun openCoinListScreen()
 
     /**
-     * Opens the bookmarks screen.
+     * Opens the Bookmarks screen.
      *
      * Clears the backstack prior to navigation to the coin list screen. This transaction is not
      * added to the backtack.
      */
-    fun openBookmarsScreen()
+    fun openBookmarksScreen()
+
 
     /**
-     * Opens the coin details screen.
+     * Opens the Settings screen.
+     *
+     * Clears the backstack prior to navigation to the coin list screen. This transaction is not
+     * added to the backtack.
+     */
+    fun openSettingsScreen()
+
+    /**
+     * Opens the CoinDetails screen.
      *
      * @param cryptoCoin the serverId of the coin for which the details are being displayed
      */

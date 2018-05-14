@@ -12,9 +12,18 @@ interface Navigator {
     /**
      * Opens the coin list screen.
      *
-     * Clears the backstack prior to navigation to the coin list screen.
+     * Clears the backstack prior to navigation to the coin list screen. This transaction is not
+     * added to the backstack.
      */
     fun openCoinListScreen()
+
+    /**
+     * Opens the bookmarks screen.
+     *
+     * Clears the backstack prior to navigation to the coin list screen. This transaction is not
+     * added to the backtack.
+     */
+    fun openBookmarsScreen()
 
     /**
      * Opens the coin details screen.

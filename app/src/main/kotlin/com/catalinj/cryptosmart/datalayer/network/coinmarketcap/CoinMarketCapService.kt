@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.datalayer.network.coinmarketcap
 
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinDetails
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinListResponse
 import io.reactivex.Observable
@@ -32,8 +33,11 @@ interface CoinMarketCapService {
             : Observable<CoinMarketCapCryptoCoinListResponse>
 
     //this endpoint returns a list of just one item
-    @GET("${V2_TICKER_ENDPOINT}/{${PATH_COIN_ID}}")
-    fun fetchCoinDetails(@Path(PATH_COIN_ID) coinId: String): Observable<CoinMarketCapCryptoCoinDetails>
+    @GET("$V2_TICKER_ENDPOINT/{$PATH_COIN_ID}")
+    fun fetchCoinDetails(@Path(PATH_COIN_ID)
+                         coinId: String,
+                         @Query(CONVERT_URL_PARAM)
+                         currency: String = CurrencyRepresentation.USD.currency): Observable<CoinMarketCapCryptoCoinDetails>
 
     companion object {
         //base url for the Rest API of cointmarketcap.com
@@ -49,39 +53,6 @@ interface CoinMarketCapService {
         //list coins start
         const val CONVERT_URL_PARAM: String = "convert"
 
-        enum class CurrencyRepresentation(val currency: String) {
-            AUD("AUD"),
-            BRL("BRL"),
-            CAD("CAD"),
-            CHF("CHF"),
-            CLP("CLP"),
-            CNY("CNY"),
-            CZK("CZK"),
-            DKK("DKK"),
-            EUR("EUR"),
-            GBP("GBP"),
-            HKD("HKD"),
-            HUF("HUF"),
-            IDR("IDR"),
-            ILS("ILS"),
-            INR("INR"),
-            JPY("JPY"),
-            KRW("KRW"),
-            MXN("MXN"),
-            MYR("MYR"),
-            NOK("NOK"),
-            NZD("NZD"),
-            PHP("PHP"),
-            PKR("PKR"),
-            PLN("PLN"),
-            RUB("RUB"),
-            SEK("SEK"),
-            SGD("SGD"),
-            THB("THB"),
-            USD("USD"),
-            TRY("TRY"),
-            TWD("TWD"),
-            ZAR("ZAR")
-        }
     }
+
 }

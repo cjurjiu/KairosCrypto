@@ -2,7 +2,7 @@ package com.catalinj.cryptosmart.businesslayer.repository
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
-import com.catalinj.cryptosmart.datalayer.network.RequestState
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 
@@ -10,14 +10,7 @@ import io.reactivex.functions.Consumer
  * Interface definition for a Repository capable of providing & managing [CryptoCoin] objects.
  * Created by catalinj on 28.01.2018.
  */
-interface CoinsRepository {
-
-    /**
-     * Observable that notifies when the loading state of this Repository changes. This always
-     * notifies with the most recent value, when an observer subscribes.
-     */
-    val loadingStateObservable: Observable<RequestState>
-
+interface CoinsRepository : Repository {
     /**
      * Updates the known list of coins.
      *
@@ -32,7 +25,9 @@ interface CoinsRepository {
     /**
      * Updates the details of a specific coin market cap coin.
      */
-    fun fetchCoinDetails(coinId: String, errorHandler: Consumer<Throwable>)
+    fun fetchCoinDetails(coinId: String,
+                         valueRepresentationsArray: Array<CurrencyRepresentation> = arrayOf(CurrencyRepresentation.USD),
+                         errorHandler: Consumer<Throwable>)
 
     /**
      * Observable which tracks changes to the details of a specific crypto coin.

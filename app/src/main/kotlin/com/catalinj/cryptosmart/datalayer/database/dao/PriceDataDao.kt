@@ -48,10 +48,10 @@ interface PriceDataDao {
     fun getPriceData(coinSymbol: String, currency: String = ANY_PRICE_DATA): List<DbPriceData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(coinsPriceData: List<DbPriceData>)
+    fun insert(coinsPriceData: List<DbPriceData>): List<Long>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(coinsPriceData: List<DbPriceData>)
+    fun update(coinsPriceData: List<DbPriceData>): Int
 
     companion object Constants {
         const val ANY_PRICE_DATA = "%"

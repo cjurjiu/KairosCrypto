@@ -207,7 +207,7 @@ class CoinsListFragment :
                 }
                 .apply {
                     if (size > 1) {
-                        val activeFragments: String? = map { it.first.typeName }.reduce { acc, s -> "$acc, ${s}" }
+                        val activeFragments: String? = map { it.first.typeName }.reduce { acc, s -> "$acc, $s" }
                         throw IllegalStateException("More than 1 selection dialogs present on screen." +
                                 "Active dialogs: $activeFragments")
                     }

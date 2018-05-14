@@ -1,12 +1,15 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.components.CoinInfoComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinInfoModule
@@ -18,19 +21,30 @@ import javax.inject.Inject
 /**
  * A simple view(fragment) which displays various information about a particular cryptocurrency.
  */
-class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(), CoinInfoContract.CoinInfoView {
+class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(),
+        CoinInfoContract.CoinInfoView {
 
     override val name: String = TAG
 
     @Inject
     protected lateinit var coinInfoPresenter: CoinInfoContract.CoinInfoPresenter
 
-    private lateinit var coinName: TextView
-    private lateinit var coinSymbol: TextView
-    private lateinit var coinValue: TextView
-    private lateinit var coinRank: TextView
-    private lateinit var coinChange: TextView
-    private lateinit var coinTimestamp: TextView
+    private lateinit var selectPeriodCoinInfo24HButton: Button
+    private lateinit var selectPeriodCoinInfo7DButton: Button
+    private lateinit var selectPeriodCoinInfo1MButton: Button
+    private lateinit var selectPeriodCoinInfo3MButton: Button
+    private lateinit var unitTimePeriodChangeTextView: TextView
+    private lateinit var unitValuePrimaryCurrencyTextView: TextView
+    private lateinit var percentValueChangePrimaryCurrencyTextView: TextView
+    private lateinit var unitValueBtcTextView: TextView
+    private lateinit var percentValueChangeBtcTextView: TextView
+    private lateinit var marketCapPrimaryCurrencyTextView: TextView
+    private lateinit var marketCapBtcTextView: TextView
+    private lateinit var volumePrimaryCurrencyTextView: TextView
+    private lateinit var volumeBtcTextView: TextView
+    private lateinit var circulatingSupplyValueTextView: TextView
+    private lateinit var currentlyAvailableSupplyValueTextView: TextView
+    private lateinit var maxPossibleSupplyValueTextView: TextView
 
     class Factory(private val coinId: String,
                   private val coinSymbol: String,
@@ -78,12 +92,25 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(), CoinInfoContract.C
 
     override fun initialise() {
         val view = view!!
-//        coinName = view.coin_name
-//        coinSymbol = view.coin_symbol
-//        coinValue = view.coin_value
-//        coinRank = view.coin_rank
-//        coinChange = view.coin_change
-//        coinTimestamp = view.coin_timestamp
+        //todo set listeners to buttons
+        selectPeriodCoinInfo24HButton = view.button_select_period_coin_info_24H
+        selectPeriodCoinInfo7DButton = view.button_select_period_coin_info_7D
+        selectPeriodCoinInfo1MButton = view.button_select_period_coin_info_1M
+        selectPeriodCoinInfo3MButton = view.button_select_period_coin_info_3M
+        //text views
+        unitTimePeriodChangeTextView = view.text_unit_time_period_change
+        unitValuePrimaryCurrencyTextView = view.text_unit_value_primary_currency
+        percentValueChangePrimaryCurrencyTextView = view.text_percent_value_change_primary_currency
+        unitValueBtcTextView = view.text_unit_value_btc
+        percentValueChangeBtcTextView = view.text_percent_value_change_btc
+        marketCapPrimaryCurrencyTextView = view.text_market_cap_primary_currency
+        marketCapBtcTextView = view.text_market_cap_btc
+        volumePrimaryCurrencyTextView = view.text_volume_primary_currency
+        volumeBtcTextView = view.text_volume_btc
+        circulatingSupplyValueTextView = view.text_circulating_supply_value
+        currentlyAvailableSupplyValueTextView = view.text_currently_available_supply_value
+        maxPossibleSupplyValueTextView = view.text_max_possible_supply_value
+
     }
 
     override fun getPresenter(): CoinInfoContract.CoinInfoPresenter {
@@ -91,12 +118,33 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(), CoinInfoContract.C
     }
 
     override fun setCoinInfo(coinDetails: CryptoCoinDetails) {
-//        coinName.text = coinDetails.name
-//        coinSymbol.text = coinDetails.symbol
-//        coinValue.text = coinDetails.priceData.price.toString()
-//        coinRank.text = coinDetails.rank.toString()
-//        coinChange.text = coinDetails.priceData.percentChange1h.toString()
-//        coinTimestamp.text = coinDetails.lastUpdated.toString()
+
+        if (coinDetails.priceData.isEmpty()) {
+            Log.e("Cata", "Price data empty??")
+            //ignore
+            return
+        } else {
+            Log.e("Cata", "Price data contains currencies:${coinDetails.priceData.keys}")
+        }
+
+        val primaryCurrencyPriceData = coinDetails.priceData[CurrencyRepresentation.USD.currency]!!
+        val bitcoinPriceData = coinDetails.priceData[CurrencyRepresentation.BTC.currency]!!
+
+        unitTimePeriodChangeTextView.text = "7d"
+
+        unitValueBtcTextView.text = bitcoinPriceData.price.toString() + " BTC"
+        percentValueChangeBtcTextView.text = bitcoinPriceData.percentChange24h.toString()
+        marketCapBtcTextView.text = bitcoinPriceData.marketCap.toString() + " BTC"
+        volumeBtcTextView.text = bitcoinPriceData.volume24h.toString() + " BTC"
+
+        unitValuePrimaryCurrencyTextView.text = primaryCurrencyPriceData.price.toString() + "USD"
+        percentValueChangePrimaryCurrencyTextView.text = primaryCurrencyPriceData.percentChange24h.toString()
+        marketCapPrimaryCurrencyTextView.text = primaryCurrencyPriceData.marketCap.toString() + "USD"
+        volumePrimaryCurrencyTextView.text = primaryCurrencyPriceData.volume24h.toString() + "USD"
+
+        circulatingSupplyValueTextView.text = coinDetails.circulatingSupply.toString()
+        currentlyAvailableSupplyValueTextView.text = coinDetails.totalSupply.toString()
+        maxPossibleSupplyValueTextView.text = coinDetails.maxSupply.toString()
     }
 
     override fun onStart() {

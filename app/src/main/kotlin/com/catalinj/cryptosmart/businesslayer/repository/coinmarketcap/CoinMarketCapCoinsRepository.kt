@@ -8,6 +8,8 @@ import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerPriceData
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
+import com.catalinj.cryptosmart.businesslayer.repository.Repository
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.database.models.DbPartialCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.RequestState
@@ -22,6 +24,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.observables.ConnectableObservable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 /**
@@ -40,7 +43,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
                                    private val coinMarketCapService: CoinMarketCapService)
     : CoinsRepository {
 
-    override val loadingStateObservable: Observable<RequestState>
+    override val loadingStateObservable: Observable<Repository.LoadingState>
 
     private val cryptoCoinsRelay = BehaviorRelay.create<List<CryptoCoin>>()
     private val loadingStateRelay = BehaviorRelay.create<RequestState>()
@@ -82,8 +85,9 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             cryptoSmartDb.getPlainCryptoCoinDao().insert(dbCoins)
             //price data
             val coinsPriceData = networkCoins.flatMap { it.toDataLayerPriceData() }
-            cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
-            Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size)
+            val insertedDataIds = cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
+            Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
+                    "inserted ids:" + insertedDataIds)
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }
@@ -103,43 +107,101 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
                 .toObservable()
     }
 
-    override fun fetchCoinDetails(coinId: String, errorHandler: Consumer<Throwable>) {
-        val apiRequest = CryptoCoinDetailsRequest(coinId = coinId,
-                coinMarketCapService = coinMarketCapService)
+    override fun fetchCoinDetails(coinId: String,
+                                  valueRepresentationsArray: Array<CurrencyRepresentation>,
+                                  errorHandler: Consumer<Throwable>) {
 
-        apiRequest.response.observeOn(Schedulers.io()).subscribe {
-            try {
-                val coin = it.data
-                Log.d("RxJ", "repo fetchCoinDetails response do next coins size:" + coin.name)
-                val dbCoin: DbPartialCryptoCoin = coin.toDataLayerCoin()
-                cryptoSmartDb.getPlainCryptoCoinDao().insert(dbCoin)
-                val dbPriceData = coin.toDataLayerPriceData()
-                cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(dbPriceData)
-                Log.d("RxJ", "repo fetchCoinDetails response AFTER do next coins size:" + coin.name)
-            } catch (e: NoSuchElementException) {
-                errorHandler.accept(IllegalStateException("Server returned an empty list.", e))
+        val requestsList = mutableListOf<CryptoCoinDetailsRequest>()
+        val compositeStateTracker: PublishSubject<RequestState> = PublishSubject.create()
+        val observablesToZip = mutableListOf<Observable<RequestState>>()
+        //iterate over the desired value representations
+        valueRepresentationsArray.forEach {
+            //create a request for each one
+            val apiRequest = CryptoCoinDetailsRequest(coinId = coinId,
+                    requiredCurrency = it,
+                    coinMarketCapService = coinMarketCapService)
+
+            apiRequest.state.doOnNext {
+                //onNext
+                //send state updates to the loading state relay
+                loadingStateRelay.accept(it)
+                if (it is RequestState.Idle.Finished.Error || it is RequestState.Idle.Finished.Success<*>) {
+                    //and also to the composite state tracker for this call
+                    compositeStateTracker.onNext(it)
+                }
+            }.subscribe()
+            observablesToZip.add(apiRequest.state)
+
+            //add the created request to the list of requests.
+            requestsList.add(apiRequest)
+        }
+
+        Observable.concat(observablesToZip).doOnComplete {
+            Log.d("RxJ", "state observables have finished, call onComplete to composite tracker.")
+            compositeStateTracker.onComplete()
+        }.subscribe()
+
+        compositeStateTracker.observeOn(Schedulers.io()).reduce<Boolean>(true) { currentResult, newRequestState ->
+            //accumulate the states of finished requests. In the end emit true if everything
+            //was successful, emit false otherwise.
+            Log.d("RxJ", "repo fetchCoinDetails reduce currentResult: $currentResult, newRequestState class:${newRequestState::class}")
+            return@reduce (currentResult and (newRequestState is RequestState.Idle.Finished.Success<*>))
+        }.subscribe { success ->
+            Log.d("RxJ", "received coin details response!!")
+
+            if (success) {
+                //all requests went through and everything was fetched successfully.
+                requestsList.forEach { request ->
+                    request.response
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .subscribe { coinResponse ->
+                                val coin = coinResponse.data
+                                Log.d("RxJ", "Write coin data to db. Available price data:" +
+                                        "${coin.quotes.keys}")
+                                val dbCoin: DbPartialCryptoCoin = coin.toDataLayerCoin()
+                                cryptoSmartDb.getPlainCryptoCoinDao().insert(dbCoin)
+                                val dbPriceData = coin.toDataLayerPriceData()
+                                val ids = cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(dbPriceData)
+                                Log.d("RxJ", "Wrote coin data(${coin.name}) to db. " +
+                                        "Available price data:${dbPriceData.map { it.currency }}. ids:$ids")
+                            }
+                }
+            } else {
+                requestsList.firstOrNull { request ->
+                    if (request.errors.isEmpty.toFuture().get()) {
+                        //if error stream is not empty, notify subscribe the error handler to it.
+                        request.errors.subscribe(errorHandler)
+                        return@firstOrNull true
+                    } else {
+                        return@firstOrNull false
+                    }
+                }
             }
         }
-        apiRequest.errors.subscribe(errorHandler)
-        apiRequest.state.subscribe { loadingStateRelay.accept(it) }
-        apiRequest.execute()
+
+        //execute requests
+        requestsList.forEach {
+            it.execute()
+        }
     }
 
-    private fun getLoadingObservable(): ConnectableObservable<RequestState> {
+    private fun getLoadingObservable(): ConnectableObservable<Repository.LoadingState> {
         return loadingStateRelay.map { requestState ->
             return@map when (requestState) {
-                RequestState.Idle -> 0
-                RequestState.Loading -> 1
-                is RequestState.Completed<*>, is RequestState.Error -> -1
+                RequestState.Idle.NotStarted -> 0
+                RequestState.InFlight -> 1
+                is RequestState.Idle.Finished.Error,
+                is RequestState.Idle.Finished.Success<*> -> -1
             }
         }
                 .scan { t1, t2 -> t1 + t2 }
                 .map { intResult ->
                     Log.d("RxJ", "repo loading state result: $intResult")
                     return@map if (intResult > 0) {
-                        RequestState.Loading
+                        Repository.LoadingState.Loading
                     } else {
-                        RequestState.Idle
+                        Repository.LoadingState.Idle
                     }
                 }
                 .distinctUntilChanged()

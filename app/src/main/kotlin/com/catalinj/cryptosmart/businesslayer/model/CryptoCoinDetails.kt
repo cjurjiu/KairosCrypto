@@ -8,7 +8,8 @@ data class CryptoCoinDetails(val id: String,
                              val name: String,
                              val symbol: String,
                              val websiteSlug: String,
-                             val circulatingSupply: Long,
-                             val maxSupply: Long,
-                             val lastUpdated: Long,
-                             var priceData: PriceData)
+                             val circulatingSupply: Double,
+                             val totalSupply: Double,
+                             val maxSupply: Double,
+                             var priceData: Map<String, PriceData>,
+                             val lastUpdated: Long)

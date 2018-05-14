@@ -17,21 +17,22 @@ import android.arch.persistence.room.PrimaryKey
 )
 data class DbPartialCryptoCoin(
         @PrimaryKey
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.RANK)
+        @ColumnInfo(name = ColumnNames.RANK)
         val rank: Int,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.SERVER_ID)
+        @ColumnInfo(name = ColumnNames.SERVER_ID)
         val serverId: String,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.NAME)
+        @ColumnInfo(name = ColumnNames.NAME)
         val name: String,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.SYMBOL)
+        @ColumnInfo(name = ColumnNames.SYMBOL)
         val symbol: String,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.WEBSITE_SLUG)
+        @ColumnInfo(name = ColumnNames.WEBSITE_SLUG)
         val websiteSlug: String,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.CIRCULATING_SUPPLY)
-        val circulatingSupply: Long,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.MAX_SUPPLY)
-        val maxSupply: Long,
-        @ColumnInfo(name = DbPartialCryptoCoin.ColumnNames.LAST_UPDATED)
+        @ColumnInfo(name = ColumnNames.CIRCULATING_SUPPLY)
+        val circulatingSupply: Double,
+        val totalSupply: Double,
+        @ColumnInfo(name = ColumnNames.MAX_SUPPLY)
+        val maxSupply: Double,
+        @ColumnInfo(name = ColumnNames.LAST_UPDATED)
         val lastUpdated: Long) {
 
     companion object {

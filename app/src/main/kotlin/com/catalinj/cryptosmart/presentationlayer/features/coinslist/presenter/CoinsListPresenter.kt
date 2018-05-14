@@ -3,7 +3,7 @@ package com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
-import com.catalinj.cryptosmart.datalayer.network.RequestState
+import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
@@ -28,7 +28,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     private var view: CoinsListContract.CoinsListView? = null
     //loading logic...
     private var waitForLoad: Boolean = false
-    private var loadingState: RequestState = RequestState.Idle
+    private var loadingState: Repository.LoadingState = Repository.LoadingState.Idle
     private var loadingController: LoadingController? = null
     //init with default value. this will later be changed by user actions
     private var activeCurrency: String = resourceDecoder.decodeChangeCoinDialogItems().first().value
@@ -150,16 +150,15 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
                 errorHandler = Consumer { Log.d("RxJ", "Refresh coins error: $it") })
     }
 
-    private fun updateLoadingState(loadingState: RequestState) {
+    private fun updateLoadingState(loadingState: Repository.LoadingState) {
         this.loadingState = loadingState
         setLoadingState(loadingState)
     }
 
-    private fun setLoadingState(loadingState: RequestState) {
+    private fun setLoadingState(loadingState: Repository.LoadingState) {
         when (loadingState) {
-            RequestState.Idle -> loadingController?.hide()
-            RequestState.Loading -> loadingController?.show()
-            else -> loadingController?.hide()
+            Repository.LoadingState.Idle -> loadingController?.hide()
+            Repository.LoadingState.Loading -> loadingController?.show()
         }
     }
 

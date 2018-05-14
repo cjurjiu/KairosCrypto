@@ -8,14 +8,16 @@ import android.arch.persistence.room.ForeignKey
  * Created by catalin on 08/05/2018.
  */
 @Entity(tableName = DbPriceData.PRICE_DATA_TABLE_NAME,
-        primaryKeys = [DbPriceData.ColumnNames.COIN_SYMBOL, DbPriceData.ColumnNames.CURRENCY],
-        foreignKeys = [
-            (ForeignKey(entity = DbPartialCryptoCoin::class,
-                    parentColumns = [DbPartialCryptoCoin.ColumnNames.SYMBOL],
-                    childColumns = [DbPriceData.ColumnNames.COIN_SYMBOL],
-                    onUpdate = ForeignKey.CASCADE,
-                    onDelete = ForeignKey.CASCADE))
-        ]
+        primaryKeys = [DbPriceData.ColumnNames.COIN_SYMBOL, DbPriceData.ColumnNames.CURRENCY]
+//      foreign keys seem to cause race conditions on inserts? comment them for not
+//        ,
+//        foreignKeys = [
+//            (ForeignKey(entity = DbPartialCryptoCoin::class,
+//                    parentColumns = [DbPartialCryptoCoin.ColumnNames.SYMBOL],
+//                    childColumns = [DbPriceData.ColumnNames.COIN_SYMBOL],
+//                    onUpdate = ForeignKey.CASCADE,
+//                    onDelete = ForeignKey.CASCADE))
+//        ]
 )
 data class DbPriceData(
         @ColumnInfo(name = ColumnNames.COIN_SYMBOL)

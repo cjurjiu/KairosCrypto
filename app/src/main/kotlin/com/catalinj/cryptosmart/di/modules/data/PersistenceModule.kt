@@ -2,6 +2,8 @@ package com.catalinj.cryptosmart.di.modules.data
 
 import android.content.Context
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettingsImpl
 import com.catalinj.cryptosmart.di.annotations.scopes.ApplicationScope
 import dagger.Module
 import dagger.Provides
@@ -16,5 +18,11 @@ class PersistenceModule {
     @ApplicationScope
     fun provideCryptoSmartDatabase(ctx: Context): CryptoSmartDb {
         return CryptoSmartDb.getInstance(ctx)
+    }
+
+    @Provides
+    @ApplicationScope
+    fun provideSettings(ctx: Context): CryptoSmartUserSettings {
+        return CryptoSmartUserSettingsImpl(ctx)
     }
 }

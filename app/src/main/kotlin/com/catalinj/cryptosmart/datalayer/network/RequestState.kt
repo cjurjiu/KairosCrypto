@@ -4,8 +4,12 @@ package com.catalinj.cryptosmart.datalayer.network
  * Created by catalin on 07/04/2018.
  */
 sealed class RequestState {
-    object Idle : RequestState()
-    object Loading : RequestState()
-    data class Error(val throwable: Throwable) : RequestState()
-    data class Completed<T>(val result: T) : RequestState()
+    object InFlight : RequestState()
+    sealed class Idle : RequestState() {
+        object NotStarted : Idle()
+        sealed class Finished : Idle() {
+            data class Error(val throwable: Throwable) : Finished()
+            data class Success<out T>(val result: T) : Finished()
+        }
+    }
 }

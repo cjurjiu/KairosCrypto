@@ -39,9 +39,9 @@ class CoinListAdapter(context: Context,
             imageCoinLogo.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coins[position].symbol,
                     context = holder.itemView.context))
             textCoinName.text = coins[position].name
-            textCoinValue.text = "\$${coins[position].priceData.price} USD"
-            textCoinIncreasePrc.text = "${coins[position].priceData.percentChange24h}%"
-            textCoinIncreaseValue.text = "\$${(coins[position].priceData.percentChange24h * coins[position].priceData.price / 100f)} USD"
+            textCoinValue.text = "\$${coins[position].priceData.values.first().price} USD"
+            textCoinIncreasePrc.text = "${coins[position].priceData.values.first().percentChange24h}%"
+            textCoinIncreaseValue.text = "\$${(coins[position].priceData.values.first().percentChange24h * coins[position].priceData.values.first().price / 100f)} USD"
         }
     }
 

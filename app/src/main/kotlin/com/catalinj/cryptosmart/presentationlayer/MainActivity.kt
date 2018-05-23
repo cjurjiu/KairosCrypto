@@ -56,7 +56,7 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
     }
 
     fun hideBottomNavigation() {
-        findViewById<View>(R.id.bottom_navigation).visibility = View.INVISIBLE
+        findViewById<View>(R.id.bottom_navigation).visibility = View.GONE
     }
 
     private companion object {

@@ -2,11 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CryptoSmart.Style.BookmarksCard"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:layout_margin="8dp"
-    android:background="?attr/colorBackground"
-    android:elevation="4dp">
+    android:layout_margin="6dp">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_bookmarks_item_coin_logo"

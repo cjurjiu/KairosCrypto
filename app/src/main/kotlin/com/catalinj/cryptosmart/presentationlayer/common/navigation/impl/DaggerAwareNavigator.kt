@@ -33,7 +33,6 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, CoinsListFragment.TAG)
                 .commit()
-        activity.showBottomNavigation()
     }
 
     override fun openBookmarksScreen() {
@@ -41,7 +40,6 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, BookmarksFragment.TAG)
                 .commit()
-        activity.showBottomNavigation()
     }
 
     override fun openSettingsScreen() {
@@ -49,7 +47,6 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, SettingsFragment.TAG)
                 .commit()
-        activity.showBottomNavigation()
     }
 
     override fun openCoinDetailsScreen(cryptoCoin: CryptoCoin) {
@@ -61,7 +58,6 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
                 .replace(R.id.fragment_container, frag, CoinDetailsFragment.TAG)
                 .addToBackStack(CoinDetailsFragment.TAG)
                 .commit()
-        activity.hideBottomNavigation()
     }
 
     override fun navigateBack(): Boolean {

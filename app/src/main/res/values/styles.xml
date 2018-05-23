@@ -123,6 +123,15 @@
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">0.5dp</item>
     </style>
+
+    <!--CARDS-->
+    <style name="CryptoSmart.Style.BookmarksCard">
+        <item name="android:background">@drawable/themed_card_background_clickable</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
     <!--TEXT STYLES-->
 
     <!--MULI FONT-->

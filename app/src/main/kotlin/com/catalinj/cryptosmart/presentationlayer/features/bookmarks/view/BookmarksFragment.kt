@@ -13,6 +13,7 @@ import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.BookmarksComponent
 import com.catalinj.cryptosmart.di.modules.bookmarks.BookmarksModule
+import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinjurjiu.smartpersist.DaggerFragment
@@ -45,6 +46,8 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).showBottomNavigation()
+        bookmarksPresenter.navigator = (activity as MainActivity).navigator
         bookmarksPresenter.viewAvailable(this)
     }
 
@@ -71,7 +74,7 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
         recyclerView = view.recyclerview_bookmarks_list
         recyclerView.layoutManager = LinearLayoutManager(context!!)
         recyclerViewAdapter = BookmarksListAdapter(context!!, CurrencyRepresentation.USD, emptyList()) {
-            Log.d("Cata", "Bookmarked clicked -> ${it.name}")
+            bookmarksPresenter.coinSelected(it)
         }
         recyclerView.adapter = recyclerViewAdapter
     }

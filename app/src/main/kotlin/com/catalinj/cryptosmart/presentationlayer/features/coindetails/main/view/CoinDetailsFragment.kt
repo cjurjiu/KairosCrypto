@@ -89,6 +89,7 @@ class CoinDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "CoinDetailsFragment#onViewCreated")
+        (activity as MainActivity).hideBottomNavigation()
         coinDetailsPresenter.navigator = (activity as MainActivity).navigator
         coinDetailsPresenter.viewAvailable(this)
     }

@@ -1,5 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 
@@ -12,6 +14,6 @@ interface BookmarksContract {
     }
 
     interface BookmarksView : MvpView<BookmarksPresenter, BookmarksView> {
-
+        fun setListData(primaryCurrency: CurrencyRepresentation, bookmarksList: List<CryptoCoin>)
     }
 }

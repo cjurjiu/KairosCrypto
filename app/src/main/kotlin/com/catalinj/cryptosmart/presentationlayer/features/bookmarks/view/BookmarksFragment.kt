@@ -1,17 +1,22 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.BookmarksComponent
 import com.catalinj.cryptosmart.di.modules.bookmarks.BookmarksModule
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinjurjiu.smartpersist.DaggerFragment
+import kotlinx.android.synthetic.main.layout_fragment_bookmarks.view.*
 import javax.inject.Inject
 
 /**
@@ -25,6 +30,8 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
 
     @Inject
     protected lateinit var bookmarksPresenter: BookmarksContract.BookmarksPresenter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewAdapter: BookmarksListAdapter
 
     //android fragment lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,15 +62,18 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
         super.onDestroyView()
         bookmarksPresenter.viewDestroyed()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
     //END android fragment lifecycle
 
     //mvp view methods
     override fun initialise() {
         Log.d("Cata", "$TAG#initialise")
+        val view = view!!
+        recyclerView = view.recyclerview_bookmarks_list
+        recyclerView.layoutManager = LinearLayoutManager(context!!)
+        recyclerViewAdapter = BookmarksListAdapter(context!!, CurrencyRepresentation.USD, emptyList()) {
+            Log.d("Cata", "Bookmarked clicked -> ${it.name}")
+        }
+        recyclerView.adapter = recyclerViewAdapter
     }
 
     override fun getPresenter(): BookmarksContract.BookmarksPresenter {
@@ -74,6 +84,14 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
         return false
     }
     //end mvp view methods
+
+    //bookmarks view methods
+    override fun setListData(primaryCurrency: CurrencyRepresentation, bookmarksList: List<CryptoCoin>) {
+        recyclerViewAdapter.primaryCurrency = primaryCurrency
+        recyclerViewAdapter.coins = bookmarksList
+        recyclerViewAdapter.notifyDataSetChanged()
+    }
+    //end bookmarks view methods
 
     class Factory(val activityComponent: ActivityComponent) : DaggerFragmentFactory<BookmarksComponent>() {
 

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="8dp"
+    android:background="?attr/colorBackground"
+    android:elevation="4dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_bookmarks_item_coin_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+        android:layout_marginTop="@dimen/min_margin_from_screen_edge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/nano" />
+
+    <TextView
+        android:id="@+id/text_bookmark_coin_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
+        app:layout_constraintStart_toEndOf="@id/image_bookmarks_item_coin_logo"
+        app:layout_constraintTop_toTopOf="@id/image_bookmarks_item_coin_logo"
+        tools:text="Nano" />
+
+    <TextView
+        android:id="@+id/text_bookmark_coin_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+        android:textAllCaps="true"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small"
+        app:layout_constraintStart_toEndOf="@id/image_bookmarks_item_coin_logo"
+        app:layout_constraintTop_toBottomOf="@id/text_bookmark_coin_name"
+        tools:text="Nano" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/text_bookmark_coin_trend"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/ic_vector_trending_up_black_24dp"
+        app:layout_constraintStart_toEndOf="@id/text_bookmark_coin_name"
+        app:layout_constraintTop_toTopOf="@id/text_bookmark_coin_name" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/text_bookmark_more"
+        style="@style/CryptoSmart.Style.Button.VectorDrawable"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_vector_more_vert_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--//start-->
+    <TextView
+        android:id="@+id/text_unit_value_heading"
+        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+        android:layout_marginTop="@dimen/min_margin_from_screen_edge"
+        android:text="@string/coin_info_string_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_bookmark_coin_symbol" />
+
+    <TextView
+        android:id="@+id/text_unit_time_period_change"
+        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Change over 7D" />
+
+    <TextView
+        android:id="@+id/text_unit_value_primary_currency"
+        style="@style/CryptoSmart.Style.Text.Muli.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/text_unit_value_heading"
+        app:layout_constraintTop_toBottomOf="@id/text_unit_value_heading"
+        tools:text="$6.51 USD" />
+
+    <TextView
+        android:id="@+id/text_percent_value_change_primary_currency"
+        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+        app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_primary_currency"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="-15.94%" />
+
+    <TextView
+        android:id="@+id/text_unit_value_btc"
+        style="@style/CryptoSmart.Style.Text.Muli.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/text_unit_value_heading"
+        app:layout_constraintTop_toBottomOf="@id/text_unit_value_primary_currency"
+        tools:text="0.00082371 BTC" />
+
+    <TextView
+        android:id="@+id/text_percent_value_change_btc"
+        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+        app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_btc"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="-8.5%" />
+
+</android.support.constraint.ConstraintLayout>

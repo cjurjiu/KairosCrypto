@@ -1,6 +1,8 @@
 package com.catalinj.cryptosmart
 
 import android.app.Application
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.components.AppComponent
 import com.catalinj.cryptosmart.di.components.DaggerAppComponent
 import com.catalinj.cryptosmart.di.modules.app.AppModule
@@ -9,6 +11,7 @@ import com.catalinj.cryptosmart.di.modules.data.PersistenceModule
 import com.catalinj.cryptosmart.di.modules.data.RepositoryModule
 import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
+import javax.inject.Inject
 
 /**
  * Represents the CryptoSmart application context. Used for App-Global config & acts as a injection
@@ -25,6 +28,9 @@ class CryptoSmartApplication : Application(), Holder<AppComponent> {
 
     override val hasComp: Boolean
         get() = ::component.isInitialized
+
+    @Inject
+    protected lateinit var userSettings: CryptoSmartUserSettings
 
     private val cryptoAppComponent: AppComponent by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         DaggerAppComponent.builder()
@@ -45,6 +51,8 @@ class CryptoSmartApplication : Application(), Holder<AppComponent> {
         }
         LeakCanary.install(this);
         component = cryptoAppComponent
+        component.inject(this)
+        userSettings.savePrimaryCurrency(CurrencyRepresentation.USD)
         println("Application onCreate")
     }
 

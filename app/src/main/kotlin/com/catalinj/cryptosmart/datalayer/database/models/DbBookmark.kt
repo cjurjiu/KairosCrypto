@@ -15,7 +15,7 @@ data class DbBookmark(
         @ColumnInfo(name = DbBookmark.ColumnNames.ID)
         val id: Int,
         @ColumnInfo(name = DbBookmark.ColumnNames.BOOKMARKED_COIN_SYMBOL)
-        val bookmarkedCoinSymbol: Int,
+        val bookmarkedCoinSymbol: String,
         @ColumnInfo(name = DbBookmark.ColumnNames.DATE_ADDED)
         val dateAdded: Long) {
 

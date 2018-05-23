@@ -39,5 +39,5 @@ interface CoinsRepository : Repository {
     /**
      * Observable that notifies when the available list of [CryptoCoin]s has been updated.
      */
-    fun getCoinListObservable(): Observable<List<CryptoCoin>>
+    fun getCoinListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>>
 }

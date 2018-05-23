@@ -1,5 +1,7 @@
 package com.catalinj.cryptosmart.di.modules.bookmarks
 
+import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.annotations.scopes.BookmarksScope
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter.BookmarksPresenter
@@ -14,7 +16,9 @@ class BookmarksModule {
 
     @Provides
     @BookmarksScope
-    fun provideBookmarksPresenter(): BookmarksContract.BookmarksPresenter {
-        return BookmarksPresenter()
+    fun provideBookmarksPresenter(db: CryptoSmartDb,
+                                  userSettings: CryptoSmartUserSettings)
+            : BookmarksContract.BookmarksPresenter {
+        return BookmarksPresenter(cryptoSmartDb = db, userSettings = userSettings)
     }
 }

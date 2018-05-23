@@ -4,6 +4,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
 import com.catalinj.cryptosmart.businesslayer.model.PriceData
 import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoin
+import com.catalinj.cryptosmart.datalayer.database.models.DbCryptoCoinSinglePriceData
 import com.catalinj.cryptosmart.datalayer.database.models.DbPartialCryptoCoin
 import com.catalinj.cryptosmart.datalayer.database.models.DbPriceData
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
@@ -91,6 +92,34 @@ fun DbCryptoCoin.toBusinessLayerCoinDetails(): CryptoCoinDetails {
             maxSupply = coin.maxSupply,
             priceData = coin.priceData,
             lastUpdated = coin.lastUpdated)
+}
+
+
+fun DbCryptoCoinSinglePriceData.toBusinessLayerCoin(): CryptoCoin {
+    val dbPriceData = this.priceData
+    val dbCoin = this.cryptoCoin
+    val businessLayerPriceDataMap: MutableMap<String, PriceData> = mutableMapOf()
+
+    businessLayerPriceDataMap[dbPriceData.currency] = PriceData(
+            currency = dbPriceData.currency,
+            price = dbPriceData.price,
+            marketCap = dbPriceData.marketCap,
+            volume24h = dbPriceData.volume24h,
+            percentChange1h = dbPriceData.percentChange1h,
+            percentChange24h = dbPriceData.percentChange24h,
+            percentChange7d = dbPriceData.percentChange7d,
+            lastUpdated = dbPriceData.lastUpdated)
+
+    return CryptoCoin(id = dbCoin.serverId,
+            rank = dbCoin.rank,
+            name = dbCoin.name,
+            symbol = dbCoin.symbol,
+            websiteSlug = dbCoin.websiteSlug,
+            circulatingSupply = dbCoin.circulatingSupply,
+            totalSupply = dbCoin.totalSupply,
+            maxSupply = dbCoin.maxSupply,
+            priceData = businessLayerPriceDataMap,
+            lastUpdated = dbCoin.lastUpdated)
 }
 
 private val EmptyPriceData = PriceData(

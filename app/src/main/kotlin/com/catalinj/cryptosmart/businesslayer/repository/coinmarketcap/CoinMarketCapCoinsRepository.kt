@@ -11,20 +11,22 @@ import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.database.models.DbBookmark
 import com.catalinj.cryptosmart.datalayer.database.models.DbPartialCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedCryptoCoinsRequest
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.observables.ConnectableObservable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -40,12 +42,12 @@ import java.util.concurrent.TimeUnit
  * Created by catalinj on 28.01.2018.
  */
 class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
-                                   private val coinMarketCapService: CoinMarketCapService)
+                                   private val coinMarketCapService: CoinMarketCapService,
+                                   private val userSettings: CryptoSmartUserSettings)
     : CoinsRepository {
 
     override val loadingStateObservable: Observable<Repository.LoadingState>
 
-    private val cryptoCoinsRelay = BehaviorRelay.create<List<CryptoCoin>>()
     private val loadingStateRelay = BehaviorRelay.create<RequestState>()
     //worry about leaks later? sounds like a great idea!
     //TODO properly dispose subscription whenever this repository will have to die
@@ -55,20 +57,6 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
         val connectableLoadingObservable = getLoadingObservable()
         disposables.add(connectableLoadingObservable.connect())
         loadingStateObservable = connectableLoadingObservable
-
-        val coinListDisposable = setupCoinListObservable()
-        disposables.add(coinListDisposable)
-    }
-
-    private fun setupCoinListObservable(): Disposable {
-        return cryptoSmartDb.getCryptoCoinDao().getCryptoCoinsFlowable()
-                .map { it.map { it.toBusinessLayerCoin() } }
-                .debounce(200L, TimeUnit.MILLISECONDS)
-                .subscribe {
-                    //onNext
-                    Log.d("RxJ", "monitor onNext")
-                    cryptoCoinsRelay.accept(it)
-                }
     }
 
     override fun fetchCoins(startIndex: Int, numberOfCoins: Int, errorHandler: Consumer<Throwable>) {
@@ -88,14 +76,48 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             val insertedDataIds = cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
             Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
                     "inserted ids:" + insertedDataIds)
+            if (!userSettings.hasDummyBookmarks()) {
+                val random = Random()
+                val randomIndexes: MutableList<Int> = mutableListOf()
+                randomIndexes.apply {
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                    add(random.nextInt(100))
+                }
+                var addedBookmarks = 0
+                val randomBookmarks = networkCoins.filterIndexed { index, _ ->
+                    val shouldBeAdded = randomIndexes.contains(index) && (addedBookmarks < 10)
+                    if (shouldBeAdded) {
+                        addedBookmarks += 1
+                    }
+                    return@filterIndexed shouldBeAdded
+                }.map { coin ->
+                    DbBookmark(0, coin.symbol, System.currentTimeMillis())
+                }
+                val insertedIds = cryptoSmartDb.getBookmarksDao().insert(randomBookmarks)
+                userSettings.saveHasDummyBookmarks(true)
+                Log.d("Cata", "Fake bookmarks inserted. Id's: $insertedIds")
+            } else {
+                Log.d("Cata", "User already has fake bookmarks inserted.")
+            }
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }
         apiRequest.execute()
     }
 
-    override fun getCoinListObservable(): Observable<List<CryptoCoin>> {
-        return cryptoCoinsRelay
+    override fun getCoinListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>> {
+        return cryptoSmartDb.getCryptoCoinDao().getCryptoCoinsFlowable(currency = currencyRepresentation.currency)
+                .map { it.map { it.toBusinessLayerCoin() } }
+                .debounce(200L, TimeUnit.MILLISECONDS)
+                .toObservable()
     }
 
     override fun getCoinDetailsObservable(coinSymbol: String): Observable<CryptoCoinDetails> {

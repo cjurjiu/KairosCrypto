@@ -4,6 +4,7 @@ import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
@@ -18,6 +19,7 @@ import io.reactivex.functions.Consumer
  * Created by catalinj on 21.01.2018.
  */
 class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
+                         private val userSettings: CryptoSmartUserSettings,
                          private val repository: CoinsRepository) :
         CoinsListContract.CoinsListPresenter {
 
@@ -43,7 +45,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ newLoadingState -> updateLoadingState(newLoadingState) })
 
-        val cryptoObservable: Disposable = repository.getCoinListObservable()
+        val cryptoObservable: Disposable = repository.getCoinListObservable(userSettings.getPrimaryCurrency())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("RxJ", "Update coins")

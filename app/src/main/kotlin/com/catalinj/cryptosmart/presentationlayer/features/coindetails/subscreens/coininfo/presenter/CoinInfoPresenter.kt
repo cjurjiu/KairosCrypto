@@ -27,7 +27,7 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
     private var availableData: CryptoCoinDetails? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private val primaryCurrency = CurrencyRepresentation.EUR
+    private val primaryCurrency = cryptoSmartUserSettings.getPrimaryCurrency()
 
     init {
         parentPresenter.registerChild(coinInfoPresenter = this)

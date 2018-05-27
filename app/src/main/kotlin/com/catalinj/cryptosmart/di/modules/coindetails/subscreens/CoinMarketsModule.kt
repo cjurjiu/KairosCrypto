@@ -1,5 +1,9 @@
 package com.catalinj.cryptosmart.di.modules.coindetails.subscreens
 
+import com.catalinj.cryptosmart.businesslayer.repository.MarketsRepository
+import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config.CoinMarketCapMarketsRepositoryConfigurator
+import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapHtmlQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinMarketsScope
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
@@ -18,11 +22,23 @@ class CoinMarketsModule(private val coinId: String) {
     @Provides
     @CoinMarketsScope
     fun provideCoinMarketsPresenter(coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter,
-                                    @CoinMarketCapHtmlQualifier retrofit: Retrofit)
+                                    repository: MarketsRepository)
             : CoinMarketsContract.CoinMarketsPresenter {
 
         return CoinMarketsPresenter(coinId = coinId,
-                retrofit = retrofit,
+                repository = repository,
                 parentPresenter = coinDetailsPresenter)
+    }
+
+    @Provides
+    @CoinMarketsScope
+    fun provideMarketsRepository(database: CryptoSmartDb,
+                                 @CoinMarketCapHtmlQualifier retrofit: Retrofit,
+                                 userSettings: CryptoSmartUserSettings)
+            : MarketsRepository {
+
+        return CoinMarketCapMarketsRepositoryConfigurator(database = database,
+                retrofit = retrofit,
+                userSettings = userSettings).configure()
     }
 }

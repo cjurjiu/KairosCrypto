@@ -20,6 +20,15 @@ class BookmarksModule {
 
     @Provides
     @BookmarksScope
+    fun provideBookmarksPresenter(bookmarksRepository: BookmarksRepository,
+                                  userSettings: CryptoSmartUserSettings)
+            : BookmarksContract.BookmarksPresenter {
+        return BookmarksPresenter(bookmarksRepository = bookmarksRepository,
+                userSettings = userSettings)
+    }
+
+    @Provides
+    @BookmarksScope
     fun provideBookmarksRepository(database: CryptoSmartDb,
                                    @CoinMarketCapApiQualifier retrofit: Retrofit,
                                    userSettings: CryptoSmartUserSettings)
@@ -28,14 +37,5 @@ class BookmarksModule {
         return CoinMarketCapBookmarksRepositoryConfigurator(database = database,
                 retrofit = retrofit,
                 userSettings = userSettings).configure()
-    }
-
-    @Provides
-    @BookmarksScope
-    fun provideBookmarksPresenter(bookmarksRepository: BookmarksRepository,
-                                  userSettings: CryptoSmartUserSettings)
-            : BookmarksContract.BookmarksPresenter {
-        return BookmarksPresenter(bookmarksRepository = bookmarksRepository,
-                userSettings = userSettings)
     }
 }

@@ -22,9 +22,9 @@ class RepositoryModule {
     fun provideCoinMarketCapRepository(database: CryptoSmartDb,
                                        @CoinMarketCapApiQualifier retrofit: Retrofit,
                                        userSettings: CryptoSmartUserSettings): CoinsRepository {
+
         return CoinMarketCapCoinsRepositoryConfigurator(database = database,
                 retrofit = retrofit,
-                userSettings = userSettings)
-                .configure()
+                userSettings = userSettings).configure()
     }
 }

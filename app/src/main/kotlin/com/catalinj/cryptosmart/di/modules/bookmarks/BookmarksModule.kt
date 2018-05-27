@@ -4,7 +4,7 @@ import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config.CoinMarketCapBookmarksRepositoryConfigurator
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
-import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
+import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.BookmarksScope
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter.BookmarksPresenter
@@ -21,7 +21,7 @@ class BookmarksModule {
     @Provides
     @BookmarksScope
     fun provideBookmarksRepository(database: CryptoSmartDb,
-                                   @CoinMarketCapQualifier retrofit: Retrofit,
+                                   @CoinMarketCapApiQualifier retrofit: Retrofit,
                                    userSettings: CryptoSmartUserSettings)
             : BookmarksRepository {
 

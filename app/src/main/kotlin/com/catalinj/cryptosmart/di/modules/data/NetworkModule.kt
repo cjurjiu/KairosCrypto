@@ -1,11 +1,11 @@
 package com.catalinj.cryptosmart.di.modules.data
 
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapHtmlService
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinj.cryptosmart.datalayer.network.config.OkHttpConfigurator
 import com.catalinj.cryptosmart.datalayer.network.config.RetrofitConfigurator
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapHtmlQualifier
-import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
+import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.ApplicationScope
 import dagger.Module
 import dagger.Provides
@@ -28,9 +28,9 @@ class NetworkModule {
 
     @Provides
     @ApplicationScope
-    @CoinMarketCapQualifier
+    @CoinMarketCapApiQualifier
     fun provideCoinMarketCapRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return RetrofitConfigurator(baseUrl = CoinMarketCapService.BASE_URL,
+        return RetrofitConfigurator(baseUrl = CoinMarketCapApiService.BASE_URL,
                 okHttpClient = okHttpClient,
                 converterFactory = GsonConverterFactory.create())
                 .configure()

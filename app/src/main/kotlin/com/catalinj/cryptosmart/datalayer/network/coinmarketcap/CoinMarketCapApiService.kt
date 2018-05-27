@@ -11,7 +11,7 @@ import retrofit2.http.Query
 /**
  * Created by catalinj on 27.01.2018.
  */
-interface CoinMarketCapService {
+interface CoinMarketCapApiService {
 
     /**
      * Fetches the list of coins, starting at the specified index on CoinMarketCap. The currency in

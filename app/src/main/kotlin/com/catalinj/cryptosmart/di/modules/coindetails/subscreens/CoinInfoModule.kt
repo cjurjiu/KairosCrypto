@@ -2,7 +2,7 @@ package com.catalinj.cryptosmart.di.modules.coindetails.subscreens
 
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
-import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
+import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinInfoScope
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
@@ -18,7 +18,7 @@ class CoinInfoModule {
 
     @Provides
     @CoinInfoScope
-    fun provideCoinInfoPresenter(@CoinMarketCapQualifier repository: CoinsRepository,
+    fun provideCoinInfoPresenter(@CoinMarketCapApiQualifier repository: CoinsRepository,
                                  cryptoSmartUserSettings: CryptoSmartUserSettings,
                                  coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter): CoinInfoContract.CoinInfoPresenter {
         return CoinInfoPresenter(coinsRepository = repository,

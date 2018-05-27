@@ -2,7 +2,7 @@ package com.catalinj.cryptosmart.datalayer.database.dao
 
 import android.arch.persistence.room.*
 import com.catalinj.cryptosmart.datalayer.database.models.DbPriceData
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import io.reactivex.Flowable
 
 /**
@@ -20,7 +20,7 @@ interface PriceDataDao {
      *
      * @param coinSymbol the symbol of the targeted cryptocurrency
      * @param currency the fiat currency (or Bitcoin) in which the value of the cryptocurrency will
-     * be expressed. See [CurrencyRepresentation][CoinMarketCapService.CurrencyRepresentation]
+     * be expressed. See [CurrencyRepresentation][CoinMarketCapApiService.CurrencyRepresentation]
      * for possible values. Use [PriceDataDao.ANY_PRICE_DATA][PriceDataDao.ANY_PRICE_DATA] to be
      * notified of changes to any of the available value representations.
      */
@@ -38,7 +38,7 @@ interface PriceDataDao {
      *
      * @param coinSymbol the symbol of the targeted cryptocurrency
      * @param currency the fiat currency (or Bitcoin) in which the value of the cryptocurrency will
-     * be expressed. See [CurrencyRepresentation][CoinMarketCapService.CurrencyRepresentation]
+     * be expressed. See [CurrencyRepresentation][CoinMarketCapApiService.CurrencyRepresentation]
      * for possible values. Use [PriceDataDao.ANY_PRICE_DATA][PriceDataDao.ANY_PRICE_DATA] to fetch
      * all the available value representations.
      */

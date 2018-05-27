@@ -12,7 +12,7 @@ import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.network.RequestState
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
@@ -33,12 +33,12 @@ import java.util.concurrent.TimeUnit
  *
  * @constructor Creates a new instance of this repository.
  * @param cryptoSmartDb database object used to store the coins fetched over the network.
- * @param coinMarketCapService service used to fetch the coins from CoinMarketCap.com
+ * @param coinMarketCapApiService service used to fetch the coins from CoinMarketCap.com
  *
  * Created by catalinj on 28.01.2018.
  */
 class CoinMarketCapBookmarksRepository(private val cryptoSmartDb: CryptoSmartDb,
-                                       private val coinMarketCapService: CoinMarketCapService,
+                                       private val coinMarketCapApiService: CoinMarketCapApiService,
                                        private val userSettings: CryptoSmartUserSettings)
     : BookmarksRepository {
 
@@ -70,7 +70,7 @@ class CoinMarketCapBookmarksRepository(private val cryptoSmartDb: CryptoSmartDb,
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.io())
                 .map { bookmarkedCoin ->
-                    CryptoCoinDetailsRequest(coinMarketCapService = coinMarketCapService,
+                    CryptoCoinDetailsRequest(coinMarketCapApiService = coinMarketCapApiService,
                             requiredCurrency = currencyRepresentation,
                             coinId = bookmarkedCoin.cryptoCoin.serverId)
                 }
@@ -110,7 +110,7 @@ class CoinMarketCapBookmarksRepository(private val cryptoSmartDb: CryptoSmartDb,
         Observable.defer { Observable.fromIterable(bookmarks) }
                 .subscribeOn(Schedulers.io())
                 .map { coin ->
-                    Pair(coin, CryptoCoinDetailsRequest(coinMarketCapService = coinMarketCapService,
+                    Pair(coin, CryptoCoinDetailsRequest(coinMarketCapApiService = coinMarketCapApiService,
                             requiredCurrency = currencyRepresentation,
                             coinId = coin.id))
                 }

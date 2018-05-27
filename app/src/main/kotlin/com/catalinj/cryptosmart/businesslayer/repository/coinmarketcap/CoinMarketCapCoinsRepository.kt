@@ -14,7 +14,7 @@ import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.database.models.DbBookmark
 import com.catalinj.cryptosmart.datalayer.database.models.DbPartialCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.RequestState
-import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapService
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedCryptoCoinsRequest
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
@@ -37,12 +37,12 @@ import java.util.concurrent.TimeUnit
  *
  * @constructor Creates a new instance of this repository.
  * @param cryptoSmartDb database object used to store the coins fetched over the network.
- * @param coinMarketCapService service used to fetch the coins from CoinMarketCap.com
+ * @param coinMarketCapApiService service used to fetch the coins from CoinMarketCap.com
  *
  * Created by catalinj on 28.01.2018.
  */
 class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
-                                   private val coinMarketCapService: CoinMarketCapService,
+                                   private val coinMarketCapApiService: CoinMarketCapApiService,
                                    private val userSettings: CryptoSmartUserSettings)
     : CoinsRepository {
 
@@ -62,7 +62,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
     override fun fetchCoins(startIndex: Int, numberOfCoins: Int, errorHandler: Consumer<Throwable>) {
         val apiRequest = BoundedCryptoCoinsRequest(startIndex = startIndex,
                 numberOfCoins = numberOfCoins,
-                coinMarketCapService = coinMarketCapService)
+                coinMarketCapApiService = coinMarketCapApiService)
 
         apiRequest.response.observeOn(Schedulers.io()).subscribe {
             Log.d("RxJ", "repo getFreshCoins response do next coins size:" + it.data.size)
@@ -140,7 +140,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             //create a request for each one
             val apiRequest = CryptoCoinDetailsRequest(coinId = coinId,
                     requiredCurrency = it,
-                    coinMarketCapService = coinMarketCapService)
+                    coinMarketCapApiService = coinMarketCapApiService)
 
             apiRequest.state.doOnNext {
                 //onNext

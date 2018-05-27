@@ -81,8 +81,7 @@ fun DbCryptoCoin.toBusinessLayerCoin(): CryptoCoin {
 
 fun DbCryptoCoin.toBusinessLayerCoinDetails(): CryptoCoinDetails {
     val coin = this.toBusinessLayerCoin()
-    return CryptoCoinDetails(
-            id = coin.id,
+    return CryptoCoinDetails(id = coin.id,
             rank = coin.rank,
             name = coin.name,
             symbol = coin.symbol,
@@ -93,7 +92,6 @@ fun DbCryptoCoin.toBusinessLayerCoinDetails(): CryptoCoinDetails {
             priceData = coin.priceData,
             lastUpdated = coin.lastUpdated)
 }
-
 
 fun DbCryptoCoinSinglePriceData.toBusinessLayerCoin(): CryptoCoin {
     val dbPriceData = this.priceData

@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -8,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.BookmarksComponent
@@ -16,6 +16,7 @@ import com.catalinj.cryptosmart.di.modules.bookmarks.BookmarksModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
+import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.layout_fragment_bookmarks.view.*
 import javax.inject.Inject
@@ -33,6 +34,7 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
     protected lateinit var bookmarksPresenter: BookmarksContract.BookmarksPresenter
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: BookmarksListAdapter
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     //android fragment lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +42,9 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
         injector.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_fragment_bookmarks, container, false)
     }
 
@@ -71,9 +75,13 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
     override fun initialise() {
         Log.d("Cata", "$TAG#initialise")
         val view = view!!
+        swipeRefreshLayout = view.swiperefreshlayout_bookmarks_list
+        swipeRefreshLayout.setOnRefreshListener {
+            bookmarksPresenter.userPullToRefresh()
+        }
         recyclerView = view.recyclerview_bookmarks_list
         recyclerView.layoutManager = LinearLayoutManager(context!!)
-        recyclerViewAdapter = BookmarksListAdapter(context!!, CurrencyRepresentation.USD, emptyList()) {
+        recyclerViewAdapter = BookmarksListAdapter(context!!, CurrencyRepresentation.USD, mutableListOf()) {
             bookmarksPresenter.coinSelected(it)
         }
         recyclerView.adapter = recyclerViewAdapter
@@ -89,13 +97,22 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
     //end mvp view methods
 
     //bookmarks view methods
-    override fun setListData(primaryCurrency: CurrencyRepresentation, bookmarksList: List<CryptoCoin>) {
+    override fun setListData(primaryCurrency: CurrencyRepresentation,
+                             bookmarksList: List<BookmarksCoin>) {
         recyclerViewAdapter.primaryCurrency = primaryCurrency
-        recyclerViewAdapter.coins = bookmarksList
+        recyclerViewAdapter.coins = bookmarksList.toMutableList()
         recyclerViewAdapter.notifyDataSetChanged()
     }
-    //end bookmarks view methods
 
+    override fun showLoadingIndicator() {
+        //do nothing, each card displays its own loading indicator
+    }
+
+    override fun hideLoadingIndicator() {
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    //end bookmarks view methods
     class Factory(val activityComponent: ActivityComponent) : DaggerFragmentFactory<BookmarksComponent>() {
 
         override fun onCreateFragment(): DaggerFragment<BookmarksComponent> {

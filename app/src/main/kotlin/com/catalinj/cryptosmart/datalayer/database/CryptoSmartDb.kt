@@ -39,7 +39,9 @@ abstract class CryptoSmartDb : RoomDatabase() {
         fun getInstance(context: Context): CryptoSmartDb {
             synchronized(lock) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context, CryptoSmartDb::class.java, DATABASE_NAME).build()
+                    INSTANCE = Room.databaseBuilder(context, CryptoSmartDb::class.java, DATABASE_NAME)
+                            .fallbackToDestructiveMigration()
+                            .build()
                 }
             }
             return INSTANCE!!

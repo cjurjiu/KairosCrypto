@@ -76,41 +76,40 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             val insertedDataIds = cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
             Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
                     "inserted ids:" + insertedDataIds)
-            if (!userSettings.hasDummyBookmarks()) {
-                val random = Random()
-                val randomIndexes: MutableList<Int> = mutableListOf()
-                randomIndexes.apply {
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                    add(random.nextInt(100))
-                }
-                var addedBookmarks = 0
-                val randomBookmarks = networkCoins.filterIndexed { index, _ ->
-                    val shouldBeAdded = randomIndexes.contains(index) && (addedBookmarks < 10)
-                    if (shouldBeAdded) {
-                        addedBookmarks += 1
-                    }
-                    return@filterIndexed shouldBeAdded
-                }.map { coin ->
-                    DbBookmark(0, coin.symbol, System.currentTimeMillis())
-                }
-                val insertedIds = cryptoSmartDb.getBookmarksDao().insert(randomBookmarks)
-                userSettings.saveHasDummyBookmarks(true)
-                Log.d("Cata", "Fake bookmarks inserted. Id's: $insertedIds")
-            } else {
-                Log.d("Cata", "User already has fake bookmarks inserted.")
-            }
+            insertDummyBookmarks(networkCoins)
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }
         apiRequest.execute()
+    }
+
+    private fun insertDummyBookmarks(networkCoins: List<CoinMarketCapCryptoCoin>) {
+        if (!userSettings.hasDummyBookmarks()) {
+            val random = Random()
+            val randomIndexes: MutableList<Int> = mutableListOf()
+            randomIndexes.apply {
+                add(random.nextInt(100))
+                add(random.nextInt(100))
+                add(random.nextInt(100))
+                add(random.nextInt(100))
+                add(random.nextInt(100))
+            }
+            var addedBookmarks = 0
+            val randomBookmarks = networkCoins.filterIndexed { index, _ ->
+                val shouldBeAdded = randomIndexes.contains(index) && (addedBookmarks < 10)
+                if (shouldBeAdded) {
+                    addedBookmarks += 1
+                }
+                return@filterIndexed shouldBeAdded
+            }.mapIndexed { index, coin ->
+                DbBookmark(0, coin.symbol, index.toLong())
+            }
+            val insertedIds = cryptoSmartDb.getBookmarksDao().insert(randomBookmarks)
+            userSettings.saveHasDummyBookmarks(true)
+            Log.d("Cata", "Fake bookmarks inserted. Id's: $insertedIds")
+        } else {
+            Log.d("Cata", "User already has fake bookmarks inserted.")
+        }
     }
 
     override fun getCoinListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>> {

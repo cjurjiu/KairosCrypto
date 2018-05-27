@@ -80,6 +80,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$config.lib_versions.rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$config.lib_versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$config.lib_versions.rxrelay"
+    //material loading library
+    implementation "me.zhanghai.android.materialprogressbar:library:$config.lib_versions.material_progress"
 
     //local dependencies
     implementation project(':smartpersist')

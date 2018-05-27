@@ -48,6 +48,14 @@
         <item name="android:background">?attr/colorBackground</item>
     </style>
 
+    <!--PROGRESS BAR-->
+    <style name="CryptoSmart.Style.Progress.Horizontal.Indeterminate.BookmarksCard" parent="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding">
+        <item name="android:indeterminate">true</item>
+        <item name="mpb_progressStyle">horizontal</item>
+        <item name="mpb_useIntrinsicPadding">false
+        </item>
+    </style>
+
     <!--IMAGES-->
     <style name="CryptoSmart.Style.Image">
         <item name="android:background">?attr/colorBackground</item>

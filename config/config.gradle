@@ -1,5 +1,5 @@
 def library_versions = [
-        kotlin             : '1.2.40',
+        kotlin             : '1.2.41',
         support_library    : '27.1.1',
         room               : '1.1.1-rc1',
         //constraint layout
@@ -26,7 +26,9 @@ def library_versions = [
         //rxjava
         rxjava             : '2.1.12',
         rxandroid          : '2.0.2',
-        rxrelay            : '2.0.0'
+        rxrelay            : '2.0.0',
+        //material progress
+        material_progress  : '1.4.2'
 ]
 
 def build_versions = [

@@ -1,12 +1,16 @@
 package com.catalinj.cryptosmart.di.modules.bookmarks
 
+import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
+import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config.CoinMarketCapBookmarksRepositoryConfigurator
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
+import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.BookmarksScope
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter.BookmarksPresenter
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 
 /**
  * Created by catalin on 14/05/2018.
@@ -16,9 +20,22 @@ class BookmarksModule {
 
     @Provides
     @BookmarksScope
-    fun provideBookmarksPresenter(db: CryptoSmartDb,
+    fun provideBookmarksRepository(database: CryptoSmartDb,
+                                   @CoinMarketCapQualifier retrofit: Retrofit,
+                                   userSettings: CryptoSmartUserSettings)
+            : BookmarksRepository {
+
+        return CoinMarketCapBookmarksRepositoryConfigurator(database = database,
+                retrofit = retrofit,
+                userSettings = userSettings).configure()
+    }
+
+    @Provides
+    @BookmarksScope
+    fun provideBookmarksPresenter(bookmarksRepository: BookmarksRepository,
                                   userSettings: CryptoSmartUserSettings)
             : BookmarksContract.BookmarksPresenter {
-        return BookmarksPresenter(cryptoSmartDb = db, userSettings = userSettings)
+        return BookmarksPresenter(bookmarksRepository = bookmarksRepository,
+                userSettings = userSettings)
     }
 }

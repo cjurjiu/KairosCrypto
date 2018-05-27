@@ -12,9 +12,9 @@ import retrofit2.Retrofit
 /**
  * Created by catalin on 03/05/2018.
  */
-class CoinMarketCapRepositoryConfigurator(private val database: CryptoSmartDb,
-                                          @CoinMarketCapQualifier private val retrofit: Retrofit,
-                                          private val userSettings: CryptoSmartUserSettings)
+class CoinMarketCapCoinsRepositoryConfigurator(private val database: CryptoSmartDb,
+                                               @CoinMarketCapQualifier private val retrofit: Retrofit,
+                                               private val userSettings: CryptoSmartUserSettings)
     : Configurator<CoinsRepository> {
     override fun configure(): CoinsRepository {
         val service = retrofit.create(CoinMarketCapService::class.java)

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_markets_coin_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        app:layout_constraintEnd_toStartOf="@+id/text_markets_exchange_name"
+        app:layout_constraintStart_toEndOf="@+id/text_markets_coin_name"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="USD" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_markets_coin_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="USD" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_markets_exchange_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="USD" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_markets_exchange_pair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        app:layout_constraintStart_toStartOf="@+id/text_markets_coin_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_markets_coin_name"
+        tools:text="USD" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_markets_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="24dp"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_markets_exchange_pair"
+        tools:text="USD" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_markets_volume_prc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="USD" />
+
+    <include
+        layout="@layout/mergeable_layout_separator"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,15 +1,19 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.view
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinMarketInfo
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.components.CoinMarketsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinMarketsModule
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import com.catalinjurjiu.smartpersist.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_coin_markets.view.*
 import javax.inject.Inject
 
 /**
@@ -17,9 +21,13 @@ import javax.inject.Inject
  * available for trade.
  */
 class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsContract.CoinMarketsView {
+
     override val name: String = TAG
     @Inject
     protected lateinit var coinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewAdapter: MarketsInfoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +40,21 @@ class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsC
         return inflater.inflate(R.layout.fragment_coin_markets, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        coinMarketsPresenter.viewAvailable(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coinMarketsPresenter.viewDestroyed()
+    }
+
     override fun initialise() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        recyclerView = view!!.recyclerview_markets_list
+        recyclerViewAdapter = MarketsInfoAdapter(emptyList())
+        recyclerView.adapter = recyclerViewAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onStart() {
@@ -48,6 +69,11 @@ class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsC
 
     override fun getPresenter(): CoinMarketsContract.CoinMarketsPresenter {
         return coinMarketsPresenter
+    }
+
+    override fun setData(marketInfo: List<CryptoCoinMarketInfo>) {
+        recyclerViewAdapter.data = marketInfo
+        recyclerViewAdapter.notifyDataSetChanged()
     }
 
     class Factory(private val coinId: String,

@@ -16,3 +16,17 @@ inline fun DbCryptoCoinMarketInfo.toBusinessLayerMarketInfo(): CryptoCoinMarketI
             updatedFlag = updatedFlag,
             lastUpdatedTimestamp = lastUpdatedTimestamp)
 }
+
+inline fun CryptoCoinMarketInfo.toDataLayerMarketInto(): DbCryptoCoinMarketInfo {
+    return DbCryptoCoinMarketInfo(rank = this.rank,
+            exchangeName = exchangeName,
+            exchangePairUrl = exchangePairUrl,
+            coinSymbol = coinSymbol,
+            exchangePairSymbol1 = exchangePairSymbol1,
+            exchangePairSymbol2 = exchangePairSymbol2,
+            volumeUsd = volumeUsd,
+            priceUsd = priceUsd,
+            volumePercent = volumePercent,
+            updatedFlag = updatedFlag,
+            lastUpdatedTimestamp = lastUpdatedTimestamp)
+}

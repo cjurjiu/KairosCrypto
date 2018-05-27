@@ -4,6 +4,7 @@ import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.repository.MarketsRepository
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
  * Created by catalin on 05/05/2018.
@@ -13,12 +14,19 @@ class CoinMarketsPresenter(private val coinId: String,
                            private val parentPresenter: CoinDetailsContract.CoinDetailsPresenter) :
         CoinMarketsContract.CoinMarketsPresenter {
 
+    private var view: CoinMarketsContract.CoinMarketsView? = null
+
     init {
         parentPresenter.registerChild(coinMarketsPresenter = this)
     }
 
     override fun startPresenting() {
         parentPresenter.getCoinId()
+        repository.getMarketsListObservable("BTC")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    view?.setData(it)
+                }
         Log.d("Cata", "Markets presenter #startPresenting.")
         repository.updateMarketsData("bitcoin")
     }
@@ -28,16 +36,16 @@ class CoinMarketsPresenter(private val coinId: String,
     }
 
     override fun viewAvailable(view: CoinMarketsContract.CoinMarketsView) {
-        //todo
+        this.view = view
+        view.initialise()
     }
 
     override fun viewDestroyed() {
-        //todo
+        this.view = null
     }
 
     override fun getView(): CoinMarketsContract.CoinMarketsView? {
-        //todo
-        return null
+        return view
     }
 
     override fun handleRefresh(): Boolean {

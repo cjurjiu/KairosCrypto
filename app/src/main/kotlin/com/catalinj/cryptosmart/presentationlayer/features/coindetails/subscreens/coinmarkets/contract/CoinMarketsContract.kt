@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinMarketInfo
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 
@@ -14,6 +15,6 @@ interface CoinMarketsContract {
     }
 
     interface CoinMarketsView : MvpView<CoinMarketsPresenter, CoinMarketsView> {
-        //empty for now
+        fun setData(marketInfo: List<CryptoCoinMarketInfo>)
     }
 }

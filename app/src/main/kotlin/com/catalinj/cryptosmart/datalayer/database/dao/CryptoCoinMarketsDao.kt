@@ -11,7 +11,8 @@ import io.reactivex.Flowable
 interface CryptoCoinMarketsDao {
 
     @Query(value = "SELECT * FROM ${DbCryptoCoinMarketInfo.TABLE_NAME}" +
-            " WHERE ${DbCryptoCoinMarketInfo.ColumnNames.COIN_SYMBOL} = :coinSymbol")
+            " WHERE ${DbCryptoCoinMarketInfo.ColumnNames.COIN_SYMBOL} = :coinSymbol" +
+            " ORDER BY ${DbCryptoCoinMarketInfo.ColumnNames.RANK} ASC")
     fun getMarketsObservable(coinSymbol: String): Flowable<List<DbCryptoCoinMarketInfo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

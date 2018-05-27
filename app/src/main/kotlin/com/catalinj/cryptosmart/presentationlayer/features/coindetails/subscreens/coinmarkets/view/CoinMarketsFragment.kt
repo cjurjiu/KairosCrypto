@@ -10,6 +10,7 @@ import com.catalinj.cryptosmart.di.components.CoinMarketsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinMarketsModule
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import com.catalinjurjiu.smartpersist.DaggerFragment
+import javax.inject.Inject
 
 /**
  * A simple view(fragment) which displays the exchanges on which a particular crypocurrency is
@@ -17,6 +18,37 @@ import com.catalinjurjiu.smartpersist.DaggerFragment
  */
 class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsContract.CoinMarketsView {
     override val name: String = TAG
+    @Inject
+    protected lateinit var coinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injector.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_coin_markets, container, false)
+    }
+
+    override fun initialise() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onStart() {
+        super.onStart()
+        coinMarketsPresenter.startPresenting()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coinMarketsPresenter.stopPresenting()
+    }
+
+    override fun getPresenter(): CoinMarketsContract.CoinMarketsPresenter {
+        return coinMarketsPresenter
+    }
 
     class Factory(private val coinId: String,
                   private val coinSymbol: String,
@@ -36,20 +68,6 @@ class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsC
                     coinMarketsModule = CoinMarketsModule(coinId)
             )
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_coin_markets, container, false)
-    }
-
-    override fun initialise() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getPresenter(): CoinMarketsContract.CoinMarketsPresenter {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {

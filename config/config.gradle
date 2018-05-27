@@ -9,6 +9,7 @@ def library_versions = [
         //retrofit
         retrofit           : '2.3.0',
         converter_gson     : '2.3.0',
+        converter_scalars  : '2.3.0',
         retrofit_rxadapter : '2.4.0',
         //gson
         gson               : '2.8.2',
@@ -28,7 +29,9 @@ def library_versions = [
         rxandroid          : '2.0.2',
         rxrelay            : '2.0.0',
         //material progress
-        material_progress  : '1.4.2'
+        material_progress  : '1.4.2',
+        //jsoup
+        jsoup              : '1.11.3'
 ]
 
 def build_versions = [

@@ -12,7 +12,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view.BookmarksFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.view.CoinDetailsFragment
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinsListFragment
-import com.catalinj.cryptosmart.presentationlayer.features.settings.SettingsFragment
+import com.catalinj.cryptosmart.presentationlayer.features.settings.view.SettingsFragment
 
 /**
  * Created by catalin on 27/04/2018.
@@ -43,7 +43,8 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
     }
 
     override fun openSettingsScreen() {
-        val frag = SettingsFragment()
+        val frag = SettingsFragment.SettingsFragmentFactory(activityComponent = activity.injector)
+                .create()
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, SettingsFragment.TAG)
                 .commit()

@@ -8,6 +8,7 @@ import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
  * Created by catalin on 11/05/2018.
  */
 class CryptoSmartUserSettingsImpl(context: Context) : CryptoSmartUserSettings {
+
     private val sharedPrefs: SharedPreferences =
             context.applicationContext.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE)
 
@@ -30,9 +31,18 @@ class CryptoSmartUserSettingsImpl(context: Context) : CryptoSmartUserSettings {
         return CurrencyRepresentation.valueOf(currency)
     }
 
+    override fun saveDarkThemeEnabled(darkThemeEnabled: Boolean) {
+        sharedPrefs.edit().putBoolean(KEY_DARK_THEME_ENABLED, darkThemeEnabled).apply()
+    }
+
+    override fun isDarkThemeEnabled(): Boolean {
+        return sharedPrefs.getBoolean(KEY_DARK_THEME_ENABLED, false)
+    }
+
     companion object {
         const val SHARED_PREFS_FILE_NAME = "CryptoSmartPrefs"
         const val KEY_PRIMARY_CURRENCY = "PrimaryCurrency"
+        const val KEY_DARK_THEME_ENABLED = "DarkThemeEnabled"
         const val KEY_DUMMY_BOOKMARKS = "DummyBookmarks"
     }
 }
@@ -46,4 +56,8 @@ interface CryptoSmartUserSettings {
     fun savePrimaryCurrency(currency: CurrencyRepresentation)
 
     fun getPrimaryCurrency(): CurrencyRepresentation
+
+    fun saveDarkThemeEnabled(darkThemeEnabled: Boolean)
+
+    fun isDarkThemeEnabled(): Boolean
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_item_simple_list"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/min_tap_area_side_small"
+    android:minWidth="@dimen/min_tap_area_side_small"
+    android:padding="8dp"
+    android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+    tools:text="USD" />

@@ -141,7 +141,6 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             val apiRequest = CryptoCoinDetailsRequest(coinId = coinId,
                     requiredCurrency = it,
                     coinMarketCapApiService = coinMarketCapApiService)
-
             apiRequest.state.doOnNext {
                 //onNext
                 //send state updates to the loading state relay

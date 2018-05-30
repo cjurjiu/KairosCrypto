@@ -39,5 +39,7 @@
     <string name="coin_info_string_circulating_supply">Circulating Supply</string>
     <string name="coin_info_string_available_supply">Available Supply</string>
     <string name="coin_info_string_max_possible_supply">Max Possible Supply</string>
+    <string name="string_settings_dark_theme">Dark Theme</string>
+    <string name="string_settings_primary_currency">Primary Currency</string>
 
 </resources>

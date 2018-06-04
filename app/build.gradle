@@ -49,7 +49,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$config.lib_versions.kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$config.lib_versions.kotlin"
     //android-ktx
-    implementation "androidx.core:core-ktx:$config.lib_versions.android_ktx"
+//    implementation "androidx.core:core-ktx:$config.lib_versions.android_ktx"
     //support libraries
     implementation "com.android.support:support-v4:$config.lib_versions.support_library"
     implementation "com.android.support:appcompat-v7:$config.lib_versions.support_library"

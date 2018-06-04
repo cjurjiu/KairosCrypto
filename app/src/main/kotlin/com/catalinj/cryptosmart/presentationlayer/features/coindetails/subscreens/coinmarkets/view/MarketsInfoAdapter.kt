@@ -21,19 +21,19 @@ class MarketsInfoAdapter(var data: List<CryptoCoinMarketInfo>) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: MarketInfoViewHolder, position: Int) {
         holder.coinRank.text = data[position].rank.toString()
-        holder.coinName.text = data[position].coinSymbol
         holder.exchange.text = data[position].exchangeName
         holder.value.text = data[position].priceUsd.toString()
         holder.pair.text = "${data[position].exchangePairSymbol1}/${data[position].exchangePairSymbol2}"
         holder.volumePrc.text = data[position].volumePercent.toString()
+        holder.volume.text = data[position].volumeUsd.toString()
     }
 }
 
 class MarketInfoViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val coinRank = view.text_markets_coin_rank
-    val coinName = view.text_markets_coin_name
     val exchange = view.text_markets_exchange_name
     val value = view.text_markets_price
     val pair = view.text_markets_exchange_pair
     val volumePrc = view.text_markets_volume_prc
+    val volume = view.text_markets_volume_24h
 }

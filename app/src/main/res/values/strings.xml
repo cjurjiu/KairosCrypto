@@ -41,5 +41,6 @@
     <string name="coin_info_string_max_possible_supply">Max Possible Supply</string>
     <string name="string_settings_dark_theme">Dark Theme</string>
     <string name="string_settings_primary_currency">Primary Currency</string>
+    <string name="string_markets_label_volume_24h">Volume (24h):</string>
 
 </resources>

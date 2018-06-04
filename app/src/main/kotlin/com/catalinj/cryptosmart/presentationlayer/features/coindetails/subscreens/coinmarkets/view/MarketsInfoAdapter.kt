@@ -26,9 +26,6 @@ class MarketsInfoAdapter(var data: List<CryptoCoinMarketInfo>) : RecyclerView.Ad
         holder.value.text = data[position].priceUsd.toString()
         holder.pair.text = "${data[position].exchangePairSymbol1}/${data[position].exchangePairSymbol2}"
         holder.volumePrc.text = data[position].volumePercent.toString()
-//        exchanges are missing. rank 1 jumps to rank 4 or so...inspect what might be the cause
-//        issue might be related to the uniqueness of the primary key in the db and to the insert
-//        /override strategy
     }
 }
 

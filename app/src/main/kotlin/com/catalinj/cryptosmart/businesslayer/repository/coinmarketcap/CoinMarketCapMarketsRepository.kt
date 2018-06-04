@@ -32,15 +32,17 @@ class CoinMarketCapMarketsRepository(private val cryptoSmartDb: CryptoSmartDb,
                 }
     }
 
-    override fun updateMarketsData(websiteSlug: String) {
-        coinMarketCapHtmlService.fetchCoinMarkets(websiteSlug)
+    override fun updateMarketsData(coinSymbol: String, webFriendlyName: String) {
+        coinMarketCapHtmlService.fetchCoinMarkets(webFriendlyName)
                 .subscribeOn(Schedulers.io())
                 .doOnError { Log.e("Cata", "Error", it) }
                 .subscribe(Consumer {
-                    val parser = MarketInfoHtmlParser(it)
+                    val parser = MarketInfoHtmlParser(coinSymbol = coinSymbol,
+                            marketInfoHtmlPage = it)
                     val markets = parser.extractMarkets().map { it.toDataLayerMarketInto() }
                     Log.w("Cata", "Add markets to DB. size: ${markets.size}")
-                    cryptoSmartDb.getMarketsInfoDao().insert(markets)
+                    val addedIds = cryptoSmartDb.getMarketsInfoDao().insert(markets)
+                    Log.w("Cata", "Add markets markets with ids:$addedIds")
                 })
     }
 }

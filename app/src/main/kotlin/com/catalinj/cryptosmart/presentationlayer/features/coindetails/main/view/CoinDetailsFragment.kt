@@ -18,6 +18,7 @@ import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import com.example.cryptodrawablesprovider.getCryptoDrawable
@@ -45,35 +46,22 @@ class CoinDetailsFragment :
         : DaggerFragmentFactory<CoinDetailsComponent>() {
 
         override fun onCreateFragment(): DaggerFragment<CoinDetailsComponent> {
-            val f = CoinDetailsFragment()
-            val bundle = Bundle()
-            bundle.putString(ARG_KEY_COIN_ID, cryptoCoin.id)
-            bundle.putString(ARG_KEY_COIN_NAME, cryptoCoin.name)
-            bundle.putString(ARG_KEY_COIN_SYMBOL, cryptoCoin.symbol)
-//            bundle.putFloat(ARG_KEY_COIN_CHANGE_1H, cryptoCoin.priceData[].percentChange1h)
-            //set selected coin
-            f.arguments = bundle
-            //do some other initializations, set arguments
-            return f
+            return CoinDetailsFragment()
         }
 
         override fun onCreateDaggerComponent(): CoinDetailsComponent {
-            return activityComponent.getCoinDetailsComponent(CoinDetailsModule())
+            return activityComponent.getCoinDetailsComponent(CoinDetailsModule(
+                    CoinDetailsPartialData(coinName = cryptoCoin.name,
+                            webFriendlyName = cryptoCoin.websiteSlug,
+                            coinSymbol = cryptoCoin.symbol,
+                            coinId = cryptoCoin.id,
+                            change1h = cryptoCoin.priceData.entries.first().value.percentChange1h)))
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val cryptoCoinId = arguments!!.getString(ARG_KEY_COIN_ID)
-        val cryptoCoinName = arguments!!.getString(ARG_KEY_COIN_NAME)
-        val cryptoCoinSymbol = arguments!!.getString(ARG_KEY_COIN_SYMBOL)
-        val cryptoCoinChange1h = arguments!!.getFloat(ARG_KEY_COIN_CHANGE_1H)
-        Log.d("CataDetails", "Coin serverId is: $cryptoCoinId")
         injector.inject(this)
-        coinDetailsPresenter.setInitialInfo(coinName = cryptoCoinName,
-                coinId = cryptoCoinId,
-                coinSymbol = cryptoCoinSymbol,
-                change1h = cryptoCoinChange1h)
         Log.d(TAG, "CoinDetailsFragment${hashCode().toString(16)}#onCreate.injector:" +
                 injector.hashCode().toString(16) + " presenter:" +
                 coinDetailsPresenter.hashCode().toString(16))
@@ -207,8 +195,7 @@ class CoinDetailsFragment :
         //ViewPager config
         val viewPager = view.view_pager_coin_details
         coinDetailsViewPagerAdapter = CoinDetailsViewPagerAdapter(
-                coinId = coinDetailsPresenter.getCoinId(),
-                coinSymbol = coinDetailsPresenter.getCoinSymbol(),
+                coinDetailsPartialData = coinDetailsPresenter.getCoinData(),
                 coinDetailsComponent = injector,
                 supportFragmentManager = childFragmentManager)
         viewPager.adapter = coinDetailsViewPagerAdapter

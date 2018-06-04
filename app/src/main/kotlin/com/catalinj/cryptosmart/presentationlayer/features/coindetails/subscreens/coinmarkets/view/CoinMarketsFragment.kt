@@ -11,6 +11,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinMarketInfo
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.components.CoinMarketsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinMarketsModule
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_coin_markets.view.*
@@ -76,29 +77,23 @@ class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsC
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
-    class Factory(private val coinId: String,
-                  private val coinSymbol: String,
+    class Factory(private val coinData: CoinDetailsPartialData,
                   private val coinDetailsComponent: CoinDetailsComponent)
 
         : DaggerFragmentFactory<CoinMarketsComponent>() {
         override fun onCreateFragment(): DaggerFragment<CoinMarketsComponent> {
-            val fragment = CoinMarketsFragment()
-            val args = Bundle()
-            args.putString(ARGS_COIN_ID, coinId)
-            fragment.arguments = args
-            return fragment
+            return CoinMarketsFragment()
         }
 
         override fun onCreateDaggerComponent(): CoinMarketsComponent {
             return coinDetailsComponent.getCoinMarketsComponent(
-                    coinMarketsModule = CoinMarketsModule(coinId)
+                    coinMarketsModule = CoinMarketsModule(coinData)
             )
         }
     }
 
     companion object {
         const val TAG = "CoinMarketsFragment"
-        const val ARGS_COIN_ID = "ARGS::COIN_ID"
     }
 
 }

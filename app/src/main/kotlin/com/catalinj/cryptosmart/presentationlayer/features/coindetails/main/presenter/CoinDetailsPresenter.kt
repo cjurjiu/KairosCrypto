@@ -3,6 +3,7 @@ package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.pre
 import android.util.Log
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import io.reactivex.disposables.CompositeDisposable
@@ -10,14 +11,10 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
+class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData) : CoinDetailsContract.CoinDetailsPresenter {
     override var navigator: Navigator? = null
 
     private var view: CoinDetailsContract.CoinDetailsView? = null
-    private lateinit var coinId: String
-    private lateinit var coinSymbol: String
-    private lateinit var coinName: String
-    private var coinChange1h: Float = 0F
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var childCoinInfoPresenter: CoinInfoContract.CoinInfoPresenter? = null
     private var childCoinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter? = null
@@ -26,16 +23,9 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
         Log.d("Cata", "Injected CoinDetailsPresenter")
     }
 
-    override fun setInitialInfo(coinName: String, coinSymbol: String, coinId: String, change1h: Float) {
-        this.coinId = coinId
-        this.coinName = coinName
-        this.coinSymbol = coinSymbol
-        this.coinChange1h = change1h
-    }
-
     override fun startPresenting() {
         Log.d("Cata", "CoinDetailsPresenter#startPresenting")
-        view?.setCoinInfo(coinName, coinSymbol, coinChange1h)
+        updateView(data = coinPartialData)
     }
 
     override fun stopPresenting() {
@@ -71,12 +61,8 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
         }
     }
 
-    override fun getCoinId(): String {
-        return coinId
-    }
-
-    override fun getCoinSymbol(): String {
-        return coinSymbol
+    override fun getCoinData(): CoinDetailsPartialData {
+        return coinPartialData
     }
 
     override fun registerChild(coinInfoPresenter: CoinInfoContract.CoinInfoPresenter) {
@@ -96,14 +82,24 @@ class CoinDetailsPresenter : CoinDetailsContract.CoinDetailsPresenter {
     }
 
     override fun updateChange1h(newChange1h: Float) {
-        this.coinChange1h = newChange1h
-        view?.setCoinInfo(coinName = coinName,
-                coinSymbol = coinSymbol,
+        this.coinPartialData = CoinDetailsPartialData(
+                coinName = this.coinPartialData.coinName,
+                webFriendlyName = this.coinPartialData.webFriendlyName,
+                coinSymbol = this.coinPartialData.coinSymbol,
+                coinId = this.coinPartialData.coinId,
                 change1h = newChange1h)
+        //update view after change
+        updateView(data = coinPartialData)
     }
 
     override fun userPressedBack() {
         navigator?.navigateBack()
+    }
+
+    private fun updateView(data: CoinDetailsPartialData) {
+        view?.setCoinInfo(data.coinName,
+                data.coinSymbol,
+                data.change1h)
     }
 
     private companion object {

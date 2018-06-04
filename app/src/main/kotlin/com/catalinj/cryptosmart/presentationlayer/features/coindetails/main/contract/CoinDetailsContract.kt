@@ -17,11 +17,7 @@ interface CoinDetailsContract {
 
         fun userPullToRefresh()
 
-        fun setInitialInfo(coinName: String, coinSymbol: String, coinId: String, change1h: Float)
-
-        fun getCoinId(): String
-
-        fun getCoinSymbol(): String
+        fun getCoinData(): CoinDetailsPartialData
 
         fun registerChild(coinInfoPresenter: CoinInfoContract.CoinInfoPresenter)
 
@@ -34,6 +30,12 @@ interface CoinDetailsContract {
         fun updateChange1h(newChange1h: Float)
 
         fun userPressedBack()
+
+        data class CoinDetailsPartialData(val coinName: String,
+                                          val webFriendlyName: String,
+                                          val coinSymbol: String,
+                                          val coinId: String,
+                                          val change1h: Float)
     }
 
     interface CoinDetailsView : MvpView<CoinDetailsPresenter, CoinDetailsView>, LoadingView {

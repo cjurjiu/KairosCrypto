@@ -11,7 +11,7 @@ import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.parser.MarketInf
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.parser.MarketInfoHtmlParser.TableHeaderColumns.VOLUME_PRC_TABLE_COLUMN_INDEX
 import org.jsoup.Jsoup
 
-class MarketInfoHtmlParser(marketInfoHtmlPage: String) {
+class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: String) {
 
     //todo, provide a base URL
     private val marketInfoPage = Jsoup.parse(marketInfoHtmlPage)
@@ -53,7 +53,7 @@ class MarketInfoHtmlParser(marketInfoHtmlPage: String) {
             marketsInfo.add(CryptoCoinMarketInfo(rank = rank,
                     exchangeName = source,
                     exchangePairUrl = tradingPairUrl,
-                    coinSymbol = tradingPairString[0],
+                    coinSymbol = coinSymbol,
                     exchangePairSymbol1 = tradingPairString[0],
                     exchangePairSymbol2 = tradingPairString[1],
                     volumeUsd = tradingVol24HoursUsd,

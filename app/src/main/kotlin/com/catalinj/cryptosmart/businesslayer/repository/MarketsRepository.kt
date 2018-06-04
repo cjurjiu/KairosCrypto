@@ -10,9 +10,9 @@ import io.reactivex.Observable
 interface MarketsRepository : Repository {
 
     /**
-     * Updates the markets on which the given [cryptoCoin] is available for tradingl
+     * Updates the markets on which the given [cryptoCoin] is available for trading.
      */
-    fun updateMarketsData(websiteSlug: String)
+    fun updateMarketsData(coinSymbol: String, webFriendlyName: String)
 
     /**
      * Observable that notifies when the available list of [CryptoCoin]s has been updated.

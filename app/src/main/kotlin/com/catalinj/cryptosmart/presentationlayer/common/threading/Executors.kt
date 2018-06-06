@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.common
+package com.catalinj.cryptosmart.presentationlayer.common.threading
 
 import android.os.Handler
 import android.os.Looper

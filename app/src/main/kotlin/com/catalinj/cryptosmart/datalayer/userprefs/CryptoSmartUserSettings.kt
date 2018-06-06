@@ -27,7 +27,7 @@ class CryptoSmartUserSettingsImpl(context: Context) : CryptoSmartUserSettings {
     }
 
     override fun getPrimaryCurrency(): CurrencyRepresentation {
-        val currency = sharedPrefs.getString(KEY_PRIMARY_CURRENCY, "USD")
+        val currency = sharedPrefs.getString(KEY_PRIMARY_CURRENCY, CurrencyRepresentation.USD.currency)
         return CurrencyRepresentation.valueOf(currency)
     }
 

@@ -1,7 +1,6 @@
 package com.catalinj.cryptosmart
 
 import android.app.Application
-import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.components.AppComponent
 import com.catalinj.cryptosmart.di.components.DaggerAppComponent
@@ -9,6 +8,7 @@ import com.catalinj.cryptosmart.di.modules.app.AppModule
 import com.catalinj.cryptosmart.di.modules.data.NetworkModule
 import com.catalinj.cryptosmart.di.modules.data.PersistenceModule
 import com.catalinj.cryptosmart.di.modules.data.RepositoryModule
+import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
 import javax.inject.Inject
@@ -52,7 +52,7 @@ class CryptoSmartApplication : Application(), Holder<AppComponent> {
         LeakCanary.install(this);
         component = cryptoAppComponent
         component.inject(this)
-        userSettings.savePrimaryCurrency(CurrencyRepresentation.USD)
+        CurrencyFormatter.refreshLocale(context = this)
         println("Application onCreate")
     }
 

@@ -4,6 +4,7 @@ import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
@@ -38,6 +39,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     private var activeSortOrder: String = resourceDecoder.fetchSortOptionsDialogItems().first().value
     //init with default value. this will later be changed by user actions
     private var activeSnapshot: String = resourceDecoder.decodeSnapshotDialogItems().first().value
+    private var displayedCurrency = userSettings.getPrimaryCurrency()
 
     //base presenter methods
     override fun startPresenting() {
@@ -45,7 +47,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ newLoadingState -> updateLoadingState(newLoadingState) })
 
-        val cryptoObservable: Disposable = repository.getCoinListObservable(userSettings.getPrimaryCurrency())
+        val cryptoObservable: Disposable = repository.getCoinListObservable(displayedCurrency)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("RxJ", "Update coins")
@@ -108,6 +110,10 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         )
     }
 
+    override fun getSelectedCurrency(): CurrencyRepresentation {
+        return displayedCurrency
+    }
+
     override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {
         activeCurrency = newSelectedCurrency.value
         Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
@@ -140,7 +146,9 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     private fun fetchMoreCoins() {
         Log.d("Cata", "CoinListPresenter#fetchMoreCoins")
         val startIndex = availableCoins.orEmpty().size
-        repository.fetchCoins(startIndex = startIndex, numberOfCoins = COIN_FETCH_BATCH_SIZE,
+        repository.fetchCoins(startIndex = startIndex,
+                numberOfCoins = COIN_FETCH_BATCH_SIZE,
+                currencyRepresentation = displayedCurrency,
                 errorHandler = Consumer { Log.d("RxJ", "Fetch more coins error:+ $it") })
     }
 
@@ -148,7 +156,9 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         Log.d("Cata", "CoinListPresenter#refreshCoins")
         waitForLoad = false
         val fetchedCoinsNumber = availableCoins?.count() ?: COIN_FETCH_BATCH_SIZE
-        repository.fetchCoins(startIndex = 0, numberOfCoins = fetchedCoinsNumber,
+        repository.fetchCoins(startIndex = 0,
+                numberOfCoins = fetchedCoinsNumber,
+                currencyRepresentation = displayedCurrency,
                 errorHandler = Consumer { Log.d("RxJ", "Refresh coins error: $it") })
     }
 

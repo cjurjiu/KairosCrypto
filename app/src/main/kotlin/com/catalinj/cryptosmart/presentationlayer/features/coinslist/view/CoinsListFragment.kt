@@ -163,8 +163,9 @@ class CoinsListFragment :
 
     //coin list view presenter
     override fun setListData(data: List<CryptoCoin>) {
-        (recyclerView.adapter as CoinListAdapter).coins = data
-        recyclerView.adapter.notifyDataSetChanged()
+        recyclerViewAdapter.coins = data
+        recyclerViewAdapter.currency = coinListPresenter.getSelectedCurrency()
+        recyclerViewAdapter.notifyDataSetChanged()
     }
 
     override fun showLoadingIndicator() {
@@ -247,7 +248,9 @@ class CoinsListFragment :
 
     private fun initRecyclerView(rootView: View, appCompatActivity: AppCompatActivity) {
         recyclerView = rootView.recyclerview_coins_list
-        recyclerViewAdapter = CoinListAdapter(appCompatActivity.baseContext, emptyList()) {
+        recyclerViewAdapter = CoinListAdapter(context = appCompatActivity.baseContext,
+                coins = emptyList(),
+                currency = coinListPresenter.getSelectedCurrency()) {
             coinListPresenter.coinSelected(it)
         }
         recyclerViewLayoutManager = LinearLayoutManager(appCompatActivity.baseContext)

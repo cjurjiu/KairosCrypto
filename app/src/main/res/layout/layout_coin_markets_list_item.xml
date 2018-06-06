@@ -68,7 +68,6 @@
         app:layout_constraintStart_toEndOf="@id/text_markets_label_volume_24h"
         tools:text="$756,294,485 USD" />
 
-
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_markets_volume_prc"
         android:layout_width="wrap_content"

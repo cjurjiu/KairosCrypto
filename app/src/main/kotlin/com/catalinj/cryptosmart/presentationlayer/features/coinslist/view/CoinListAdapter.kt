@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
+import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
+import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.example.cryptodrawablesprovider.getCryptoDrawable
 import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
 
@@ -17,6 +20,7 @@ import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
  */
 class CoinListAdapter(context: Context,
                       var coins: List<CryptoCoin>,
+                      var currency: CurrencyRepresentation,
                       private val click: (position: CryptoCoin) -> Unit) :
         RecyclerView.Adapter<CoinListAdapter.MyViewHolder>() {
 
@@ -35,13 +39,19 @@ class CoinListAdapter(context: Context,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.apply {
-            textCoinRank.text = coins[position].rank.toString()
-            imageCoinLogo.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coins[position].symbol,
+            val coin = coins[position]
+            val priceData = coin.priceData[currency.currency]!!
+
+            textCoinRank.text = coin.rank.toString()
+            imageCoinLogo.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coin.symbol,
                     context = holder.itemView.context))
-            textCoinName.text = coins[position].name
-            textCoinValue.text = "\$${coins[position].priceData.values.first().price} USD"
-            textCoinIncreasePrc.text = "${coins[position].priceData.values.first().percentChange24h}%"
-            textCoinIncreaseValue.text = "\$${(coins[position].priceData.values.first().percentChange24h * coins[position].priceData.values.first().price / 100f)} USD"
+            textCoinName.text = coin.name
+            textCoinValue.text = CurrencyFormatter.format(value = priceData.price,
+                    currencyRepresentation = currency)
+            textCoinIncreasePrc.displayPercent(priceData.percentChange24h)
+            val value = (priceData.percentChange24h * priceData.price) / 100f
+            textCoinIncreaseValue.text = CurrencyFormatter.format(value = value,
+                    currencyRepresentation = currency)
         }
     }
 

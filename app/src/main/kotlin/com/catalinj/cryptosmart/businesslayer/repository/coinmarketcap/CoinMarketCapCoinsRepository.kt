@@ -59,9 +59,14 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
         loadingStateObservable = connectableLoadingObservable
     }
 
-    override fun fetchCoins(startIndex: Int, numberOfCoins: Int, errorHandler: Consumer<Throwable>) {
+    override fun fetchCoins(startIndex: Int,
+                            numberOfCoins: Int,
+                            currencyRepresentation: CurrencyRepresentation,
+                            errorHandler: Consumer<Throwable>) {
+
         val apiRequest = BoundedCryptoCoinsRequest(startIndex = startIndex,
                 numberOfCoins = numberOfCoins,
+                currencyRepresentation = currencyRepresentation,
                 coinMarketCapApiService = coinMarketCapApiService)
 
         apiRequest.response.observeOn(Schedulers.io()).subscribe {

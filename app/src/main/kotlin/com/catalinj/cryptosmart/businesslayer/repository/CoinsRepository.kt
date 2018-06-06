@@ -20,7 +20,10 @@ interface CoinsRepository : Repository {
      * @param numberOfCoins the number of coins to fetch
      * @param errorHandler consumer which will be notified if an error happens
      */
-    fun fetchCoins(startIndex: Int, numberOfCoins: Int, errorHandler: Consumer<Throwable>)
+    fun fetchCoins(startIndex: Int,
+                   numberOfCoins: Int,
+                   currencyRepresentation: CurrencyRepresentation = CurrencyRepresentation.USD,
+                   errorHandler: Consumer<Throwable>)
 
     /**
      * Updates the details of a specific coin market cap coin.

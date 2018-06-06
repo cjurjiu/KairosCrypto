@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.LoadingView
@@ -22,6 +23,8 @@ interface CoinsListContract {
         fun sortListButtonPressed()
 
         fun selectSnapshotButtonPressed()
+
+        fun getSelectedCurrency(): CurrencyRepresentation
 
         fun displayCurrencyChanged(newSelectedCurrency: SelectionItem)
 

@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view
 
 import android.content.Context
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
+import com.catalinj.cryptosmart.presentationlayer.common.extension.trendlineForPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.example.cryptodrawablesprovider.getCryptoDrawable
@@ -41,14 +43,17 @@ class BookmarksListAdapter(val context: Context,
     override fun onBindViewHolder(holder: BookmarksViewHolder, position: Int) {
         holder.apply {
             val coinModel = coins[position]
+            val priceData = coinModel.priceData[primaryCurrency.currency]!!
+
             imageCoinLogo.setImageDrawable(
                     getCryptoDrawable(cryptoIdentifier = coinModel.symbol,
                             context = context))
             textCoinName.text = coinModel.name
             textCoinSymbol.text = coinModel.symbol
-            textCoinValuePrimary.text = CurrencyFormatter.format(value = coinModel.priceData[primaryCurrency.currency]!!.price,
+            trendLine24H.trendlineForPercent(percent = priceData.percentChange1h)
+            textCoinValuePrimary.text = CurrencyFormatter.format(value = priceData.price,
                     currencyRepresentation = primaryCurrency)
-            textCoinValuePrimaryChange.text = CurrencyFormatter.format(value = coinModel.priceData[primaryCurrency.currency]!!.percentChange24h,
+            textCoinValuePrimaryChange.text = CurrencyFormatter.format(value = priceData.percentChange24h,
                     currencyRepresentation = primaryCurrency)
 
             if (coinModel.isLoading) {
@@ -67,5 +72,6 @@ class BookmarksListAdapter(val context: Context,
         val textCoinValuePrimary: TextView = v.text_unit_value_primary_currency
         val textCoinValuePrimaryChange: TextView = v.text_percent_value_change_primary_currency
         val imageLoadingBar: View = v.loading_bar
+        val trendLine24H: AppCompatImageView = v.text_bookmark_coin_trend
     }
 }

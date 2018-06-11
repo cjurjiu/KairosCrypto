@@ -15,6 +15,7 @@ import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
+import com.catalinj.cryptosmart.presentationlayer.common.extension.trendlineForPercent
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
@@ -153,7 +154,7 @@ class CoinDetailsFragment :
         coinNameTextView.text = coinName
         coinSymbolTextView.text = coinSymbol
         coinLogoImageView.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coinSymbol, context = activity!!))
-        coinTrendImageView.setImageResource(R.drawable.ic_vector_trending_up_black_24dp)
+        coinTrendImageView.trendlineForPercent(change1h)
         //do just log for the moment
         Log.d(TAG, "$TAG#setCoinInfo.")
     }

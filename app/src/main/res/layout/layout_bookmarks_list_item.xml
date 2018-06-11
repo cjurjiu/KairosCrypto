@@ -51,9 +51,9 @@
         android:layout_height="20dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="3dp"
-        android:src="@drawable/ic_vector_trending_up_black_24dp"
         app:layout_constraintStart_toEndOf="@id/text_bookmark_coin_name"
-        app:layout_constraintTop_toTopOf="@id/text_bookmark_coin_name" />
+        app:layout_constraintTop_toTopOf="@id/text_bookmark_coin_name"
+        tools:src="@drawable/ic_vector_trending_up_black_24dp" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/text_bookmark_more"

@@ -22,7 +22,7 @@ class CoinInfoModule {
                                  cryptoSmartUserSettings: CryptoSmartUserSettings,
                                  coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter): CoinInfoContract.CoinInfoPresenter {
         return CoinInfoPresenter(coinsRepository = repository,
-                cryptoSmartUserSettings = cryptoSmartUserSettings,
+                userSettings = cryptoSmartUserSettings,
                 parentPresenter = coinDetailsPresenter)
     }
 }

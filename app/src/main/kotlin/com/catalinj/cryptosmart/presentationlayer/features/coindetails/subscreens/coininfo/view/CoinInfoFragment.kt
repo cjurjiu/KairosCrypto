@@ -13,6 +13,8 @@ import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.components.CoinInfoComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinInfoModule
+import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
+import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import com.catalinjurjiu.smartpersist.DaggerFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_info.view.*
@@ -132,19 +134,29 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(),
 
         unitTimePeriodChangeTextView.text = "7d"
 
-        unitValueBtcTextView.text = bitcoinPriceData.price.toString() + " BTC"
-        percentValueChangeBtcTextView.text = bitcoinPriceData.percentChange24h.toString()
-        marketCapBtcTextView.text = bitcoinPriceData.marketCap.toString() + " BTC"
-        volumeBtcTextView.text = bitcoinPriceData.volume24h.toString() + " BTC"
+        unitValueBtcTextView.text = CurrencyFormatter.format(value = bitcoinPriceData.price,
+                currencyRepresentation = CurrencyRepresentation.BTC)
 
-        unitValuePrimaryCurrencyTextView.text = primaryCurrencyPriceData.price.toString() + "USD"
-        percentValueChangePrimaryCurrencyTextView.text = primaryCurrencyPriceData.percentChange24h.toString()
-        marketCapPrimaryCurrencyTextView.text = primaryCurrencyPriceData.marketCap.toString() + "USD"
-        volumePrimaryCurrencyTextView.text = primaryCurrencyPriceData.volume24h.toString() + "USD"
+        percentValueChangeBtcTextView.displayPercent(bitcoinPriceData.percentChange24h)
 
-        circulatingSupplyValueTextView.text = coinDetails.circulatingSupply.toString()
-        currentlyAvailableSupplyValueTextView.text = coinDetails.totalSupply.toString()
-        maxPossibleSupplyValueTextView.text = coinDetails.maxSupply.toString()
+        marketCapBtcTextView.text = CurrencyFormatter.format(value = bitcoinPriceData.marketCap,
+                currencyRepresentation = CurrencyRepresentation.BTC)
+        volumeBtcTextView.text = CurrencyFormatter.format(value = bitcoinPriceData.volume24h,
+                currencyRepresentation = CurrencyRepresentation.BTC)
+
+        unitValuePrimaryCurrencyTextView.text = CurrencyFormatter.format(value = primaryCurrencyPriceData.price,
+                currencyRepresentation = coinInfoPresenter.getPrimaryCurrency())
+
+        percentValueChangePrimaryCurrencyTextView.displayPercent(primaryCurrencyPriceData.percentChange24h)
+
+        marketCapPrimaryCurrencyTextView.text = CurrencyFormatter.format(value = primaryCurrencyPriceData.marketCap,
+                currencyRepresentation = coinInfoPresenter.getPrimaryCurrency())
+        volumePrimaryCurrencyTextView.text = CurrencyFormatter.format(value = primaryCurrencyPriceData.volume24h,
+                currencyRepresentation = coinInfoPresenter.getPrimaryCurrency())
+
+        circulatingSupplyValueTextView.text = CurrencyFormatter.formatCrypto(value = coinDetails.circulatingSupply, symbol = coinDetails.symbol)
+        currentlyAvailableSupplyValueTextView.text = CurrencyFormatter.formatCrypto(value = coinDetails.totalSupply, symbol = coinDetails.symbol)
+        maxPossibleSupplyValueTextView.text = CurrencyFormatter.formatCrypto(value = coinDetails.maxSupply, symbol = coinDetails.symbol)
     }
 
     override fun onStart() {

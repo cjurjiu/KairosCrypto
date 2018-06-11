@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
  * Created by catalin on 05/05/2018.
  */
 class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
-                        private val cryptoSmartUserSettings: CryptoSmartUserSettings,
+                        private val userSettings: CryptoSmartUserSettings,
                         private val parentPresenter: CoinDetailsContract.CoinDetailsPresenter)
     : CoinInfoContract.CoinInfoPresenter {
 
@@ -27,7 +27,7 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
     private var availableData: CryptoCoinDetails? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private val primaryCurrency = cryptoSmartUserSettings.getPrimaryCurrency()
+    private val primaryCurrency = userSettings.getPrimaryCurrency()
 
     init {
         parentPresenter.registerChild(coinInfoPresenter = this)
@@ -103,6 +103,10 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
 
     override fun setCoinSymbol(coinSymbol: String) {
         this.coinSymbol = coinSymbol
+    }
+
+    override fun getPrimaryCurrency(): CurrencyRepresentation {
+        return primaryCurrency
     }
 
     override fun handleRefresh(): Boolean {

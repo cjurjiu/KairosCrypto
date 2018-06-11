@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinMarketInfo
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
+import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
+import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import kotlinx.android.synthetic.main.layout_coin_markets_list_item.view.*
 
 class MarketsInfoAdapter(var data: List<CryptoCoinMarketInfo>) : RecyclerView.Adapter<MarketInfoViewHolder>() {
@@ -22,10 +25,12 @@ class MarketsInfoAdapter(var data: List<CryptoCoinMarketInfo>) : RecyclerView.Ad
     override fun onBindViewHolder(holder: MarketInfoViewHolder, position: Int) {
         holder.coinRank.text = data[position].rank.toString()
         holder.exchange.text = data[position].exchangeName
-        holder.value.text = data[position].priceUsd.toString()
+        holder.value.text = CurrencyFormatter.format(value = data[position].priceUsd,
+                currencyRepresentation = CurrencyRepresentation.USD)
         holder.pair.text = "${data[position].exchangePairSymbol1}/${data[position].exchangePairSymbol2}"
-        holder.volumePrc.text = data[position].volumePercent.toString()
-        holder.volume.text = data[position].volumeUsd.toString()
+        holder.volumePrc.displayPercent(percent = data[position].volumePercent, colored = false)
+        holder.volume.text = CurrencyFormatter.format(value = data[position].volumeUsd,
+                currencyRepresentation = CurrencyRepresentation.USD)
     }
 }
 

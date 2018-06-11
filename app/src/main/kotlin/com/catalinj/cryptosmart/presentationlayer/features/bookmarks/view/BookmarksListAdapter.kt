@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
+import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.example.cryptodrawablesprovider.getCryptoDrawable
 import kotlinx.android.synthetic.main.layout_bookmarks_list_item.view.*
@@ -45,8 +46,10 @@ class BookmarksListAdapter(val context: Context,
                             context = context))
             textCoinName.text = coinModel.name
             textCoinSymbol.text = coinModel.symbol
-            textCoinValuePrimary.text = coinModel.priceData[primaryCurrency.currency]?.price.toString()
-            textCoinValuePrimaryChange.text = coinModel.priceData[primaryCurrency.currency]?.percentChange24h.toString()
+            textCoinValuePrimary.text = CurrencyFormatter.format(value = coinModel.priceData[primaryCurrency.currency]!!.price,
+                    currencyRepresentation = primaryCurrency)
+            textCoinValuePrimaryChange.text = CurrencyFormatter.format(value = coinModel.priceData[primaryCurrency.currency]!!.percentChange24h,
+                    currencyRepresentation = primaryCurrency)
 
             if (coinModel.isLoading) {
                 imageLoadingBar.visibility = View.VISIBLE

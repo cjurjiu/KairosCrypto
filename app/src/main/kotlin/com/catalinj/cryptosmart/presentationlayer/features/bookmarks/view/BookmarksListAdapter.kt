@@ -13,7 +13,7 @@ import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.extension.trendlineForPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
-import com.example.cryptodrawablesprovider.getCryptoDrawable
+import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_bookmarks_list_item.view.*
 
 /**
@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.layout_bookmarks_list_item.view.*
 class BookmarksListAdapter(val context: Context,
                            var primaryCurrency: CurrencyRepresentation,
                            var coins: MutableList<BookmarksCoin>,
+                           private val imageHelper: ImageHelper<String>,
                            private val click: (position: BookmarksCoin) -> Unit) :
         RecyclerView.Adapter<BookmarksListAdapter.BookmarksViewHolder>() {
 
@@ -45,9 +46,7 @@ class BookmarksListAdapter(val context: Context,
             val coinModel = coins[position]
             val priceData = coinModel.priceData[primaryCurrency.currency]!!
 
-            imageCoinLogo.setImageDrawable(
-                    getCryptoDrawable(cryptoIdentifier = coinModel.symbol,
-                            context = context))
+            imageHelper.setImage(imageCoinLogo, coinModel.symbol)
             textCoinName.text = coinModel.name
             textCoinSymbol.text = coinModel.symbol
             trendLine24H.trendlineForPercent(percent = priceData.percentChange1h)

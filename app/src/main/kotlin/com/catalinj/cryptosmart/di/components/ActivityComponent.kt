@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.di.components
 
 import com.catalinj.cryptosmart.di.annotations.scopes.ActivityScope
+import com.catalinj.cryptosmart.di.modules.activity.ActivityModule
 import com.catalinj.cryptosmart.di.modules.bookmarks.BookmarksModule
 import com.catalinj.cryptosmart.di.modules.coindetails.CoinDetailsModule
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
@@ -12,7 +13,7 @@ import dagger.Subcomponent
  * Created by catalinj on 04.02.2018.
  */
 @ActivityScope
-@Subcomponent
+@Subcomponent(modules = [(ActivityModule::class)])
 abstract class ActivityComponent {
 
     abstract fun inject(mainActivity: MainActivity)

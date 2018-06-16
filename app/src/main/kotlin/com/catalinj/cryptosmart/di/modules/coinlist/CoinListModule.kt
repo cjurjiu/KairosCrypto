@@ -3,6 +3,7 @@ package com.catalinj.cryptosmart.di.modules.coinlist
 import android.content.Context
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
+import com.catalinj.cryptosmart.di.annotations.qualifiers.ActivityContext
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinListScope
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
@@ -19,7 +20,7 @@ class CoinListModule {
 
     @Provides
     @CoinListScope
-    fun provideCoinsListPresenter(context: Context,
+    fun provideCoinsListPresenter(@ActivityContext context: Context,
                                   userSettings: CryptoSmartUserSettings,
                                   @CoinMarketCapApiQualifier coinsRepository: CoinsRepository): CoinsListContract.CoinsListPresenter {
         return CoinsListPresenter(CoinListResourceDecoder(context = context),

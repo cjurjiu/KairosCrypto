@@ -22,7 +22,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.cont
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
-import com.example.cryptodrawablesprovider.getCryptoDrawable
+import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_main_coin_details.view.*
 import javax.inject.Inject
 
@@ -35,6 +35,8 @@ class CoinDetailsFragment :
     override val name: String = TAG
     @Inject
     protected lateinit var coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter
+    @Inject
+    protected lateinit var imageHelper: ImageHelper<String>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var coinDetailsViewPagerAdapter: CoinDetailsViewPagerAdapter
     private lateinit var coinNameTextView: AppCompatTextView
@@ -153,7 +155,7 @@ class CoinDetailsFragment :
     override fun setCoinInfo(coinName: String, coinSymbol: String, change1h: Float) {
         coinNameTextView.text = coinName
         coinSymbolTextView.text = coinSymbol
-        coinLogoImageView.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coinSymbol, context = activity!!))
+        imageHelper.setImage(imageView = coinLogoImageView, resourceIdentifier = coinSymbol)
         coinTrendImageView.trendlineForPercent(change1h)
         //do just log for the moment
         Log.d(TAG, "$TAG#setCoinInfo.")

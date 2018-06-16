@@ -18,6 +18,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwa
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_bookmarks.view.*
 import javax.inject.Inject
 
@@ -32,6 +33,8 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
 
     @Inject
     protected lateinit var bookmarksPresenter: BookmarksContract.BookmarksPresenter
+    @Inject
+    protected lateinit var imageHelper: ImageHelper<String>
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: BookmarksListAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -81,7 +84,10 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
         }
         recyclerView = view.recyclerview_bookmarks_list
         recyclerView.layoutManager = LinearLayoutManager(context!!)
-        recyclerViewAdapter = BookmarksListAdapter(context!!, CurrencyRepresentation.USD, mutableListOf()) {
+        recyclerViewAdapter = BookmarksListAdapter(context = context!!,
+                primaryCurrency = CurrencyRepresentation.USD,
+                coins = mutableListOf(),
+                imageHelper = imageHelper) {
             bookmarksPresenter.coinSelected(it)
         }
         recyclerView.adapter = recyclerViewAdapter

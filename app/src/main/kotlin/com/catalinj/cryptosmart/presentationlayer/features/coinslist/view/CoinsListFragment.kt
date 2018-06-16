@@ -28,6 +28,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionListDialog
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import java.util.*
 import javax.inject.Inject
@@ -45,6 +46,9 @@ class CoinsListFragment :
 
     @Inject
     protected lateinit var coinListPresenter: CoinsListContract.CoinsListPresenter
+
+    @Inject
+    protected lateinit var imageHelper: ImageHelper<String>
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -250,7 +254,8 @@ class CoinsListFragment :
         recyclerView = rootView.recyclerview_coins_list
         recyclerViewAdapter = CoinListAdapter(context = appCompatActivity.baseContext,
                 coins = emptyList(),
-                currency = coinListPresenter.getSelectedCurrency()) {
+                currency = coinListPresenter.getSelectedCurrency(),
+                imageHelper = imageHelper) {
             coinListPresenter.coinSelected(it)
         }
         recyclerViewLayoutManager = LinearLayoutManager(appCompatActivity.baseContext)

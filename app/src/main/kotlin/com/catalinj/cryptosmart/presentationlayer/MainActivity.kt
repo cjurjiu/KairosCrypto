@@ -8,6 +8,7 @@ import com.catalinj.cryptosmart.CryptoSmartApplication
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.components.ActivityComponent
+import com.catalinj.cryptosmart.di.modules.activity.ActivityModule
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.impl.DaggerAwareNavigator
 import com.catalinjurjiu.common.NamedComponent
@@ -49,7 +50,8 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
     }
 
     override fun onCreateDaggerComponent(): ActivityComponent {
-        return (application as CryptoSmartApplication).component.getActivityComponent()
+        return (application as CryptoSmartApplication).component
+                .getActivityComponent(ActivityModule(activityContext = this))
     }
 
     override fun onStop() {

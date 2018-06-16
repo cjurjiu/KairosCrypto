@@ -33,7 +33,11 @@ def library_versions = [
         //material progress
         material_progress  : '1.4.2',
         //jsoup
-        jsoup              : '1.11.3'
+        jsoup              : '1.11.3',
+        //glide
+        glide              : '4.7.1',
+        //android svg
+        android_svg        : '1.2.1'
 ]
 
 def build_versions = [

@@ -12,7 +12,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
-import com.example.cryptodrawablesprovider.getCryptoDrawable
+import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
 
 /**
@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
 class CoinListAdapter(context: Context,
                       var coins: List<CryptoCoin>,
                       var currency: CurrencyRepresentation,
+                      private val imageHelper: ImageHelper<String>,
                       private val click: (position: CryptoCoin) -> Unit) :
         RecyclerView.Adapter<CoinListAdapter.MyViewHolder>() {
 
@@ -42,9 +43,8 @@ class CoinListAdapter(context: Context,
             val coin = coins[position]
             val priceData = coin.priceData[currency.currency]!!
 
+            imageHelper.setImage(imageCoinLogo, coin.symbol)
             textCoinRank.text = coin.rank.toString()
-            imageCoinLogo.setImageDrawable(getCryptoDrawable(cryptoIdentifier = coin.symbol,
-                    context = holder.itemView.context))
             textCoinName.text = coin.name
             textCoinValue.text = CurrencyFormatter.format(value = priceData.price,
                     currencyRepresentation = currency)

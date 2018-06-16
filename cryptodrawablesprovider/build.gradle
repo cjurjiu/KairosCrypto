@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion "$config.build_versions.compileSdkVersion".toInteger()
@@ -33,11 +34,16 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$config.lib_versions.support_library"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$config.lib_versions.kotlin"
-
+    //glide
+    implementation "com.github.bumptech.glide:glide:$config.lib_versions.glide"
+    kapt "com.github.bumptech.glide:compiler:$config.lib_versions.glide"
+    //android svg
+    implementation "com.caverock:androidsvg:$config.lib_versions.android_svg"
+    //common module
+    implementation project(':common')
     testImplementation "junit:junit:$config.lib_versions.junit"
     //instrumentation tests
     androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"

@@ -17,7 +17,7 @@ import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
-import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_bookmarks.view.*
 import javax.inject.Inject
@@ -25,7 +25,7 @@ import javax.inject.Inject
 /**
  * Created by catalin on 14/05/2018.
  */
-class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
+class BookmarksFragment : InjectorFragment<BookmarksComponent>(),
         BookmarksContract.BookmarksView,
         BackEventAwareComponent {
 
@@ -119,13 +119,13 @@ class BookmarksFragment : DaggerFragment<BookmarksComponent>(),
     }
 
     //end bookmarks view methods
-    class Factory(val activityComponent: ActivityComponent) : DaggerFragmentFactory<BookmarksComponent>() {
+    class Factory(val activityComponent: ActivityComponent) : InjectorFragmentFactory<BookmarksComponent>() {
 
-        override fun onCreateFragment(): DaggerFragment<BookmarksComponent> {
+        override fun onCreateFragment(): InjectorFragment<BookmarksComponent> {
             return BookmarksFragment()
         }
 
-        override fun onCreateDaggerComponent(): BookmarksComponent {
+        override fun onCreateInjector(): BookmarksComponent {
             return activityComponent.getBookmarksComponent(BookmarksModule())
         }
     }

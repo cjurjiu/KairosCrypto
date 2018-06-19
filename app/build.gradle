@@ -89,7 +89,7 @@ dependencies {
     implementation "org.jsoup:jsoup:$config.lib_versions.jsoup"
 
     //local dependencies
-    implementation project(':smartpersist')
+    implementation project(':wheelbarrow')
     implementation project(':common')
     implementation project(':cryptodrawablesprovider')
     //leak canary

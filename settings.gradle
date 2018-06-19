@@ -1,1 +1,1 @@
-include ':app', ':smartpersist', ':common', ':cryptodrawablesprovider'
+include ':app', ':wheelbarrow', ':common', ':cryptodrawablesprovider'

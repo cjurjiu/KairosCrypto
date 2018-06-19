@@ -12,10 +12,10 @@ import com.catalinj.cryptosmart.di.modules.activity.ActivityModule
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.impl.DaggerAwareNavigator
 import com.catalinjurjiu.common.NamedComponent
-import com.catalinjurjiu.smartpersist.DaggerActivity
+import com.catalinjurjiu.wheelbarrow.InjectorActivity
 import javax.inject.Inject
 
-class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
+class MainActivity : InjectorActivity<ActivityComponent>(), NamedComponent {
     override val name: String = TAG
 
     val navigator: Navigator by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
@@ -49,7 +49,7 @@ class MainActivity : DaggerActivity<ActivityComponent>(), NamedComponent {
         return true
     }
 
-    override fun onCreateDaggerComponent(): ActivityComponent {
+    override fun onCreateInjector(): ActivityComponent {
         return (application as CryptoSmartApplication).component
                 .getActivityComponent(ActivityModule(activityContext = this))
     }

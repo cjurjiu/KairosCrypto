@@ -21,13 +21,13 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinjurjiu.common.NamedComponent
-import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_main_coin_details.view.*
 import javax.inject.Inject
 
 class CoinDetailsFragment :
-        DaggerFragment<CoinDetailsComponent>(),
+        InjectorFragment<CoinDetailsComponent>(),
         NamedComponent,
         BackEventAwareComponent,
         CoinDetailsContract.CoinDetailsView {
@@ -46,13 +46,13 @@ class CoinDetailsFragment :
 
     class Factory(private val activityComponent: ActivityComponent,
                   private val cryptoCoin: CryptoCoin)
-        : DaggerFragmentFactory<CoinDetailsComponent>() {
+        : InjectorFragmentFactory<CoinDetailsComponent>() {
 
-        override fun onCreateFragment(): DaggerFragment<CoinDetailsComponent> {
+        override fun onCreateFragment(): InjectorFragment<CoinDetailsComponent> {
             return CoinDetailsFragment()
         }
 
-        override fun onCreateDaggerComponent(): CoinDetailsComponent {
+        override fun onCreateInjector(): CoinDetailsComponent {
             return activityComponent.getCoinDetailsComponent(CoinDetailsModule(
                     CoinDetailsPartialData(coinName = cryptoCoin.name,
                             webFriendlyName = cryptoCoin.websiteSlug,

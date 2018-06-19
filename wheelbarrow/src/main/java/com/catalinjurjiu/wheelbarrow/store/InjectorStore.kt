@@ -1,9 +1,9 @@
-package com.catalinjurjiu.smartpersist
+package com.catalinjurjiu.wheelbarrow.store
 
 import android.arch.lifecycle.ViewModel
 import com.catalinjurjiu.common.Holder
 
-class DaggerComponentStore<T : Any> : ViewModel(), Holder<T> {
+class InjectorStore<T : Any> : ViewModel(), Holder<T> {
 
     override lateinit var component: T
 

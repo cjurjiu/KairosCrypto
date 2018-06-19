@@ -1,4 +1,4 @@
-package com.catalinjurjiu.smartpersist;
+package com.catalinjurjiu.wheelbarrow;
 
 import org.junit.Test;
 

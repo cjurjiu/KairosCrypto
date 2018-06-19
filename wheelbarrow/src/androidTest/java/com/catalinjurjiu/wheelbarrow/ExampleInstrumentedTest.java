@@ -1,4 +1,4 @@
-package com.catalinjurjiu.smartpersist;
+package com.catalinjurjiu.wheelbarrow;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

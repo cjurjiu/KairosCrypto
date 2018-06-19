@@ -16,14 +16,14 @@ import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinInfoModule
 import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
-import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_info.view.*
 import javax.inject.Inject
 
 /**
  * A simple view(fragment) which displays various information about a particular cryptocurrency.
  */
-class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(),
+class CoinInfoFragment : InjectorFragment<CoinInfoComponent>(),
         CoinInfoContract.CoinInfoView {
 
     override val name: String = TAG
@@ -51,9 +51,9 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(),
     class Factory(private val coinId: String,
                   private val coinSymbol: String,
                   private val coinDetailsComponent: CoinDetailsComponent)
-        : DaggerFragmentFactory<CoinInfoComponent>() {
+        : InjectorFragmentFactory<CoinInfoComponent>() {
 
-        override fun onCreateFragment(): DaggerFragment<CoinInfoComponent> {
+        override fun onCreateFragment(): InjectorFragment<CoinInfoComponent> {
             val fragment = CoinInfoFragment()
             val args = Bundle()
             args.putString(ARGS_COIN_ID, coinId)
@@ -62,7 +62,7 @@ class CoinInfoFragment : DaggerFragment<CoinInfoComponent>(),
             return fragment
         }
 
-        override fun onCreateDaggerComponent(): CoinInfoComponent {
+        override fun onCreateInjector(): CoinInfoComponent {
             return coinDetailsComponent.getCoinInfoComponent(coinInfoModule = CoinInfoModule())
         }
     }

@@ -39,8 +39,6 @@ dependencies {
     //viewmodel & extensions
     implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
     implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
-    implementation project(':common')
-
     testImplementation "junit:junit:$config.lib_versions.junit"
     //instrumentation tests
     androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"

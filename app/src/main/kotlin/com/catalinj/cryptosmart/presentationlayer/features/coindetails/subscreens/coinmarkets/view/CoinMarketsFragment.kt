@@ -13,7 +13,7 @@ import com.catalinj.cryptosmart.di.components.CoinMarketsComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinMarketsModule
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
-import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import kotlinx.android.synthetic.main.fragment_coin_markets.view.*
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ import javax.inject.Inject
  * A simple view(fragment) which displays the exchanges on which a particular crypocurrency is
  * available for trade.
  */
-class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsContract.CoinMarketsView {
+class CoinMarketsFragment : InjectorFragment<CoinMarketsComponent>(), CoinMarketsContract.CoinMarketsView {
 
     override val name: String = TAG
     @Inject
@@ -80,12 +80,12 @@ class CoinMarketsFragment : DaggerFragment<CoinMarketsComponent>(), CoinMarketsC
     class Factory(private val coinData: CoinDetailsPartialData,
                   private val coinDetailsComponent: CoinDetailsComponent)
 
-        : DaggerFragmentFactory<CoinMarketsComponent>() {
-        override fun onCreateFragment(): DaggerFragment<CoinMarketsComponent> {
+        : InjectorFragmentFactory<CoinMarketsComponent>() {
+        override fun onCreateFragment(): InjectorFragment<CoinMarketsComponent> {
             return CoinMarketsFragment()
         }
 
-        override fun onCreateDaggerComponent(): CoinMarketsComponent {
+        override fun onCreateInjector(): CoinMarketsComponent {
             return coinDetailsComponent.getCoinMarketsComponent(
                     coinMarketsModule = CoinMarketsModule(coinData)
             )

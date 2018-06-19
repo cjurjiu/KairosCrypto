@@ -27,7 +27,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.ListenerType
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionListDialog
 import com.catalinjurjiu.common.NamedComponent
-import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import java.util.*
@@ -37,7 +37,7 @@ import javax.inject.Inject
  * Created by catalinj on 21.01.2018.
  */
 class CoinsListFragment :
-        DaggerFragment<CoinListComponent>(),
+        InjectorFragment<CoinListComponent>(),
         NamedComponent,
         BackEventAwareComponent,
         CoinsListContract.CoinsListView {
@@ -62,15 +62,15 @@ class CoinsListFragment :
     private val onSortButtonClickedListener = View.OnClickListener { coinListPresenter.sortListButtonPressed() }
     private val onSnapshotButtonClickedListener = View.OnClickListener { coinListPresenter.selectSnapshotButtonPressed() }
 
-    class Factory(private val activityComponent: ActivityComponent) : DaggerFragmentFactory<CoinListComponent>() {
+    class Factory(private val activityComponent: ActivityComponent) : InjectorFragmentFactory<CoinListComponent>() {
 
-        override fun onCreateFragment(): DaggerFragment<CoinListComponent> {
+        override fun onCreateFragment(): InjectorFragment<CoinListComponent> {
             val f = CoinsListFragment()
             //do some other initializations, set arguments
             return f
         }
 
-        override fun onCreateDaggerComponent(): CoinListComponent {
+        override fun onCreateInjector(): CoinListComponent {
             return activityComponent.getCoinListComponent(CoinListModule())
         }
     }

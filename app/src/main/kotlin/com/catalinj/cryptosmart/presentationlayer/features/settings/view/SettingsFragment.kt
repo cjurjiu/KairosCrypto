@@ -15,7 +15,7 @@ import com.catalinj.cryptosmart.di.components.SettingsComponent
 import com.catalinj.cryptosmart.di.modules.settings.SettingsModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.features.settings.contract.SettingsContract
-import com.catalinjurjiu.smartpersist.DaggerFragment
+import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import kotlinx.android.synthetic.main.layout_fragment_settings.view.*
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ import javax.inject.Inject
  * A simple Settings Fragment, which allows changing between dark & light themes, and allows
  * changing the primary currency
  */
-class SettingsFragment : DaggerFragment<SettingsComponent>(), SettingsContract.SettingsView {
+class SettingsFragment : InjectorFragment<SettingsComponent>(), SettingsContract.SettingsView {
     override val name: String = TAG
 
     @Inject
@@ -99,12 +99,12 @@ class SettingsFragment : DaggerFragment<SettingsComponent>(), SettingsContract.S
     }
 
     class SettingsFragmentFactory(private val activityComponent: ActivityComponent) :
-            DaggerFragmentFactory<SettingsComponent>() {
-        override fun onCreateFragment(): DaggerFragment<SettingsComponent> {
+            InjectorFragmentFactory<SettingsComponent>() {
+        override fun onCreateFragment(): InjectorFragment<SettingsComponent> {
             return SettingsFragment()
         }
 
-        override fun onCreateDaggerComponent(): SettingsComponent {
+        override fun onCreateInjector(): SettingsComponent {
             return activityComponent.getSettingsComponent(settingsModule = SettingsModule())
         }
     }

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-        <include layout="@layout/include_toolbar_content" />
+        <include layout="@layout/include_bookmarks_toolbar_content" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.SwipeRefreshLayout

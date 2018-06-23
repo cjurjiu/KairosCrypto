@@ -36,8 +36,6 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     //init with default value. this will later be changed by user actions
     private var activeCurrency: String = resourceDecoder.decodeChangeCoinDialogItems().first().value
     //init with default value. this will later be changed by user actions
-    private var activeSortOrder: String = resourceDecoder.fetchSortOptionsDialogItems().first().value
-    //init with default value. this will later be changed by user actions
     private var activeSnapshot: String = resourceDecoder.decodeSnapshotDialogItems().first().value
     private var displayedCurrency = userSettings.getPrimaryCurrency()
 
@@ -98,12 +96,6 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         )
     }
 
-    override fun sortListButtonPressed() {
-        view?.openSortListDialog(
-                resourceDecoder.fetchSortOptionsDialogItems(markedActive = activeSortOrder)
-        )
-    }
-
     override fun selectSnapshotButtonPressed() {
         view?.openSelectSnapshotDialog(
                 resourceDecoder.decodeSnapshotDialogItems(markedActive = activeSnapshot)
@@ -117,11 +109,6 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {
         activeCurrency = newSelectedCurrency.value
         Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
-    }
-
-    override fun listSortingChanged(newSortingOrder: SelectionItem) {
-        activeSortOrder = newSortingOrder.value
-        Log.d("Cata", "listSortingChanged: selectionItem:${newSortingOrder.name}")
     }
 
     override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {

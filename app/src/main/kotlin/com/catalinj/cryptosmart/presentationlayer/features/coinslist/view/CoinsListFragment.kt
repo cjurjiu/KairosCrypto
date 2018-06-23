@@ -59,7 +59,6 @@ class CoinsListFragment :
     private lateinit var recyclerViewLayoutManager: LinearLayoutManager
 
     private val onChangeCurrencyButtonClickedListener = View.OnClickListener { coinListPresenter.changeCurrencyPressed() }
-    private val onSortButtonClickedListener = View.OnClickListener { coinListPresenter.sortListButtonPressed() }
     private val onSnapshotButtonClickedListener = View.OnClickListener { coinListPresenter.selectSnapshotButtonPressed() }
 
     class Factory(private val activityComponent: ActivityComponent) : InjectorFragmentFactory<CoinListComponent>() {
@@ -187,21 +186,16 @@ class CoinsListFragment :
     }
 
     override fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>) {
-        showSelectionDialog(dialogType = SelectionDialogType.ChangeCurrency, data = selectionItems)
-    }
-
-    override fun openSortListDialog(selectionItems: List<SelectionItem>) {
-        showSelectionDialog(dialogType = SelectionDialogType.SortModes, data = selectionItems)
+        showSelectionDialog(dialogType = CoinListSelectionDialogType.ChangeCurrency, data = selectionItems)
     }
 
     override fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>) {
-        showSelectionDialog(dialogType = SelectionDialogType.SelectSnapshot, data = selectionItems)
+        showSelectionDialog(dialogType = CoinListSelectionDialogType.SelectSnapshot, data = selectionItems)
     }
 
     private fun rebindDialogIfActive() {
-        val activeFragmentList = arrayOf(SelectionDialogType.ChangeCurrency,
-                SelectionDialogType.SortModes,
-                SelectionDialogType.SelectSnapshot)
+        val activeFragmentList = arrayOf(CoinListSelectionDialogType.ChangeCurrency,
+                CoinListSelectionDialogType.SelectSnapshot)
                 .mapNotNull {
                     val fragment = fragmentManager?.findFragmentByTag(it.typeName)
                     return@mapNotNull if (fragment != null) {
@@ -236,9 +230,6 @@ class CoinsListFragment :
         val changeCurrencyButton = toolbar.findViewById<ImageButton>(R.id.button_change_currency)
         changeCurrencyButton?.setOnClickListener(onChangeCurrencyButtonClickedListener)
         //set the change currency button clicked listener
-        val sortListButton = toolbar.findViewById<ImageButton>(R.id.button_sort)
-        sortListButton?.setOnClickListener(onSortButtonClickedListener)
-        //set the change currency button clicked listener
         val selectSnapshotButton = toolbar.findViewById<ImageButton>(R.id.button_snapshots)
         selectSnapshotButton?.setOnClickListener(onSnapshotButtonClickedListener)
         Log.d("Cata", "have toolbar!")
@@ -271,18 +262,16 @@ class CoinsListFragment :
         })
     }
 
-    private fun getListenerForDialogType(dialogType: SelectionDialogType): ListenerType {
+    private fun getListenerForDialogType(dialogType: CoinListSelectionDialogType): ListenerType {
         return when (dialogType) {
-            SelectionDialogType.ChangeCurrency ->
+            CoinListSelectionDialogType.ChangeCurrency ->
                 { item -> coinListPresenter.displayCurrencyChanged(item.toSelectionItem()) }
-            SelectionDialogType.SortModes ->
-                { item -> coinListPresenter.listSortingChanged(item.toSelectionItem()) }
-            SelectionDialogType.SelectSnapshot ->
+            CoinListSelectionDialogType.SelectSnapshot ->
                 { item -> coinListPresenter.selectedSnapshotChanged(item.toSelectionItem()) }
         }
     }
 
-    private fun showSelectionDialog(dialogType: SelectionDialogType, data: List<SelectionItem>) {
+    private fun showSelectionDialog(dialogType: CoinListSelectionDialogType, data: List<SelectionItem>) {
         val parcelableData = ArrayList(data.map { it.toParcelableSelectionItem() })
         val listener = getListenerForDialogType(dialogType = dialogType)
         val dialog = SelectionListDialog.Builder()

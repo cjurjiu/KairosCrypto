@@ -20,15 +20,11 @@ interface CoinsListContract {
 
         fun changeCurrencyPressed()
 
-        fun sortListButtonPressed()
-
         fun selectSnapshotButtonPressed()
 
         fun getSelectedCurrency(): CurrencyRepresentation
 
         fun displayCurrencyChanged(newSelectedCurrency: SelectionItem)
-
-        fun listSortingChanged(newSortingOrder: SelectionItem)
 
         fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem)
 
@@ -40,8 +36,6 @@ interface CoinsListContract {
     interface CoinsListView : MvpView<CoinsListPresenter, CoinsListView>, LoadingView {
 
         fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>)
-
-        fun openSortListDialog(selectionItems: List<SelectionItem>)
 
         fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>)
 

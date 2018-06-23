@@ -3,8 +3,8 @@ package com.catalinjurjiu.wheelbarrow
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.catalinjurjiu.common.NamedComponent
+import com.catalinjurjiu.wheelbarrow.log.Chronicle
 import com.catalinjurjiu.wheelbarrow.store.InjectorStore
 
 /**
@@ -18,20 +18,20 @@ abstract class InjectorActivity<InjectorType : Any> : AppCompatActivity(), Named
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(name, InjectorStore::class.java) as InjectorStore<InjectorType>
+        val viewModel = ViewModelProviders.of(this)
+                .get(name, InjectorStore::class.java) as InjectorStore<InjectorType>
         if (!viewModel.hasComp) {
             viewModel.component = onCreateInjector()
         }
         injector = viewModel.component
-        Log.d(TAG, "InjectorActivity${hashCode().toString(16)}#onCreate end. injector: ${injector.hashCode().toString(16)}")
+
+        Chronicle.logDebug(this::class.java.simpleName, "Initialised injector " +
+                "${injector.hashCode().toString(16)} for " +
+                "${this.javaClass.simpleName}${this.hashCode().toString(16)}.")
     }
 
     /**
      * Called when the Injector needs to be created.
      */
     abstract fun onCreateInjector(): InjectorType
-
-    private companion object {
-        const val TAG = "InjectorActivity"
-    }
 }

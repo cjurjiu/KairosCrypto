@@ -3,9 +3,9 @@ package com.catalinjurjiu.wheelbarrow
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import com.catalinjurjiu.common.Factory
 import com.catalinjurjiu.common.NamedComponent
+import com.catalinjurjiu.wheelbarrow.log.Chronicle
 import com.catalinjurjiu.wheelbarrow.store.InjectorStore
 
 /**
@@ -32,19 +32,29 @@ abstract class InjectorFragment<InjectorType : Any> : Fragment(), NamedComponent
     private fun initializeInjector() {
         val injectorStore = ViewModelProviders.of(this).get(name, InjectorStore::class.java)
                 as InjectorStore<InjectorType>
-        Log.d("Cata", "As ${this.javaClass.simpleName}${this.hashCode().toString(16)}Got Injector componentStore: ${injectorStore.hashCode().toString(16)}")
         if (doPersistInjectorToViewModel) {
             if (isInjectorInitialized()) {
                 injectorStore.component = injector
+                Chronicle.logDebug(this::class.java.simpleName, "Saved injector " +
+                        "${injectorStore.hashCode().toString(16)} for " +
+                        "${this.javaClass.simpleName}${this.hashCode().toString(16)}.")
             } else {
-                Log.e("Cata", "injector not initialised but the flags were set to store the initializer?? how??")
+                //Injector not initialised but the flags say that the injector was initialised and
+                //needs to be stored. Decide how to handle this...maybe just throw an Exception?
+                Chronicle.logError(this::class.java.simpleName, "Cannot store an " +
+                        "uninitialised injector.")
             }
         } else if (doReadInjectorFromViewModel) {
             if (injectorStore.hasComp) {
                 injector = injectorStore.component
+                Chronicle.logDebug(this::class.java.simpleName, "Re-initialised injector " +
+                        "${injectorStore.hashCode().toString(16)} for " +
+                        "${this.javaClass.simpleName}${this.hashCode().toString(16)}.")
             } else {
-                Log.e("Cata", "injector wants to be initialized from the dagger comp store, but the store has no\n" +
-                        "component in it....an error? check flags? this class ${this::class.simpleName}")
+                //Injector wants to be initialized from the injector store, but the store has no
+                //injector in it....an error? check flags!
+                Chronicle.logError(this::class.java.simpleName, "Cannot initialize the " +
+                        "injector from an empty injector store.")
             }
         }
     }

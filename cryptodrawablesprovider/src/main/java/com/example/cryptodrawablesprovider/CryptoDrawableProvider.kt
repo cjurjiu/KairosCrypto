@@ -36,7 +36,7 @@ class GithubCryptoIconHelper(private val context: Context) : ImageHelper<String>
     }
 
     private companion object {
-        const val GITHUB_URL = "https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/svg/color/%s.svg"
+        const val GITHUB_URL = "https://raw.githubusercontent.com/cjurjiu/cryptocurrency-icons/master/svg/color/%s.svg"
         val ERROR_DRAWABLE_ID = R.drawable.avd_error
         val PLACEHOLDER_DRAWABLE_ID = R.drawable.avd_progress_indeterminate_circular
     }

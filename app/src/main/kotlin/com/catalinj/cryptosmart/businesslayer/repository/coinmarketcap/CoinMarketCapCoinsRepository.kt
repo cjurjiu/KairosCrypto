@@ -78,6 +78,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             cryptoSmartDb.getPlainCryptoCoinDao().insert(dbCoins)
             //price data
             val coinsPriceData = networkCoins.flatMap { it.toDataLayerPriceData() }
+            Log.d("RxJ", "coinsPriceData size: ${coinsPriceData.size}")
             val insertedDataIds = cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
             Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
                     "inserted ids:" + insertedDataIds)

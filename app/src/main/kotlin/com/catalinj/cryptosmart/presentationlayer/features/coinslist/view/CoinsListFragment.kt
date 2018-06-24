@@ -58,7 +58,8 @@ class CoinsListFragment :
 
     private lateinit var recyclerViewLayoutManager: LinearLayoutManager
 
-    private val onChangeCurrencyButtonClickedListener = View.OnClickListener { coinListPresenter.changeCurrencyPressed() }
+    private val onChangeCurrencyButtonClickedListener = View.OnClickListener { coinListPresenter.changeCurrencyButtonPressed() }
+
     private val onSnapshotButtonClickedListener = View.OnClickListener { coinListPresenter.selectSnapshotButtonPressed() }
 
     class Factory(private val activityComponent: ActivityComponent) : InjectorFragmentFactory<CoinListComponent>() {

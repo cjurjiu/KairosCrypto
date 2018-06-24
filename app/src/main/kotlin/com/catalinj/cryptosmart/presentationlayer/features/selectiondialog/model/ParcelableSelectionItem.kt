@@ -40,7 +40,7 @@ data class ParcelableSelectionItem(override val name: String,
 }
 
 fun SelectionItem.toParcelableSelectionItem(): ParcelableSelectionItem {
-    return ParcelableSelectionItem(this.name, this.value, this.activeItem)
+    return ParcelableSelectionItem(this.name, this.value, this.isActive)
 }
 
 fun ParcelableSelectionItem.toSelectionItem(): SelectionItem {

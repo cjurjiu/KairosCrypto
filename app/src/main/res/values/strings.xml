@@ -10,10 +10,8 @@
     <!--change currency dialog-->
     <!--text-->
     <string name="bitcoin">Bitcoin</string>
-    <string name="dollar_usd">Dollar(USD)</string>
     <!--symbols-->
-    <string name="bitcoin_symbol" translatable="false">btc</string>
-    <string name="dollar_usd_symbol" translatable="false">usd</string>
+    <string name="bitcoin_symbol" translatable="false">BTC</string>
     <!--sort list dialog-->
     <!--text-->
 

@@ -24,42 +24,47 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
                          private val repository: CoinsRepository) :
         CoinsListContract.CoinsListPresenter {
 
-    override var navigator: Navigator? = null
-
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private var availableCoins: List<CryptoCoin>? = null
+    //user interaction & output
     private var view: CoinsListContract.CoinsListView? = null
+    override var navigator: Navigator? = null
+    //the composite disposable which stores all active disposables
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    //data to be displayed & manipulated
+    private var availableCoins: List<CryptoCoin>? = null
+    private lateinit var coinListDisposable: Disposable
     //loading logic...
     private var waitForLoad: Boolean = false
     private var loadingState: Repository.LoadingState = Repository.LoadingState.Idle
     private var loadingController: LoadingController? = null
+    //selection dialog logic
+    private var defaultCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
     //init with default value. this will later be changed by user actions
-    private var activeCurrency: String = resourceDecoder.decodeChangeCoinDialogItems().first().value
+    private var activeCurrency: CurrencyRepresentation = defaultCurrency
+    private lateinit var changeCurrencyDialogItems: List<SelectionItem>
     //init with default value. this will later be changed by user actions
     private var activeSnapshot: String = resourceDecoder.decodeSnapshotDialogItems().first().value
-    private var displayedCurrency = userSettings.getPrimaryCurrency()
+    private lateinit var changeSnapshotDialogItems: List<SelectionItem>
 
     //base presenter methods
     override fun startPresenting() {
+        //the primary currency can change, so we need to reload it each time we start presenting
+        initChangeCurrencyDialogItems()
+
         val loadingStateDisposable: Disposable = repository.loadingStateObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ newLoadingState -> updateLoadingState(newLoadingState) })
 
-        val cryptoObservable: Disposable = repository.getCoinListObservable(displayedCurrency)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Log.d("RxJ", "Update coins")
-                    updateDisplayedCoins(it)
-                })
+        val coinListDisposable: Disposable = subscribeToCoinListUpdates(currency = activeCurrency)
+        this.coinListDisposable = coinListDisposable
 
         compositeDisposable.add(loadingStateDisposable)
-        compositeDisposable.add(cryptoObservable)
+        compositeDisposable.add(coinListDisposable)
 
         availableCoins.orEmpty().apply {
             if (isNotEmpty()) {
                 view?.setListData(this)
             } else {
-                refreshCoins()
+                fetchInitialBatch()
             }
         }
     }
@@ -90,28 +95,42 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         navigator?.openCoinDetailsScreen(cryptoCoin = selectedCoin)
     }
 
-    override fun changeCurrencyPressed() {
-        view?.openChangeCurrencyDialog(
-                resourceDecoder.decodeChangeCoinDialogItems(markedActive = activeCurrency)
-        )
+    override fun changeCurrencyButtonPressed() {
+        view?.openChangeCurrencyDialog(selectionItems = changeCurrencyDialogItems)
     }
 
     override fun selectSnapshotButtonPressed() {
-        view?.openSelectSnapshotDialog(
-                resourceDecoder.decodeSnapshotDialogItems(markedActive = activeSnapshot)
-        )
+        ensureSnapshotDialogOptionsInitialised()
+        view?.openSelectSnapshotDialog(changeSnapshotDialogItems)
     }
 
     override fun getSelectedCurrency(): CurrencyRepresentation {
-        return displayedCurrency
+        return activeCurrency
     }
 
     override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {
-        activeCurrency = newSelectedCurrency.value
+        if (activeCurrency.currency == newSelectedCurrency.value) {
+            //the new selection is equal to the previous one. do nothing
+            return
+        }
+        activeCurrency = CurrencyRepresentation.valueOf(newSelectedCurrency.value.toUpperCase())
+        refreshActiveCurrencyForSelectionList(changeCurrencyDialogItems)
+        //remove old subscription
+        compositeDisposable.remove(coinListDisposable)
+        coinListDisposable.dispose()
+        //subscribe to updates for the new currency
+        coinListDisposable = subscribeToCoinListUpdates(activeCurrency)
+        compositeDisposable.add(coinListDisposable)
+        //launch the request
+        fetchInitialBatch()
         Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
     }
 
     override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {
+        if (activeSnapshot == newSelectedSnapshot.value) {
+            //the new selection is equal to the previous one. do nothing
+            return
+        }
         activeSnapshot = newSelectedSnapshot.value
         Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
     }
@@ -130,12 +149,21 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         }
     }
 
+    private fun fetchInitialBatch() {
+        Log.d("Cata", "CoinListPresenter#fetchMoreCoins")
+        val startIndex = 0
+        repository.fetchCoins(startIndex = startIndex,
+                numberOfCoins = COIN_FETCH_BATCH_SIZE,
+                currencyRepresentation = activeCurrency,
+                errorHandler = Consumer { Log.d("RxJ", "Fetch more coins error:+ $it") })
+    }
+
     private fun fetchMoreCoins() {
         Log.d("Cata", "CoinListPresenter#fetchMoreCoins")
         val startIndex = availableCoins.orEmpty().size
         repository.fetchCoins(startIndex = startIndex,
                 numberOfCoins = COIN_FETCH_BATCH_SIZE,
-                currencyRepresentation = displayedCurrency,
+                currencyRepresentation = activeCurrency,
                 errorHandler = Consumer { Log.d("RxJ", "Fetch more coins error:+ $it") })
     }
 
@@ -145,7 +173,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         val fetchedCoinsNumber = availableCoins?.count() ?: COIN_FETCH_BATCH_SIZE
         repository.fetchCoins(startIndex = 0,
                 numberOfCoins = fetchedCoinsNumber,
-                currencyRepresentation = displayedCurrency,
+                currencyRepresentation = activeCurrency,
                 errorHandler = Consumer { Log.d("RxJ", "Refresh coins error: $it") })
     }
 
@@ -166,6 +194,37 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         availableCoins = coins
         view?.setListData(coins)
         waitForLoad = false
+    }
+
+    private fun subscribeToCoinListUpdates(currency: CurrencyRepresentation): Disposable {
+        return repository.getCoinListObservable(currency)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Log.d("RxJ", "Update coins")
+                    updateDisplayedCoins(it)
+                })
+    }
+
+    private fun initChangeCurrencyDialogItems() {
+        val selectionList = resourceDecoder.decodeChangeCoinDialogItems(primaryCurrency = defaultCurrency)
+        refreshActiveCurrencyForSelectionList(selectionList)
+        changeCurrencyDialogItems = selectionList
+    }
+
+    private fun refreshActiveCurrencyForSelectionList(selectionList: List<SelectionItem>) {
+        selectionList.onEach {
+            it.isActive = it.value == activeCurrency.currency
+        }
+    }
+
+    private fun ensureSnapshotDialogOptionsInitialised() {
+        if (!::changeSnapshotDialogItems.isInitialized) {
+            val snapshotOptions: List<SelectionItem> = resourceDecoder.decodeSnapshotDialogItems()
+            snapshotOptions.onEach {
+                it.isActive = it.value == activeSnapshot
+            }
+            changeSnapshotDialogItems = snapshotOptions
+        }
     }
 
     private companion object {

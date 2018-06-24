@@ -7,4 +7,4 @@ import com.catalinjurjiu.common.NamedComponent
  */
 data class SelectionItem(override val name: String,
                          val value: String,
-                         val activeItem: Boolean = false) : NamedComponent
+                         var isActive: Boolean = false) : NamedComponent

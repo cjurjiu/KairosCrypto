@@ -18,7 +18,7 @@ interface CoinsListContract {
 
         fun coinSelected(selectedCoin: CryptoCoin)
 
-        fun changeCurrencyPressed()
+        fun changeCurrencyButtonPressed()
 
         fun selectSnapshotButtonPressed()
 

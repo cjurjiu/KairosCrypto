@@ -2,12 +2,10 @@
 <resources>
     <array name="change_currency_dialog_options">
         <item>@string/bitcoin</item>
-        <item>@string/dollar_usd</item>
     </array>
 
     <array name="change_currency_dialog_options_values">
         <item>@string/bitcoin_symbol</item>
-        <item>@string/dollar_usd_symbol</item>
     </array>
 
     <array name="sort_list_dialog_options">

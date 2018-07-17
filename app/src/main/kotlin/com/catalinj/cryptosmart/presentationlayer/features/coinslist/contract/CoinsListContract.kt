@@ -42,5 +42,7 @@ interface CoinsListContract {
         fun setListData(data: List<CryptoCoin>)
 
         fun scrollTo(scrollPosition: Int)
+
+        fun setContentVisible(isVisible: Boolean)
     }
 }

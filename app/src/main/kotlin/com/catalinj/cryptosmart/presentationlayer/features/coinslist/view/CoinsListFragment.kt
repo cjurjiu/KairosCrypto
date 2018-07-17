@@ -194,6 +194,10 @@ class CoinsListFragment :
         showSelectionDialog(dialogType = CoinListSelectionDialogType.SelectSnapshot, data = selectionItems)
     }
 
+    override fun setContentVisible(isVisible: Boolean) {
+        recyclerView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    }
+
     private fun rebindDialogIfActive() {
         val activeFragmentList = arrayOf(CoinListSelectionDialogType.ChangeCurrency,
                 CoinListSelectionDialogType.SelectSnapshot)

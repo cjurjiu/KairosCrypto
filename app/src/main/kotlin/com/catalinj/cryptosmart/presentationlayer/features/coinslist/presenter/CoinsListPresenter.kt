@@ -52,7 +52,7 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
 
         val loadingStateDisposable: Disposable = repository.loadingStateObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ newLoadingState -> updateLoadingState(newLoadingState) })
+                .subscribe { newLoadingState -> updateLoadingState(newLoadingState) }
 
         val coinListDisposable: Disposable = subscribeToCoinListUpdates(currency = activeCurrency)
         this.coinListDisposable = coinListDisposable
@@ -121,6 +121,8 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         //subscribe to updates for the new currency
         coinListDisposable = subscribeToCoinListUpdates(activeCurrency)
         compositeDisposable.add(coinListDisposable)
+        //hide the list while the list is being fetched
+        view?.setContentVisible(isVisible = false)
         //launch the request
         fetchInitialBatch()
         Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
@@ -190,6 +192,8 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     }
 
     private fun updateDisplayedCoins(coins: List<CryptoCoin>) {
+        //ensure the content is visible
+        view?.setContentVisible(isVisible = true)
         Log.d("RxJ", "Update displayed coins: size: ${coins.count()}")
         availableCoins = coins
         view?.setListData(coins)
@@ -199,10 +203,10 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     private fun subscribeToCoinListUpdates(currency: CurrencyRepresentation): Disposable {
         return repository.getCoinListObservable(currency)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe {
                     Log.d("RxJ", "Update coins")
                     updateDisplayedCoins(it)
-                })
+                }
     }
 
     private fun initChangeCurrencyDialogItems() {

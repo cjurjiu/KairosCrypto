@@ -9,7 +9,7 @@ import io.reactivex.subjects.ReplaySubject
 /**
  * Created by catalin on 07/04/2018.
  */
-abstract class ApiRequest<T> {
+abstract class ComposableApiRequest<T> {
     val state: Observable<RequestState>
     val response: Observable<T>
     val errors: Observable<Throwable>

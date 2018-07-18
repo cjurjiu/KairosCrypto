@@ -6,10 +6,11 @@ import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
+import com.catalinj.cryptosmart.presentationlayer.common.decoder.ResourceDecoder
+import com.catalinj.cryptosmart.presentationlayer.common.decoder.SelectionItemsResource
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
-import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinListResourceDecoder
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,7 +20,7 @@ import io.reactivex.functions.Consumer
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
+class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
                          private val userSettings: CryptoSmartUserSettings,
                          private val repository: CoinsRepository) :
         CoinsListContract.CoinsListPresenter {
@@ -36,20 +37,21 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     private var waitForLoad: Boolean = false
     private var loadingState: Repository.LoadingState = Repository.LoadingState.Idle
     private var loadingController: LoadingController? = null
-    //selection dialog logic
-    private var defaultCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
     //init with default value. this will later be changed by user actions
-    private var activeCurrency: CurrencyRepresentation = defaultCurrency
+    private var activeCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
     private lateinit var changeCurrencyDialogItems: List<SelectionItem>
     //init with default value. this will later be changed by user actions
-    private var activeSnapshot: String = resourceDecoder.decodeSnapshotDialogItems().first().value
+    private var activeSnapshotValue: String = resourceDecoder
+            .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
+            .first()
+            .value
     private lateinit var changeSnapshotDialogItems: List<SelectionItem>
 
     //base presenter methods
     override fun startPresenting() {
         //the primary currency can change, so we need to reload it each time we start presenting
         initChangeCurrencyDialogItems()
-
+        ensureSnapshotDialogOptionsInitialised()
         val loadingStateDisposable: Disposable = repository.loadingStateObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { newLoadingState -> updateLoadingState(newLoadingState) }
@@ -100,7 +102,6 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     }
 
     override fun selectSnapshotButtonPressed() {
-        ensureSnapshotDialogOptionsInitialised()
         view?.openSelectSnapshotDialog(changeSnapshotDialogItems)
     }
 
@@ -129,11 +130,12 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     }
 
     override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {
-        if (activeSnapshot == newSelectedSnapshot.value) {
+        if (activeSnapshotValue == newSelectedSnapshot.value) {
             //the new selection is equal to the previous one. do nothing
             return
         }
-        activeSnapshot = newSelectedSnapshot.value
+        activeSnapshotValue = newSelectedSnapshot.value
+        refreshSelectedSnapshot(changeSnapshotDialogItems)
         Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
     }
 
@@ -210,7 +212,13 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
     }
 
     private fun initChangeCurrencyDialogItems() {
-        val selectionList = resourceDecoder.decodeChangeCoinDialogItems(primaryCurrency = defaultCurrency)
+        val selectionList = resourceDecoder
+                .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.CURRENCIES)
+                .toMutableList()
+        val primaryCurrency = userSettings.getPrimaryCurrency()
+        selectionList.add(index = 0,
+                element = SelectionItem(name = primaryCurrency.name, value = primaryCurrency.currency)
+        )
         refreshActiveCurrencyForSelectionList(selectionList)
         changeCurrencyDialogItems = selectionList
     }
@@ -221,11 +229,18 @@ class CoinsListPresenter(private val resourceDecoder: CoinListResourceDecoder,
         }
     }
 
+    private fun refreshSelectedSnapshot(selectionList: List<SelectionItem>) {
+        selectionList.onEach {
+            it.isActive = it.value == activeSnapshotValue
+        }
+    }
+
     private fun ensureSnapshotDialogOptionsInitialised() {
         if (!::changeSnapshotDialogItems.isInitialized) {
-            val snapshotOptions: List<SelectionItem> = resourceDecoder.decodeSnapshotDialogItems()
+            val snapshotOptions: List<SelectionItem> = resourceDecoder
+                    .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
             snapshotOptions.onEach {
-                it.isActive = it.value == activeSnapshot
+                it.isActive = it.value == activeSnapshotValue
             }
             changeSnapshotDialogItems = snapshotOptions
         }

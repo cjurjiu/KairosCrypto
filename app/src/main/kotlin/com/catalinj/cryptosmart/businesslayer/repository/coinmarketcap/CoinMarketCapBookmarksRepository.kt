@@ -14,7 +14,6 @@ import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
-import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
@@ -38,8 +37,7 @@ import java.util.concurrent.TimeUnit
  * Created by catalinj on 28.01.2018.
  */
 class CoinMarketCapBookmarksRepository(private val cryptoSmartDb: CryptoSmartDb,
-                                       private val coinMarketCapApiService: CoinMarketCapApiService,
-                                       private val userSettings: CryptoSmartUserSettings)
+                                       private val coinMarketCapApiService: CoinMarketCapApiService)
     : BookmarksRepository {
 
     private val loadingCoinsList = CopyOnWriteArrayList<String>()
@@ -152,9 +150,9 @@ class CoinMarketCapBookmarksRepository(private val cryptoSmartDb: CryptoSmartDb,
                 })
     }
 
-    override fun getBookmarksListObservable(): Observable<List<CryptoCoin>> {
+    override fun getBookmarksListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>> {
         return cryptoSmartDb.getBookmarksDao()
-                .getBookmarksPriceDataFlowable(currency = userSettings.getPrimaryCurrency().currency)
+                .getBookmarksPriceDataFlowable(currency = currencyRepresentation.currency)
                 .map { it.map { it.toBusinessLayerCoin() } }
                 .debounce(200L, TimeUnit.MILLISECONDS)
                 .toObservable()

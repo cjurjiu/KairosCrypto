@@ -35,5 +35,5 @@ interface BookmarksRepository : Repository {
      * Observable that notifies when the available list of [CryptoCoin]s (representing bookmarks)
      * has been updated.
      */
-    fun getBookmarksListObservable(): Observable<List<CryptoCoin>>
+    fun getBookmarksListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>>
 }

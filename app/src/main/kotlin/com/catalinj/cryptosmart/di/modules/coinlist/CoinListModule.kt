@@ -8,7 +8,7 @@ import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualif
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinListScope
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter.CoinsListPresenter
-import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinListResourceDecoder
+import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.AndroidResourceDecoder
 import dagger.Module
 import dagger.Provides
 
@@ -23,7 +23,7 @@ class CoinListModule {
     fun provideCoinsListPresenter(@ActivityContext context: Context,
                                   userSettings: CryptoSmartUserSettings,
                                   @CoinMarketCapApiQualifier coinsRepository: CoinsRepository): CoinsListContract.CoinsListPresenter {
-        return CoinsListPresenter(CoinListResourceDecoder(context = context),
+        return CoinsListPresenter(AndroidResourceDecoder(context = context),
                 userSettings = userSettings,
                 repository = coinsRepository)
     }

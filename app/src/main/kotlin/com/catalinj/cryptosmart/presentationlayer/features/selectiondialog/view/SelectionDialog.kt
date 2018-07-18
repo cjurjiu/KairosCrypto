@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,28 +15,36 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.ParcelableSelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toParcelableSelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toSelectionItem
 import kotlinx.android.synthetic.main.layout_selection_dialog.view.*
 import kotlinx.android.synthetic.main.layout_simple_list_item.view.*
 import kotlinx.android.synthetic.main.mergeable_layout_separator.view.*
 
 /**
- *
+ * Listener called when a selection is made in the [SelectionDialog]
  */
-typealias ListenerType = (selectedItem: ParcelableSelectionItem) -> Unit
+typealias OnItemSelectedListener = (selectedItem: SelectionItem) -> Unit
+
+typealias ListenerFactory<T> = (T) -> OnItemSelectedListener
 
 /**
+ * Dialog capable of displaying a list of items, from which the user can select one.
  *
  * Created by catalin on 21/04/2018.
  */
-class SelectionListDialog : DialogFragment() {
+class SelectionDialog : DialogFragment() {
 
     private lateinit var data: List<ParcelableSelectionItem>
+    private var isDialogCancelable: Boolean = true
 
-    private var listener: ListenerType? = null
+    private var selectionListener: OnItemSelectedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = arguments?.getParcelableArrayList<ParcelableSelectionItem>(KEY_DATA).orEmpty()
+        isDialogCancelable = arguments?.getBoolean(KEY_CANCELABLE) ?: true
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -43,7 +52,7 @@ class SelectionListDialog : DialogFragment() {
         val view = LayoutInflater.from(context!!).inflate(R.layout.layout_selection_dialog, null, false)
         val dialog: AlertDialog = AlertDialog.Builder(activity)
                 .setView(view)
-                .setCancelable(true)
+                .setCancelable(isDialogCancelable)
                 .create()
         initRecyclerView(view = view)
         initCancelButton(view = view)
@@ -57,8 +66,8 @@ class SelectionListDialog : DialogFragment() {
         }
     }
 
-    fun setListener(listener: ListenerType) {
-        this.listener = listener
+    fun setListener(listener: OnItemSelectedListener) {
+        this.selectionListener = listener
     }
 
     private fun initRecyclerView(view: View) {
@@ -73,10 +82,10 @@ class SelectionListDialog : DialogFragment() {
         var separator: View = view.view_separator
 
         init {
-            textView.setOnClickListener({
-                listener?.invoke(data[adapterPosition])
+            textView.setOnClickListener {
+                selectionListener?.invoke(data[adapterPosition].toSelectionItem())
                 dismiss()
-            })
+            }
         }
     }
 
@@ -109,35 +118,99 @@ class SelectionListDialog : DialogFragment() {
         }
     }
 
-    class Builder {
-        private var selectionListener: ListenerType? = null
-        private var data: ArrayList<ParcelableSelectionItem>? = null
+    open class SelectionDialogIdentifier(val identifier: String)
 
-        fun data(data: ArrayList<ParcelableSelectionItem>): Builder {
-            this.data = data
+    class Builder {
+        private var selectionListener: OnItemSelectedListener? = null
+        private var data: ArrayList<ParcelableSelectionItem>? = null
+        private var isCancelable: Boolean = true
+
+        fun data(data: List<SelectionItem>): Builder {
+            val parcelableData = ArrayList(data.map {
+                it.toParcelableSelectionItem()
+            })
+            this.data = parcelableData
             return this
         }
 
-        fun selectionListener(selectionListener: ListenerType): Builder {
+        fun selectionListener(selectionListener: OnItemSelectedListener): Builder {
             this.selectionListener = selectionListener
             return this
         }
 
-        fun build(): SelectionListDialog {
-            val dialog = SelectionListDialog()
+        fun cancelable(cancelable: Boolean): Builder {
+            this.isCancelable = cancelable
+            return this
+        }
+
+        fun build(): SelectionDialog {
+            val dialog = SelectionDialog()
             val arguments = Bundle()
             data?.let {
                 arguments.putParcelableArrayList(KEY_DATA, data)
+                arguments.putBoolean(KEY_CANCELABLE, isCancelable)
             }
             selectionListener?.let {
-                dialog.listener = selectionListener
+                dialog.selectionListener = selectionListener
             }
             dialog.arguments = arguments
             return dialog
         }
     }
 
-    private companion object {
-        const val KEY_DATA = "SelectionDialog::Arguments::data"
+    companion object {
+        private const val KEY_DATA = "SelectionDialog::Arguments::data"
+        private const val KEY_CANCELABLE = "SelectionDialog::Arguments::isCancelable"
+
+        fun <T : SelectionDialogIdentifier> showCancelable(dialogIdentifier: T,
+                                                           fragmentManager: FragmentManager?,
+                                                           data: List<SelectionItem>,
+                                                           listenerFactory: ListenerFactory<T>) =
+                SelectionDialog.Builder()
+                        .selectionListener(selectionListener = listenerFactory.invoke(dialogIdentifier))
+                        .data(data = data)
+                        .build()
+                        .show(fragmentManager, dialogIdentifier.identifier)
+
+        fun <T : SelectionDialogIdentifier> showNonCancelable(dialogIdentifier: T,
+                                                              fragmentManager: FragmentManager?,
+                                                              data: List<SelectionItem>,
+                                                              listenerFactory: ListenerFactory<T>) =
+                SelectionDialog.Builder()
+                        .selectionListener(selectionListener = listenerFactory.invoke(dialogIdentifier))
+                        .data(data = data)
+                        .cancelable(cancelable = false)
+                        .build()
+                        .show(fragmentManager, dialogIdentifier.identifier)
+
+        fun <T : SelectionDialogIdentifier> rebindActiveDialogListeners(fragmentManager: FragmentManager,
+                                                                        possibleDialogIdentifiers: Array<T>,
+                                                                        listenerFactory: ListenerFactory<T>) {
+
+            val activeFragmentList = possibleDialogIdentifiers
+                    .mapNotNull {
+                        val fragment = fragmentManager.findFragmentByTag(it.identifier)
+                        return@mapNotNull if (fragment != null) {
+                            Pair(it, fragment)
+                        } else {
+                            null
+                        }
+                    }
+                    .apply {
+                        if (size > 1) {
+                            val activeFragments: String? = map { it.first.identifier }.reduce { acc, s -> "$acc, $s" }
+                            throw IllegalStateException("More than 1 selection dialogs present on screen." +
+                                    "Active dialogs: $activeFragments")
+                        }
+                    }
+            if (activeFragmentList.isNotEmpty()) {
+                activeFragmentList.first()
+                        .let {
+                            val selectionDialog = it.second as SelectionDialog
+                            val listener = listenerFactory.invoke(it.first)
+                            selectionDialog.setListener(listener)
+                        }
+            }
+        }
     }
 }

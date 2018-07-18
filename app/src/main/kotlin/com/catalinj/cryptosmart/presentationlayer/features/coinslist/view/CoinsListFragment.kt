@@ -22,15 +22,12 @@ import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toParcelableSelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toSelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.ListenerType
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionListDialog
+import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.OnItemSelectedListener
+import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -102,7 +99,10 @@ class CoinsListFragment :
         initToolbar(rootView = view, appCompatActivity = appCompatActivity)
         initRecyclerView(rootView = view, appCompatActivity = appCompatActivity)
         initSwipeRefreshLayout(rootView = view)
-        rebindDialogIfActive()
+//      rebind dialog
+        SelectionDialog.rebindActiveDialogListeners(fragmentManager = fragmentManager!!,
+                possibleDialogIdentifiers = CoinListSelectionDialogType.children(),
+                listenerFactory = ::getListenerForDialogType)
     }
 
     override fun onResume() {
@@ -187,44 +187,21 @@ class CoinsListFragment :
     }
 
     override fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>) {
-        showSelectionDialog(dialogType = CoinListSelectionDialogType.ChangeCurrency, data = selectionItems)
+        SelectionDialog.showCancelable(dialogIdentifier = CoinListSelectionDialogType.ChangeCurrency,
+                fragmentManager = fragmentManager,
+                data = selectionItems,
+                listenerFactory = ::getListenerForDialogType)
     }
 
     override fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>) {
-        showSelectionDialog(dialogType = CoinListSelectionDialogType.SelectSnapshot, data = selectionItems)
+        SelectionDialog.showCancelable(dialogIdentifier = CoinListSelectionDialogType.SelectSnapshot,
+                fragmentManager = fragmentManager,
+                data = selectionItems,
+                listenerFactory = ::getListenerForDialogType)
     }
 
     override fun setContentVisible(isVisible: Boolean) {
         recyclerView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
-    }
-
-    private fun rebindDialogIfActive() {
-        val activeFragmentList = arrayOf(CoinListSelectionDialogType.ChangeCurrency,
-                CoinListSelectionDialogType.SelectSnapshot)
-                .mapNotNull {
-                    val fragment = fragmentManager?.findFragmentByTag(it.typeName)
-                    return@mapNotNull if (fragment != null) {
-                        Pair(it, fragment)
-                    } else {
-                        null
-                    }
-                }
-                .apply {
-                    if (size > 1) {
-                        val activeFragments: String? = map { it.first.typeName }.reduce { acc, s -> "$acc, $s" }
-                        throw IllegalStateException("More than 1 selection dialogs present on screen." +
-                                "Active dialogs: $activeFragments")
-                    }
-                }
-        if (activeFragmentList.isNotEmpty()) {
-            activeFragmentList
-                    .first()
-                    .let {
-                        val selectionDialog = it.second as SelectionListDialog
-                        val listener = getListenerForDialogType(it.first)
-                        selectionDialog.setListener(listener)
-                    }
-        }
     }
 
     private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
@@ -239,7 +216,6 @@ class CoinsListFragment :
         selectSnapshotButton?.setOnClickListener(onSnapshotButtonClickedListener)
         Log.d("Cata", "have toolbar!")
     }
-
 
     private fun initSwipeRefreshLayout(rootView: View) {
         swipeRefreshLayout = rootView.swiperefreshlayout_coin_lists
@@ -267,23 +243,13 @@ class CoinsListFragment :
         })
     }
 
-    private fun getListenerForDialogType(dialogType: CoinListSelectionDialogType): ListenerType {
+    private fun getListenerForDialogType(dialogType: CoinListSelectionDialogType): OnItemSelectedListener {
         return when (dialogType) {
             CoinListSelectionDialogType.ChangeCurrency ->
-                { item -> coinListPresenter.displayCurrencyChanged(item.toSelectionItem()) }
+                { item -> coinListPresenter.displayCurrencyChanged(item) }
             CoinListSelectionDialogType.SelectSnapshot ->
-                { item -> coinListPresenter.selectedSnapshotChanged(item.toSelectionItem()) }
+                { item -> coinListPresenter.selectedSnapshotChanged(item) }
         }
-    }
-
-    private fun showSelectionDialog(dialogType: CoinListSelectionDialogType, data: List<SelectionItem>) {
-        val parcelableData = ArrayList(data.map { it.toParcelableSelectionItem() })
-        val listener = getListenerForDialogType(dialogType = dialogType)
-        val dialog = SelectionListDialog.Builder()
-                .selectionListener(listener)
-                .data(parcelableData)
-                .build()
-        dialog.show(fragmentManager, dialogType.typeName)
     }
 
     companion object {

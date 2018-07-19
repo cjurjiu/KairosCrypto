@@ -11,7 +11,6 @@ import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
-import com.catalinj.cryptosmart.datalayer.database.models.DbBookmark
 import com.catalinj.cryptosmart.datalayer.database.models.DbPartialCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
@@ -26,7 +25,6 @@ import io.reactivex.functions.Consumer
 import io.reactivex.observables.ConnectableObservable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -82,40 +80,10 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             val insertedDataIds = cryptoSmartDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
             Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
                     "inserted ids:" + insertedDataIds)
-            insertDummyBookmarks(networkCoins)
         }
         apiRequest.errors.subscribe(errorHandler)
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }
         apiRequest.execute()
-    }
-
-    private fun insertDummyBookmarks(networkCoins: List<CoinMarketCapCryptoCoin>) {
-        if (!userSettings.hasDummyBookmarks()) {
-            val random = Random()
-            val randomIndexes: MutableList<Int> = mutableListOf()
-            randomIndexes.apply {
-                add(random.nextInt(100))
-                add(random.nextInt(100))
-                add(random.nextInt(100))
-                add(random.nextInt(100))
-                add(random.nextInt(100))
-            }
-            var addedBookmarks = 0
-            val randomBookmarks = networkCoins.filterIndexed { index, _ ->
-                val shouldBeAdded = randomIndexes.contains(index) && (addedBookmarks < 10)
-                if (shouldBeAdded) {
-                    addedBookmarks += 1
-                }
-                return@filterIndexed shouldBeAdded
-            }.mapIndexed { index, coin ->
-                DbBookmark(0, coin.symbol, index.toLong())
-            }
-            val insertedIds = cryptoSmartDb.getBookmarksDao().insert(randomBookmarks)
-            userSettings.saveHasDummyBookmarks(true)
-            Log.d("Cata", "Fake bookmarks inserted. Id's: $insertedIds")
-        } else {
-            Log.d("Cata", "User already has fake bookmarks inserted.")
-        }
     }
 
     override fun getCoinListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>> {

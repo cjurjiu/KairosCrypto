@@ -1,5 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
@@ -28,11 +29,17 @@ interface BookmarksContract {
         fun changeCurrencyButtonPressed()
 
         fun selectSnapshotButtonPressed()
+
+        fun getSelectedCurrency(): CurrencyRepresentation
+
+        fun getSelectedSnapshot(): PredefinedSnapshot
     }
 
     interface BookmarksView : MvpView<BookmarksPresenter, BookmarksView>, LoadingView {
 
-        fun setListData(primaryCurrency: CurrencyRepresentation, bookmarksList: List<BookmarksCoin>)
+        fun setListData(bookmarksList: List<BookmarksCoin>)
+
+        fun refreshContent()
 
         fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>)
 

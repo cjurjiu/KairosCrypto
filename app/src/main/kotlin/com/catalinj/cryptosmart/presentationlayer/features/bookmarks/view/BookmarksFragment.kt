@@ -12,12 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.BookmarksComponent
 import com.catalinj.cryptosmart.di.modules.bookmarks.BookmarksModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
+import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
@@ -87,24 +87,35 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     override fun initialise() {
         Log.d("Cata", "$TAG#initialise")
         val view = view!!
-        swipeRefreshLayout = view.swiperefreshlayout_bookmarks_list
-        swipeRefreshLayout.setOnRefreshListener {
-            bookmarksPresenter.userPullToRefresh()
-        }
-        recyclerView = view.recyclerview_bookmarks_list
-        recyclerView.layoutManager = LinearLayoutManager(context!!)
-        recyclerViewAdapter = BookmarksListAdapter(context = context!!,
-                primaryCurrency = CurrencyRepresentation.USD,
-                coins = mutableListOf(),
-                imageHelper = imageHelper) {
-            bookmarksPresenter.coinSelected(it)
-        }
-        recyclerView.adapter = recyclerViewAdapter
+        initSwipeRefreshLayout(view)
+        initRecyclerView(view)
         //      rebind dialog
         SelectionDialog.rebindActiveDialogListeners(fragmentManager = fragmentManager!!,
                 possibleDialogIdentifiers = BookmarksSelectionDialogType.children(),
                 listenerFactory = ::getListenerForDialogType)
         initToolbar(view, activity as AppCompatActivity)
+    }
+
+    private fun initSwipeRefreshLayout(view: View) {
+        swipeRefreshLayout = view.swiperefreshlayout_bookmarks_list
+        swipeRefreshLayout.setOnRefreshListener {
+            bookmarksPresenter.userPullToRefresh()
+        }
+    }
+
+    private fun initRecyclerView(view: View) {
+        val adapterSettings = CryptoListAdapterSettings(currency = bookmarksPresenter.getSelectedCurrency(),
+                snapshot = bookmarksPresenter.getSelectedSnapshot())
+
+        recyclerView = view.recyclerview_bookmarks_list
+        recyclerView.layoutManager = LinearLayoutManager(context!!)
+        recyclerViewAdapter = BookmarksListAdapter(context = context!!,
+                adapterSettings = adapterSettings,
+                coins = mutableListOf(),
+                imageHelper = imageHelper) {
+            bookmarksPresenter.coinSelected(it)
+        }
+        recyclerView.adapter = recyclerViewAdapter
     }
 
     private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
@@ -130,10 +141,16 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     //end mvp view methods
 
     //bookmarks view methods
-    override fun setListData(primaryCurrency: CurrencyRepresentation,
-                             bookmarksList: List<BookmarksCoin>) {
-        recyclerViewAdapter.primaryCurrency = primaryCurrency
+    override fun setListData(bookmarksList: List<BookmarksCoin>) {
+        recyclerViewAdapter.adapterSettings = recyclerViewAdapter.adapterSettings
+                .updateCurrency(newCurrency = bookmarksPresenter.getSelectedCurrency())
         recyclerViewAdapter.coins = bookmarksList.toMutableList()
+        recyclerViewAdapter.notifyDataSetChanged()
+    }
+
+    override fun refreshContent() {
+        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = bookmarksPresenter.getSelectedCurrency(),
+                snapshot = bookmarksPresenter.getSelectedSnapshot())
         recyclerViewAdapter.notifyDataSetChanged()
     }
 

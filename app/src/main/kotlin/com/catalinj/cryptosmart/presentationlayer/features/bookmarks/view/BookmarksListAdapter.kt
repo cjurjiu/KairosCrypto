@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.businesslayer.model.changeForSnapshot
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.extension.trendlineForPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
+import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_bookmarks_list_item.view.*
@@ -20,8 +22,8 @@ import kotlinx.android.synthetic.main.layout_bookmarks_list_item.view.*
  * Created by catalin on 15/05/2018.
  */
 class BookmarksListAdapter(val context: Context,
-                           var primaryCurrency: CurrencyRepresentation,
                            var coins: MutableList<BookmarksCoin>,
+                           var adapterSettings: CryptoListAdapterSettings,
                            private val imageHelper: ImageHelper<String>,
                            private val click: (position: BookmarksCoin) -> Unit) :
         RecyclerView.Adapter<BookmarksListAdapter.BookmarksViewHolder>() {
@@ -44,16 +46,17 @@ class BookmarksListAdapter(val context: Context,
     override fun onBindViewHolder(holder: BookmarksViewHolder, position: Int) {
         holder.apply {
             val coinModel = coins[position]
-            val priceData = coinModel.priceData[primaryCurrency.currency]!!
+            val priceData = coinModel.priceData[adapterSettings.currency.currency]!!
+            val percentChange = priceData.changeForSnapshot(snapshot = adapterSettings.snapshot)
 
             imageHelper.setImage(imageCoinLogo, coinModel.symbol)
             textCoinName.text = coinModel.name
             textCoinSymbol.text = coinModel.symbol
-            trendLine24H.trendlineForPercent(percent = priceData.percentChange1h)
+            trendLine24H.trendlineForPercent(percent = percentChange)
             textCoinValuePrimary.text = CurrencyFormatter.format(value = priceData.price,
-                    currencyRepresentation = primaryCurrency)
-            textCoinValuePrimaryChange.text = CurrencyFormatter.format(value = priceData.percentChange24h,
-                    currencyRepresentation = primaryCurrency)
+                    currencyRepresentation = adapterSettings.currency)
+            textCoinValuePrimaryChange.text = CurrencyFormatter.format(value = percentChange,
+                    currencyRepresentation = adapterSettings.currency)
 
             if (coinModel.isLoading) {
                 imageLoadingBar.visibility = View.VISIBLE

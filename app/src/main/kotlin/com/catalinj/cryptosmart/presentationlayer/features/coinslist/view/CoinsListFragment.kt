@@ -20,6 +20,7 @@ import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
+import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.OnItemSelectedListener
@@ -168,13 +169,13 @@ class CoinsListFragment :
     //coin list view presenter
     override fun setListData(data: List<CryptoCoin>) {
         recyclerViewAdapter.coins = data
-        recyclerViewAdapter.adapterSettings = CoinListAdapter.Settings(currency = coinListPresenter.getSelectedCurrency(),
+        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.getSelectedCurrency(),
                 snapshot = coinListPresenter.getSelectedSnapshot())
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
     override fun refreshContent() {
-        recyclerViewAdapter.adapterSettings = CoinListAdapter.Settings(currency = coinListPresenter.getSelectedCurrency(),
+        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.getSelectedCurrency(),
                 snapshot = coinListPresenter.getSelectedSnapshot())
         recyclerViewAdapter.notifyDataSetChanged()
     }
@@ -230,7 +231,7 @@ class CoinsListFragment :
     }
 
     private fun initRecyclerView(rootView: View, appCompatActivity: AppCompatActivity) {
-        val adapterSettings = CoinListAdapter.Settings(currency = coinListPresenter.getSelectedCurrency(),
+        val adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.getSelectedCurrency(),
                 snapshot = coinListPresenter.getSelectedSnapshot())
 
         recyclerView = rootView.recyclerview_coins_list

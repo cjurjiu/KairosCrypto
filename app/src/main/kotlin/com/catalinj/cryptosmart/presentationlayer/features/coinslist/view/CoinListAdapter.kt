@@ -9,11 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
-import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.businesslayer.model.changeForSnapshot
-import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
+import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
 
@@ -22,7 +21,7 @@ import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
  */
 class CoinListAdapter(context: Context,
                       var coins: List<CryptoCoin>,
-                      var adapterSettings: CoinListAdapter.Settings,
+                      var adapterSettings: CryptoListAdapterSettings,
                       private val imageHelper: ImageHelper<String>,
                       private val click: (position: CryptoCoin) -> Unit) :
         RecyclerView.Adapter<CoinListAdapter.MyViewHolder>() {
@@ -68,19 +67,4 @@ class CoinListAdapter(context: Context,
         val textCoinIncreaseValue: TextView = v.text_coin_increase_value
     }
 
-    /**
-     * Immutable settings for the adapter.
-     */
-    data class Settings(val currency: CurrencyRepresentation, val snapshot: PredefinedSnapshot) {
-
-        /**
-         * Returns a new [Settings] instance with updated currency.
-         */
-        fun updateCurrency(newCurrency: CurrencyRepresentation) = Settings(currency = newCurrency, snapshot = this.snapshot)
-
-        /**
-         * Returns a new [Settings] instance with updated delta time.
-         */
-        fun updateDeltaTime(newSnapshot: PredefinedSnapshot) = Settings(currency = this.currency, snapshot = newSnapshot)
-    }
 }

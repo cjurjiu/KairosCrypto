@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter
 
 import android.util.Log
+import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
@@ -37,10 +38,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
     private var activeCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
     private lateinit var changeCurrencyDialogItems: List<SelectionItem>
     //init with default value. this will later be changed by user actions
-    private var activeSnapshotValue: String = resourceDecoder
-            .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
-            .first()
-            .value
+    private var activeSnapshot: PredefinedSnapshot = PredefinedSnapshot.SNAPSHOT_1H
     private lateinit var changeSnapshotDialogItems: List<SelectionItem>
 
     //base presenter methods
@@ -65,7 +63,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         if (data == null) {
             refreshBookmarks()
         } else {
-            setViewData(activeCurrency, data)
+            setViewData(data)
         }
 
         Log.d("Cata", "$TAG#startPresenting")
@@ -79,7 +77,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
                     //ensure content is visible
                     bookmarksView?.setContentVisible(isVisible = true)
                     Log.d("Cata", "Got new bookmarks! activeCurrency: $currency")
-                    setViewData(currency, coinList.map { coin ->
+                    setViewData(coinList.map { coin ->
                         coin.toBookmarksCoin(bookmarksRepository.isBookmarkLoading(coinSymbol = coin.symbol))
                     })
                 }
@@ -140,18 +138,19 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
     }
 
     override fun selectedSnapshotChanged(newSnapshot: SelectionItem) {
-        if (activeSnapshotValue == newSnapshot.value) {
+        if (activeSnapshot.stringValue == newSnapshot.value) {
             //the new selection is equal to the previous one. do nothing
             return
         }
-        activeSnapshotValue = newSnapshot.value
+        activeSnapshot = PredefinedSnapshot.of(newSnapshot.value)
         refreshSelectedSnapshot(changeSnapshotDialogItems)
+        bookmarksView?.refreshContent()
         Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSnapshot.name}")
     }
 
     private fun refreshSelectedSnapshot(selectionList: List<SelectionItem>) {
         selectionList.onEach {
-            it.isActive = it.value == activeSnapshotValue
+            it.isActive = it.value == activeSnapshot.stringValue
         }
     }
 
@@ -163,7 +162,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess {
-                    bookmarksView?.setListData(activeCurrency, it)
+                    bookmarksView?.setListData(it)
                 }
                 .observeOn(Schedulers.io())
                 .subscribe { bookmarks ->
@@ -184,8 +183,12 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         bookmarksView?.openSelectSnapshotDialog(changeSnapshotDialogItems)
     }
 
-    private fun setViewData(primaryCurrency: CurrencyRepresentation, data: List<BookmarksCoin>) {
-        bookmarksView?.setListData(primaryCurrency, data)
+    override fun getSelectedCurrency(): CurrencyRepresentation = activeCurrency
+
+    override fun getSelectedSnapshot(): PredefinedSnapshot = activeSnapshot
+
+    private fun setViewData(data: List<BookmarksCoin>) {
+        bookmarksView?.setListData(data)
     }
 
     private fun initChangeCurrencyDialogItems() {
@@ -205,7 +208,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
             val snapshotOptions: List<SelectionItem> = resourceDecoder
                     .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
             snapshotOptions.onEach {
-                it.isActive = it.value == activeSnapshotValue
+                it.isActive = it.value == activeSnapshot.stringValue
             }
             changeSnapshotDialogItems = snapshotOptions
         }

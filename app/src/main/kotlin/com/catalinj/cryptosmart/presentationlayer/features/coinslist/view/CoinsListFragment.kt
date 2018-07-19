@@ -168,7 +168,14 @@ class CoinsListFragment :
     //coin list view presenter
     override fun setListData(data: List<CryptoCoin>) {
         recyclerViewAdapter.coins = data
-        recyclerViewAdapter.currency = coinListPresenter.getSelectedCurrency()
+        recyclerViewAdapter.adapterSettings = CoinListAdapter.Settings(currency = coinListPresenter.getSelectedCurrency(),
+                snapshot = coinListPresenter.getSelectedSnapshot())
+        recyclerViewAdapter.notifyDataSetChanged()
+    }
+
+    override fun refreshContent() {
+        recyclerViewAdapter.adapterSettings = CoinListAdapter.Settings(currency = coinListPresenter.getSelectedCurrency(),
+                snapshot = coinListPresenter.getSelectedSnapshot())
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
@@ -223,13 +230,14 @@ class CoinsListFragment :
     }
 
     private fun initRecyclerView(rootView: View, appCompatActivity: AppCompatActivity) {
+        val adapterSettings = CoinListAdapter.Settings(currency = coinListPresenter.getSelectedCurrency(),
+                snapshot = coinListPresenter.getSelectedSnapshot())
+
         recyclerView = rootView.recyclerview_coins_list
         recyclerViewAdapter = CoinListAdapter(context = appCompatActivity.baseContext,
                 coins = emptyList(),
-                currency = coinListPresenter.getSelectedCurrency(),
-                imageHelper = imageHelper) {
-            coinListPresenter.coinSelected(it)
-        }
+                adapterSettings = adapterSettings,
+                imageHelper = imageHelper) { coinListPresenter.coinSelected(it) }
         recyclerViewLayoutManager = LinearLayoutManager(appCompatActivity.baseContext)
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.layoutManager = recyclerViewLayoutManager

@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
@@ -24,6 +25,8 @@ interface CoinsListContract {
 
         fun getSelectedCurrency(): CurrencyRepresentation
 
+        fun getSelectedSnapshot(): PredefinedSnapshot
+
         fun displayCurrencyChanged(newSelectedCurrency: SelectionItem)
 
         fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem)
@@ -40,6 +43,8 @@ interface CoinsListContract {
         fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>)
 
         fun setListData(data: List<CryptoCoin>)
+
+        fun refreshContent()
 
         fun scrollTo(scrollPosition: Int)
 

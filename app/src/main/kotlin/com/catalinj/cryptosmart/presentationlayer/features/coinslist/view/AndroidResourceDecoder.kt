@@ -35,11 +35,9 @@ class AndroidResourceDecoder(context: Context) : ResourceDecoder {
             decodeSelectionItemList(visibleValuesResId = R.array.change_currency_dialog_options,
                     valuesSymbolsResId = R.array.change_currency_dialog_options_values)
 
-
     private fun decodeSnapshotDialogItems(): List<SelectionItem> =
             decodeSelectionItemList(visibleValuesResId = R.array.snapshot_list_dialog_options,
                     valuesSymbolsResId = R.array.snapshot_dialog_options_values)
-
 
     private fun decodeSelectionItemList(@ArrayRes visibleValuesResId: Int,
                                         @ArrayRes valuesSymbolsResId: Int): List<SelectionItem> {

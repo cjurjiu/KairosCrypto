@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter
 
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
@@ -41,10 +42,7 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
     private var activeCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
     private lateinit var changeCurrencyDialogItems: List<SelectionItem>
     //init with default value. this will later be changed by user actions
-    private var activeSnapshotValue: String = resourceDecoder
-            .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
-            .first()
-            .value
+    private var activeSnapshot: PredefinedSnapshot = PredefinedSnapshot.SNAPSHOT_1H
     private lateinit var changeSnapshotDialogItems: List<SelectionItem>
 
     //base presenter methods
@@ -105,9 +103,9 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
         view?.openSelectSnapshotDialog(changeSnapshotDialogItems)
     }
 
-    override fun getSelectedCurrency(): CurrencyRepresentation {
-        return activeCurrency
-    }
+    override fun getSelectedCurrency(): CurrencyRepresentation = activeCurrency
+
+    override fun getSelectedSnapshot(): PredefinedSnapshot = activeSnapshot
 
     override fun displayCurrencyChanged(newSelectedCurrency: SelectionItem) {
         if (activeCurrency.currency == newSelectedCurrency.value) {
@@ -130,12 +128,13 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
     }
 
     override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {
-        if (activeSnapshotValue == newSelectedSnapshot.value) {
+        if (activeSnapshot.stringValue == newSelectedSnapshot.value) {
             //the new selection is equal to the previous one. do nothing
             return
         }
-        activeSnapshotValue = newSelectedSnapshot.value
+        activeSnapshot = PredefinedSnapshot.of(newSelectedSnapshot.value)
         refreshSelectedSnapshot(changeSnapshotDialogItems)
+        view?.refreshContent()
         Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
     }
 
@@ -231,7 +230,7 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
 
     private fun refreshSelectedSnapshot(selectionList: List<SelectionItem>) {
         selectionList.onEach {
-            it.isActive = it.value == activeSnapshotValue
+            it.isActive = it.value == activeSnapshot.stringValue
         }
     }
 
@@ -240,7 +239,7 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
             val snapshotOptions: List<SelectionItem> = resourceDecoder
                     .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
             snapshotOptions.onEach {
-                it.isActive = it.value == activeSnapshotValue
+                it.isActive = it.value == activeSnapshot.stringValue
             }
             changeSnapshotDialogItems = snapshotOptions
         }

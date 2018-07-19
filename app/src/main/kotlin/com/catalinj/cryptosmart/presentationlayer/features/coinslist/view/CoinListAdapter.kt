@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
+import com.catalinj.cryptosmart.businesslayer.model.changeForSnapshot
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.layout_coin_list_item.view.*
  */
 class CoinListAdapter(context: Context,
                       var coins: List<CryptoCoin>,
-                      var currency: CurrencyRepresentation,
+                      var adapterSettings: CoinListAdapter.Settings,
                       private val imageHelper: ImageHelper<String>,
                       private val click: (position: CryptoCoin) -> Unit) :
         RecyclerView.Adapter<CoinListAdapter.MyViewHolder>() {
@@ -41,17 +43,18 @@ class CoinListAdapter(context: Context,
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.apply {
             val coin = coins[position]
-            val priceData = coin.priceData[currency.currency]!!
+            val priceData = coin.priceData[adapterSettings.currency.currency]!!
+            val percentChange = priceData.changeForSnapshot(snapshot = adapterSettings.snapshot)
 
             imageHelper.setImage(imageCoinLogo, coin.symbol)
             textCoinRank.text = coin.rank.toString()
             textCoinName.text = coin.name
             textCoinValue.text = CurrencyFormatter.format(value = priceData.price,
-                    currencyRepresentation = currency)
-            textCoinIncreasePrc.displayPercent(priceData.percentChange24h)
-            val value = (priceData.percentChange24h * priceData.price) / 100f
+                    currencyRepresentation = adapterSettings.currency)
+            textCoinIncreasePrc.displayPercent(percent = percentChange)
+            val value = (percentChange * priceData.price) / 100f
             textCoinIncreaseValue.text = CurrencyFormatter.format(value = value,
-                    currencyRepresentation = currency)
+                    currencyRepresentation = adapterSettings.currency)
         }
     }
 
@@ -63,5 +66,21 @@ class CoinListAdapter(context: Context,
         val textCoinValue: TextView = v.text_coin_value
         val textCoinIncreasePrc: TextView = v.text_coin_increase_percent
         val textCoinIncreaseValue: TextView = v.text_coin_increase_value
+    }
+
+    /**
+     * Immutable settings for the adapter.
+     */
+    data class Settings(val currency: CurrencyRepresentation, val snapshot: PredefinedSnapshot) {
+
+        /**
+         * Returns a new [Settings] instance with updated currency.
+         */
+        fun updateCurrency(newCurrency: CurrencyRepresentation) = Settings(currency = newCurrency, snapshot = this.snapshot)
+
+        /**
+         * Returns a new [Settings] instance with updated delta time.
+         */
+        fun updateDeltaTime(newSnapshot: PredefinedSnapshot) = Settings(currency = this.currency, snapshot = newSnapshot)
     }
 }

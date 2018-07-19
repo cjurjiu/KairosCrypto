@@ -21,7 +21,7 @@
 
         <LinearLayout
             android:id="@+id/image_coin_details_header_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/min_margin_from_screen_edge"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,14 +30,15 @@
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_coin_details_coin_logo"
                 android:layout_width="56dp"
-                android:layout_height="56dp"
-                tools:src="@drawable/nano" />
+                android:layout_height="56dp" />
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="8dp">
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_coin_details_coin_name"
@@ -63,7 +64,23 @@
                     android:layout_marginTop="3dp"
                     android:layout_toEndOf="@+id/text_coin_details_coin_name"
                     tools:src="@drawable/ic_vector_trending_up_black_24dp" />
+
+                <ToggleButton
+                    android:id="@+id/button_coin_details_bookmarks_toggle"
+                    style="@style/CryptoSmart.Style.Button.VectorDrawable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="-29dp"
+                    android:layout_marginTop="-12dp"
+                    android:button="@drawable/bg_button_bookmark_toggle"
+                    android:textOff=""
+                    android:textOn=""
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
             </RelativeLayout>
+
         </LinearLayout>
 
         <android.support.v4.view.ViewPager

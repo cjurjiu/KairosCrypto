@@ -1,23 +1,28 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.presenter
 
 import android.util.Log
+import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData) : CoinDetailsContract.CoinDetailsPresenter {
+class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData,
+                           private val bookmarksRepository: BookmarksRepository) : CoinDetailsContract.CoinDetailsPresenter {
     override var navigator: Navigator? = null
 
     private var view: CoinDetailsContract.CoinDetailsView? = null
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var childCoinInfoPresenter: CoinInfoContract.CoinInfoPresenter? = null
     private var childCoinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter? = null
+    private var coinIsBookmark: Boolean = false
 
     init {
         Log.d("Cata", "Injected CoinDetailsPresenter")
@@ -96,10 +101,38 @@ class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData) 
         navigator?.navigateBack()
     }
 
+    override fun toggleButtonPressed(isChecked: Boolean) {
+        val function = if (isChecked) {
+            bookmarksRepository::addBookmark
+        } else {
+            bookmarksRepository::deleteBookmark
+        }
+        //first order functions are nice <3
+        function.invoke(coinPartialData.coinSymbol)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { success ->
+                    Log.d("Cata", "Operation success! $success")
+                    updateBookmarkToggleButton(coinPartialData.coinSymbol)
+                }
+    }
+
     private fun updateView(data: CoinDetailsPartialData) {
         view?.setCoinInfo(data.coinName,
                 data.coinSymbol,
                 data.change1h)
+        updateBookmarkToggleButton(coinSymbol = data.coinSymbol)
+    }
+
+    private fun updateBookmarkToggleButton(coinSymbol: String) {
+        val disposable = bookmarksRepository.isBookmark(coinSymbol = coinSymbol)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { isBookmark ->
+                    this.coinIsBookmark = isBookmark
+                    view?.refreshBookmarkToggleButton(isBookmark = isBookmark)
+                }
+        compositeDisposable.add(disposable)
     }
 
     private companion object {

@@ -40,5 +40,8 @@
     <string name="string_settings_dark_theme">Dark Theme</string>
     <string name="string_settings_primary_currency">Primary Currency</string>
     <string name="string_markets_label_volume_24h">Volume (24h):</string>
+    <string name="change_over_past_hour">Change over past hour</string>
+    <string name="change_over_24_hours">Change over 24 hours</string>
+    <string name="change_over_7_days">Change over 7 days</string>
 
 </resources>

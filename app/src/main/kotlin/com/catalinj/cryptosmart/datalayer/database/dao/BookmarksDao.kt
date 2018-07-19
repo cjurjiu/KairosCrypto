@@ -1,11 +1,9 @@
 package com.catalinj.cryptosmart.datalayer.database.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
+import android.arch.persistence.room.*
 import com.catalinj.cryptosmart.datalayer.database.models.*
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 /**
  * Created by catalin on 11/05/2018.
@@ -14,7 +12,12 @@ import io.reactivex.Flowable
 interface BookmarksDao {
 
     @Query("SELECT * FROM ${DbBookmark.BOOKMARKS_TABLE_NAME}")
-    fun getBookmarks(): List<DbBookmark>
+    fun getBookmarks(): Single<List<DbBookmark>>
+
+    @Query("SELECT * FROM ${DbBookmark.BOOKMARKS_TABLE_NAME} " +
+            "WHERE ${DbBookmark.BOOKMARKS_TABLE_NAME}.${DbBookmark.ColumnNames.BOOKMARKED_COIN_SYMBOL} = " +
+            ":coinSymbol")
+    fun getBookmark(coinSymbol: String): Single<DbBookmark>
 
     @Query("SELECT * FROM ${DbBookmark.BOOKMARKS_TABLE_NAME}")
     fun getBookmarksFlowable(): Flowable<List<DbBookmark>>
@@ -43,8 +46,11 @@ interface BookmarksDao {
     fun getBookmarksPriceDataFlowable(currency: String): Flowable<List<DbCryptoCoinSinglePriceData>>
 
     @Insert
-    fun insert(dbBookmark: DbBookmark)
+    fun insert(dbBookmark: DbBookmark): Long
 
     @Insert
     fun insert(dbBookmark: List<DbBookmark>): List<Long>
+
+    @Delete
+    fun delete(dbBookmark: DbBookmark): Int
 }

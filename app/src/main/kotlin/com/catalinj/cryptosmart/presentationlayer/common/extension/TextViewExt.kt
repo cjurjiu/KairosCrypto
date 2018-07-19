@@ -2,6 +2,8 @@ package com.catalinj.cryptosmart.presentationlayer.common.extension
 
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
+import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 
 private const val NUMBER_OF_PERCENT_DECIMALS = 2
 
@@ -23,5 +25,21 @@ fun TextView.displayAsPercent(initialValue: Float, updateValue: Float) {
         setTextColor(resources.getColor(R.color.red_primary))
     } else {
         setTextColor(resources.getColor(R.color.green_primary))
+    }
+}
+
+fun TextView.percentAsAbsoluteChange(initialValue: Float,
+                                     percentChange: Float,
+                                     currency: CurrencyRepresentation,
+                                     colored: Boolean = true) {
+    val absoluteChange = initialValue * percentChange
+    text = CurrencyFormatter.format(value = absoluteChange,
+            currencyRepresentation = currency)
+    if (colored) {
+        if (percentChange < 0) {
+            setTextColor(resources.getColor(R.color.red_primary))
+        } else {
+            setTextColor(resources.getColor(R.color.green_primary))
+        }
     }
 }

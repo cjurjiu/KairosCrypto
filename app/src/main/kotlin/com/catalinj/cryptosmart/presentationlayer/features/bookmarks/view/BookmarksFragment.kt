@@ -44,9 +44,7 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     private lateinit var recyclerViewAdapter: BookmarksListAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val onChangeCurrencyButtonClickedListener = View.OnClickListener { bookmarksPresenter.changeCurrencyButtonPressed() }
-
     private val onSnapshotButtonClickedListener = View.OnClickListener { bookmarksPresenter.selectSnapshotButtonPressed() }
-
 
     //android fragment lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {

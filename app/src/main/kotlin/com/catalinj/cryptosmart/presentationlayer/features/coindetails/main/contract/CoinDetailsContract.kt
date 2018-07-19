@@ -31,6 +31,8 @@ interface CoinDetailsContract {
 
         fun userPressedBack()
 
+        fun toggleButtonPressed(isChecked: Boolean)
+
         data class CoinDetailsPartialData(val coinName: String,
                                           val webFriendlyName: String,
                                           val coinSymbol: String,
@@ -43,5 +45,7 @@ interface CoinDetailsContract {
         fun setCoinInfo(coinName: String, coinSymbol: String, change1h: Float)
 
         fun getActiveChildView(): MvpView<*, *>
+
+        fun refreshBookmarkToggleButton(isBookmark: Boolean)
     }
 }

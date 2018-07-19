@@ -55,14 +55,14 @@
         app:layout_constraintTop_toTopOf="@id/text_bookmark_coin_name"
         tools:src="@drawable/ic_vector_trending_up_black_24dp" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/text_bookmark_more"
-        style="@style/CryptoSmart.Style.Button.VectorDrawable"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_vector_more_vert_black_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<android.support.v7.widget.AppCompatImageView-->
+    <!--android:id="@+id/text_bookmark_more"-->
+    <!--style="@style/CryptoSmart.Style.Button.VectorDrawable"-->
+    <!--android:layout_width="40dp"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:src="@drawable/ic_vector_more_vert_black_24dp"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <!--//start-->
     <TextView
@@ -85,7 +85,7 @@
         android:textColor="?attr/colorAccent"
         app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_heading"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Change over 7D" />
+        tools:text="@string/change_over_7_days" />
 
     <TextView
         android:id="@+id/text_unit_value_primary_currency"

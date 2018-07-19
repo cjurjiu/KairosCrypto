@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ToggleButton
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.di.components.ActivityComponent
@@ -43,6 +44,7 @@ class CoinDetailsFragment :
     private lateinit var coinSymbolTextView: AppCompatTextView
     private lateinit var coinLogoImageView: AppCompatImageView
     private lateinit var coinTrendImageView: AppCompatImageView
+    private lateinit var bookmarkToggleButton: ToggleButton
 
     class Factory(private val activityComponent: ActivityComponent,
                   private val cryptoCoin: CryptoCoin)
@@ -53,8 +55,8 @@ class CoinDetailsFragment :
         }
 
         override fun onCreateInjector(): CoinDetailsComponent {
-            return activityComponent.getCoinDetailsComponent(CoinDetailsModule(
-                    CoinDetailsPartialData(coinName = cryptoCoin.name,
+            return activityComponent.getCoinDetailsComponent(
+                    coinListModule = CoinDetailsModule(CoinDetailsPartialData(coinName = cryptoCoin.name,
                             webFriendlyName = cryptoCoin.websiteSlug,
                             coinSymbol = cryptoCoin.symbol,
                             coinId = cryptoCoin.id,
@@ -148,6 +150,7 @@ class CoinDetailsFragment :
         coinSymbolTextView = view.text_coin_details_coin_symbol
         coinLogoImageView = view.image_coin_details_coin_logo
         coinTrendImageView = view.image_coin_details_trend
+        bookmarkToggleButton = view.button_coin_details_bookmarks_toggle
         initializeToolbar(view)
         initializeViewPagerWithTabs(view)
     }
@@ -184,6 +187,15 @@ class CoinDetailsFragment :
         val viewPager = view?.view_pager_coin_details
         val activeFragment = coinDetailsViewPagerAdapter.getItem(viewPager!!.currentItem)
         return (activeFragment as MvpView<*, *>)
+    }
+
+    override fun refreshBookmarkToggleButton(isBookmark: Boolean) {
+        bookmarkToggleButton.setOnCheckedChangeListener(null)
+        bookmarkToggleButton.isChecked = isBookmark
+        bookmarkToggleButton.setOnCheckedChangeListener { _, isChecked ->
+            coinDetailsPresenter.toggleButtonPressed(isChecked = isChecked)
+        }
+        bookmarkToggleButton.visibility = View.VISIBLE
     }
 
     private fun initializeToolbar(view: View) {

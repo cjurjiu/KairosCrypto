@@ -4,6 +4,7 @@ import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.functions.Consumer
 
 /**
@@ -36,4 +37,19 @@ interface BookmarksRepository : Repository {
      * has been updated.
      */
     fun getBookmarksListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>>
+
+    /**
+     * Single returns true if coin symbol represents a bookmark, and false otherwise.
+     */
+    fun isBookmark(coinSymbol: String): Single<Boolean>
+
+    /**
+     * Single returns true if add was successful, false otherwise
+     */
+    fun addBookmark(coinSymbol: String): Single<Boolean>
+
+    /**
+     * Single returns true if delete was successful, false otherwise
+     */
+    fun deleteBookmark(coinSymbol: String): Single<Boolean>
 }

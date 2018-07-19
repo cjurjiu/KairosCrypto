@@ -11,12 +11,14 @@ import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
+import com.catalinj.cryptosmart.datalayer.database.models.DbBookmark
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.observables.ConnectableObservable
@@ -156,6 +158,38 @@ class CoinMarketCapBookmarksRepository(private val cryptoSmartDb: CryptoSmartDb,
                 .map { it.map { it.toBusinessLayerCoin() } }
                 .debounce(200L, TimeUnit.MILLISECONDS)
                 .toObservable()
+    }
+
+    override fun isBookmark(coinSymbol: String): Single<Boolean> =
+            cryptoSmartDb.getBookmarksDao()
+                    .getBookmarks()
+                    .onErrorReturn { emptyList() }
+                    .flattenAsObservable { list -> list }
+                    .filter {
+                        it.bookmarkedCoinSymbol == coinSymbol
+                    }
+                    .isEmpty
+                    .map { !it }
+
+    override fun addBookmark(coinSymbol: String): Single<Boolean> {
+        return Single.fromCallable {
+            cryptoSmartDb.getBookmarksDao()
+                    .insert(DbBookmark(0, coinSymbol, System.currentTimeMillis()))
+        }
+                .onErrorReturn { 0 }
+                .map { it > 0 }
+    }
+
+    override fun deleteBookmark(coinSymbol: String): Single<Boolean> {
+        return cryptoSmartDb.getBookmarksDao().getBookmark(coinSymbol)
+                .flatMap {
+                    Single.just(cryptoSmartDb.getBookmarksDao().delete(it))
+                }
+                .onErrorReturnItem(-1)
+                .map {
+                    //true if something was deleted
+                    it > 0
+                }
     }
 
     private fun getLoadingObservable(): ConnectableObservable<Repository.LoadingState> {

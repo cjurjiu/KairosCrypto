@@ -20,30 +20,26 @@ interface CoinsListContract {
 
         fun coinSelected(selectedCoin: CryptoCoin)
 
+        fun userPullToRefresh()
+
+        fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int)
+
+        fun scrollToTopPressed()
+
         fun changeCurrencyButtonPressed()
 
         fun selectSnapshotButtonPressed()
-
-        fun getSelectedCurrency(): CurrencyRepresentation
-
-        fun getSelectedSnapshot(): PredefinedSnapshot
 
         fun displayCurrencyChanged(newSelectedCurrency: SelectionItem)
 
         fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem)
 
-        fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int)
+        fun getSelectedCurrency(): CurrencyRepresentation
 
-        fun userPullToRefresh()
-
-        fun scrollToTopPressed()
+        fun getSelectedSnapshot(): PredefinedSnapshot
     }
 
     interface CoinsListView : MvpView<CoinsListPresenter, CoinsListView>, LoadingView {
-
-        fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>)
-
-        fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>)
 
         fun setListData(data: List<CryptoCoin>)
 
@@ -62,5 +58,9 @@ interface CoinsListContract {
         fun hideScrollToTopButton()
 
         fun getDisplayedItemPosition(): Int
+
+        fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>)
+
+        fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>)
     }
 }

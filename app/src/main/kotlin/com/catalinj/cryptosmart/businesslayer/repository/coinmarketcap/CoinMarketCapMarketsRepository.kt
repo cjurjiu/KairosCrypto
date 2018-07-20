@@ -35,8 +35,12 @@ class CoinMarketCapMarketsRepository(private val cryptoSmartDb: CryptoSmartDb,
     override fun updateMarketsData(coinSymbol: String, webFriendlyName: String) {
         coinMarketCapHtmlService.fetchCoinMarkets(webFriendlyName)
                 .subscribeOn(Schedulers.io())
-                .doOnError { Log.e("Cata", "Error", it) }
+                .doOnError { Log.e("Cata", "Error while fetching markets", it) }
+                .onErrorReturn { "" }
                 .subscribe(Consumer {
+                    if (it != null || it == "") {
+                        //empty string received, ignore error
+                    }
                     val parser = MarketInfoHtmlParser(coinSymbol = coinSymbol,
                             marketInfoHtmlPage = it)
                     val markets = parser.extractMarkets().map { it.toDataLayerMarketInto() }

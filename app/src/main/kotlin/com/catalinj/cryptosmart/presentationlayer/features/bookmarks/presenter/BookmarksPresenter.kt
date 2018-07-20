@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter
 
 import android.util.Log
+import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
@@ -9,6 +10,7 @@ import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.ResourceDecoder
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.SelectionItemsResource
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
+import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
@@ -116,6 +118,22 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         bookmarksView?.hideLoadingIndicator()
     }
 
+    override fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int) {
+        //scroll to top button hide/reveal logic
+        val displayedItemPosition = (bookmarksView?.getDisplayedItemPosition() ?: 0)
+        val scrollToTopVisible = bookmarksView?.isScrollToTopVisible() ?: false
+        if (displayedItemPosition > SCROLL_TO_TOP_LIST_THRESHOLD && !scrollToTopVisible) {
+            bookmarksView?.revealScrollToTopButton()
+        } else if (displayedItemPosition < SCROLL_TO_TOP_LIST_THRESHOLD && scrollToTopVisible) {
+            bookmarksView?.hideScrollToTopButton()
+        }
+    }
+
+    override fun scrollToTopPressed() {
+        bookmarksView?.scrollTo(0)
+        bookmarksView?.hideScrollToTopButton()
+    }
+
     override fun displayCurrencyChanged(newDisplayCurrency: SelectionItem) {
         Log.d("Cata", "$TAG#displayCurrencyChanged")
         if (activeCurrency.currency == newDisplayCurrency.value) {
@@ -133,7 +151,10 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         //hide the list while the list is being fetched
         bookmarksView?.setContentVisible(isVisible = false)
         //launch the request
-        bookmarksRepository.refreshBookmarks(activeCurrency, Consumer { Log.d("CAta", "Error occured at bookmars:$it") })
+        bookmarksRepository.refreshBookmarks(currencyRepresentation = activeCurrency,
+                errorHandler = Consumer {
+                    Log.d("Cata", "Error occurred at displayCurrencyChanged:$it")
+                })
         Log.d("Cata", "displayCurrencyChanged: selectionItem:${newDisplayCurrency.name}")
     }
 
@@ -169,7 +190,11 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
                     bookmarksRepository.refreshBookmarksById(currencyRepresentation = activeCurrency,
                             bookmarks = bookmarks,
                             errorHandler = Consumer {
-                                Log.d("Cata", "Error when fetching bookmarks. Error: $it")
+                                Log.d("Cata", "Error occurred at refreshBookmarks:$it")
+                                Executors.mainThread().execute {
+                                    bookmarksView?.showError(errorCode = ErrorCode.GENERIC_ERROR,
+                                            retryAction = ::refreshBookmarks)
+                                }
                             })
                 }
         compositeDisposable.add(disposable)
@@ -223,5 +248,6 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
     //END base presenter methods
     companion object {
         const val TAG = "BookmarksPresenter"
+        private const val SCROLL_TO_TOP_LIST_THRESHOLD = 10
     }
 }

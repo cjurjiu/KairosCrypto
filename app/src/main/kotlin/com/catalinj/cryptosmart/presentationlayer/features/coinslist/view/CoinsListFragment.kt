@@ -236,6 +236,7 @@ class CoinsListFragment :
     }
 
     override fun isScrollToTopVisible(): Boolean = floatingScrollToTopButton.visibility == View.VISIBLE
+
     override fun revealScrollToTopButton() {
         val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_reveal) as AnimatorSet
         floatingScrollToTopButton.visibility = View.VISIBLE

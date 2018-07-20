@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground"
-    android:orientation="vertical">
+    android:background="?attr/colorBackground">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        style="@style/CryptoSmart.Style.Toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <include layout="@layout/include_bookmarks_toolbar_content" />
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefreshlayout_bookmarks_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_bookmarks_list"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            style="@style/CryptoSmart.Style.Toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </android.support.v4.widget.SwipeRefreshLayout>
-</LinearLayout>
+            android:layout_height="?attr/actionBarSize">
+
+            <include layout="@layout/include_bookmarks_toolbar_content" />
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefreshlayout_bookmarks_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_bookmarks_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floating_scroll_to_top"
+        style="@style/CryptoSmart.Style.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/min_margin_from_screen_edge"
+        android:src="@drawable/ic_vector_arrow_up_black_24dp"
+        android:tint="?attr/colorPrimary"
+        android:visibility="gone"
+        app:backgroundTint="?attr/colorBackground"
+        app:fabSize="normal" />
+</android.support.design.widget.CoordinatorLayout>

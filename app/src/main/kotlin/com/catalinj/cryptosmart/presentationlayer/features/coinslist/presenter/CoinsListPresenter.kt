@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter
 
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
@@ -10,6 +11,7 @@ import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.ResourceDecoder
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.SelectionItemsResource
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
+import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
@@ -145,11 +147,27 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
 
     override fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int) {
         Log.d("Cata2", "Scroll! position:$currentScrollPosition maxScroll:$maxScrollPosition")
+
+        //fetch more coin logic
         if (currentScrollPosition / maxScrollPosition.toFloat() > 0.75f && !waitForLoad) {
             Log.d("Cata2", "scroll trigger load!")
             waitForLoad = true
             fetchMoreCoins()
         }
+
+        //scroll to top button hide/reveal logic
+        val displayedItemPosition = (view?.getDisplayedItemPosition() ?: 0)
+        val scrollToTopVisible = view?.isScrollToTopVisible() ?: false
+        if (displayedItemPosition > SCROLL_TO_TOP_LIST_THRESHOLD && !scrollToTopVisible) {
+            view?.revealScrollToTopButton()
+        } else if (displayedItemPosition < SCROLL_TO_TOP_LIST_THRESHOLD && scrollToTopVisible) {
+            view?.hideScrollToTopButton()
+        }
+    }
+
+    override fun scrollToTopPressed() {
+        view?.scrollTo(0)
+        view?.hideScrollToTopButton()
     }
 
     private fun fetchInitialBatch() {
@@ -158,7 +176,11 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
         repository.fetchCoins(startIndex = startIndex,
                 numberOfCoins = COIN_FETCH_BATCH_SIZE,
                 currencyRepresentation = activeCurrency,
-                errorHandler = Consumer { Log.d("RxJ", "Fetch more coins error:+ $it") })
+                errorHandler = Consumer {
+                    Executors.mainThread().execute {
+                        view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::fetchInitialBatch)
+                    }
+                })
     }
 
     private fun fetchMoreCoins() {
@@ -167,7 +189,11 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
         repository.fetchCoins(startIndex = startIndex,
                 numberOfCoins = COIN_FETCH_BATCH_SIZE,
                 currencyRepresentation = activeCurrency,
-                errorHandler = Consumer { Log.d("RxJ", "Fetch more coins error:+ $it") })
+                errorHandler = Consumer {
+                    Executors.mainThread().execute {
+                        view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::fetchMoreCoins)
+                    }
+                })
     }
 
     private fun refreshCoins() {
@@ -177,7 +203,13 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
         repository.fetchCoins(startIndex = 0,
                 numberOfCoins = fetchedCoinsNumber,
                 currencyRepresentation = activeCurrency,
-                errorHandler = Consumer { Log.d("RxJ", "Refresh coins error: $it") })
+                errorHandler = Consumer {
+                    Log.d("Cata", "CoinListPresenter#refreshCoins error: $it")
+
+                    Executors.mainThread().execute {
+                        view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::refreshCoins)
+                    }
+                })
     }
 
     private fun updateLoadingState(loadingState: Repository.LoadingState) {
@@ -247,5 +279,6 @@ class CoinsListPresenter(private val resourceDecoder: ResourceDecoder,
 
     private companion object {
         private const val COIN_FETCH_BATCH_SIZE = 100
+        private const val SCROLL_TO_TOP_LIST_THRESHOLD = 30
     }
 }

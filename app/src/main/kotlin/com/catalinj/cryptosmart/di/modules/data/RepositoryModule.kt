@@ -3,7 +3,6 @@ package com.catalinj.cryptosmart.di.modules.data
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config.CoinMarketCapCoinsRepositoryConfigurator
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
-import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.ApplicationScope
 import dagger.Module
@@ -20,11 +19,9 @@ class RepositoryModule {
     @ApplicationScope
     @CoinMarketCapApiQualifier
     fun provideCoinMarketCapRepository(database: CryptoSmartDb,
-                                       @CoinMarketCapApiQualifier retrofit: Retrofit,
-                                       userSettings: CryptoSmartUserSettings): CoinsRepository {
+                                       @CoinMarketCapApiQualifier retrofit: Retrofit): CoinsRepository {
 
         return CoinMarketCapCoinsRepositoryConfigurator(database = database,
-                retrofit = retrofit,
-                userSettings = userSettings).configure()
+                retrofit = retrofit).configure()
     }
 }

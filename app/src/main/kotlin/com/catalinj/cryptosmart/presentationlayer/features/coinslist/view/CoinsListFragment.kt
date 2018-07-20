@@ -1,5 +1,9 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.view
 
+import android.animation.Animator
+import android.animation.AnimatorInflater
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -15,21 +19,25 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
+import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.CoinListComponent
 import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
+import com.catalinj.cryptosmart.presentationlayer.common.extension.toMessageResId
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.OnItemSelectedListener
 import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
+import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import javax.inject.Inject
+
 
 /**
  * Created by catalinj on 21.01.2018.
@@ -55,6 +63,10 @@ class CoinsListFragment :
     private lateinit var recyclerViewAdapter: CoinListAdapter
 
     private lateinit var recyclerViewLayoutManager: LinearLayoutManager
+
+    private lateinit var floatingScrollToTopButton: View
+
+    private var hideAnimationInProgress: Boolean = false
 
     private val onChangeCurrencyButtonClickedListener = View.OnClickListener { coinListPresenter.changeCurrencyButtonPressed() }
 
@@ -100,6 +112,7 @@ class CoinsListFragment :
         initToolbar(rootView = view, appCompatActivity = appCompatActivity)
         initRecyclerView(rootView = view, appCompatActivity = appCompatActivity)
         initSwipeRefreshLayout(rootView = view)
+        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
 //      rebind dialog
         SelectionDialog.rebindActiveDialogListeners(fragmentManager = fragmentManager!!,
                 possibleDialogIdentifiers = CoinListSelectionDialogType.children(),
@@ -180,6 +193,16 @@ class CoinsListFragment :
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
+    override fun showError(errorCode: ErrorCode, retryAction: () -> Unit) {
+        SnackBarWrapper.showSnackBar(view = view!!,
+                infoMessage = errorCode.toMessageResId(),
+                actionButtonMessage = R.string.cta_try_again,
+                clickListener = View.OnClickListener {
+                    //invoke the retry action
+                    retryAction.invoke()
+                })
+    }
+
     override fun showLoadingIndicator() {
         Log.d("Cata", "Loading started")
         swipeRefreshLayout.isRefreshing = true
@@ -211,6 +234,46 @@ class CoinsListFragment :
     override fun setContentVisible(isVisible: Boolean) {
         recyclerView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
+
+    override fun isScrollToTopVisible(): Boolean = floatingScrollToTopButton.visibility == View.VISIBLE
+    override fun revealScrollToTopButton() {
+        val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_reveal) as AnimatorSet
+        floatingScrollToTopButton.visibility = View.VISIBLE
+        set.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                floatingScrollToTopButton.setOnClickListener {
+                    coinListPresenter.scrollToTopPressed()
+                }
+                set.removeAllListeners()
+            }
+        })
+        set.setTarget(floatingScrollToTopButton)
+        set.start()
+    }
+
+    override fun hideScrollToTopButton() {
+        if (hideAnimationInProgress) {
+            //guard to not start multiple hide animations...
+            return
+        }
+        this.hideAnimationInProgress = true
+        val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_hide) as AnimatorSet
+        set.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
+                floatingScrollToTopButton.setOnClickListener(null)
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                floatingScrollToTopButton.visibility = View.GONE
+                hideAnimationInProgress = false
+                set.removeAllListeners()
+            }
+        })
+        set.setTarget(floatingScrollToTopButton)
+        set.start()
+    }
+
+    override fun getDisplayedItemPosition(): Int = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 
     private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
         val toolbar: Toolbar = rootView.findViewById(R.id.my_toolbar)

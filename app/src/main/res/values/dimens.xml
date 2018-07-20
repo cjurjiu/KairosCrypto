@@ -12,4 +12,5 @@
     <dimen name="text_size_medium">14dp</dimen>
     <dimen name="text_size_medium_large">16dp</dimen>
     <dimen name="text_size_large">18dp</dimen>
+    <dimen name="snackbar_height">60dp</dimen>
 </resources>

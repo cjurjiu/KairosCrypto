@@ -17,7 +17,6 @@ import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApi
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoin
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.BoundedCryptoCoinsRequest
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
-import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -40,8 +39,7 @@ import java.util.concurrent.TimeUnit
  * Created by catalinj on 28.01.2018.
  */
 class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
-                                   private val coinMarketCapApiService: CoinMarketCapApiService,
-                                   private val userSettings: CryptoSmartUserSettings)
+                                   private val coinMarketCapApiService: CoinMarketCapApiService)
     : CoinsRepository {
 
     override val loadingStateObservable: Observable<Repository.LoadingState>

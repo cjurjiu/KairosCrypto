@@ -44,4 +44,10 @@
     <string name="change_over_24_hours">Change over 24 hours</string>
     <string name="change_over_7_days">Change over 7 days</string>
 
+    <!--error messages-->
+    <string name="error_no_internet">Communication error. Is internet available?</string>
+    <string name="error_request_timeout">Request timeout. Is your connection stable?</string>
+    <string name="error_generic_failure">Something went wrong</string>
+    <!--retry call to action-->
+    <string name="cta_try_again">Try again</string>
 </resources>

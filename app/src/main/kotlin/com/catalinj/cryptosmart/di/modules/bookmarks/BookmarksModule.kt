@@ -10,6 +10,8 @@ import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualif
 import com.catalinj.cryptosmart.di.annotations.scopes.BookmarksScope
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter.BookmarksPresenter
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.presenter.CoinDisplayOptionsPresenter
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.AndroidResourceDecoder
 import dagger.Module
 import dagger.Provides
@@ -23,12 +25,22 @@ class BookmarksModule {
 
     @Provides
     @BookmarksScope
-    fun provideBookmarksPresenter(@ActivityContext context: Context,
-                                  bookmarksRepository: BookmarksRepository,
+    fun provideBookmarksPresenter(bookmarksRepository: BookmarksRepository,
                                   userSettings: CryptoSmartUserSettings)
             : BookmarksContract.BookmarksPresenter {
-        return BookmarksPresenter(resourceDecoder = AndroidResourceDecoder(context = context),
-                bookmarksRepository = bookmarksRepository,
+        return BookmarksPresenter(bookmarksRepository = bookmarksRepository,
+                userSettings = userSettings)
+    }
+
+    @Provides
+    @BookmarksScope
+    fun provideCoinDisplayOptionsPresenter(@ActivityContext context: Context,
+                                           bookmarksPresenter: BookmarksContract.BookmarksPresenter,
+                                           userSettings: CryptoSmartUserSettings)
+            : CoinsDisplayOptionsContract.CoinsDisplayOptionsPresenter {
+
+        return CoinDisplayOptionsPresenter(resourceDecoder = AndroidResourceDecoder(context = context),
+                coinDisplayController = bookmarksPresenter,
                 userSettings = userSettings)
     }
 

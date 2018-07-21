@@ -7,8 +7,6 @@ import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
-import com.catalinj.cryptosmart.presentationlayer.common.decoder.ResourceDecoder
-import com.catalinj.cryptosmart.presentationlayer.common.decoder.SelectionItemsResource
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
@@ -16,7 +14,6 @@ import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.Bo
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.toBookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.toBusinessLayerCoin
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,26 +24,34 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by catalin on 14/05/2018.
  */
-class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
-                         private val bookmarksRepository: BookmarksRepository,
-                         private val userSettings: CryptoSmartUserSettings) : BookmarksContract.BookmarksPresenter {
+class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
+                         userSettings: CryptoSmartUserSettings) : BookmarksContract.BookmarksPresenter {
 
+    //overwritten properties
+
+    //init with default value. this will later be changed by user actions
+    override var displayCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
+        set(value) {
+            field = value
+            displayCurrencyChanged(newDisplayCurrency = value)
+        }
+    //init with default value. this will later be changed by user actions
+    override var displaySnapshot: PredefinedSnapshot = PredefinedSnapshot.SNAPSHOT_1H
+        set(value) {
+            field = value
+            selectedSnapshotChanged(newSnapshot = value)
+        }
     override var navigator: Navigator? = null
+    //end overwritten properties
+
     private var loadController: LoadingController? = null
     private var bookmarksView: BookmarksContract.BookmarksView? = null
     private val compositeDisposable = CompositeDisposable()
     private lateinit var bookmarksListDisposable: Disposable
     private var availableData: List<BookmarksCoin>? = null
-    private var activeCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
-    private lateinit var changeCurrencyDialogItems: List<SelectionItem>
-    //init with default value. this will later be changed by user actions
-    private var activeSnapshot: PredefinedSnapshot = PredefinedSnapshot.SNAPSHOT_1H
-    private lateinit var changeSnapshotDialogItems: List<SelectionItem>
 
     //base presenter methods
     override fun startPresenting() {
-        initChangeCurrencyDialogItems()
-        ensureSnapshotDialogOptionsInitialised()
         val loadingDisposable = bookmarksRepository.loadingStateObservable
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,7 +61,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
                         is Repository.LoadingState.Idle -> loadController?.hide()
                     }
                 }
-        bookmarksListDisposable = subscribeToBookmarksListUpdates(activeCurrency)
+        bookmarksListDisposable = subscribeToBookmarksListUpdates(currency = displayCurrency)
 
         compositeDisposable.add(loadingDisposable)
         compositeDisposable.add(bookmarksListDisposable)
@@ -69,20 +74,6 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         }
 
         Log.d("Cata", "$TAG#startPresenting")
-    }
-
-    private fun subscribeToBookmarksListUpdates(currency: CurrencyRepresentation): Disposable {
-        return bookmarksRepository.getBookmarksListObservable(currencyRepresentation = currency)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { coinList ->
-                    //ensure content is visible
-                    bookmarksView?.setContentVisible(isVisible = true)
-                    Log.d("Cata", "Got new bookmarks! activeCurrency: $currency")
-                    setViewData(coinList.map { coin ->
-                        coin.toBookmarksCoin(bookmarksRepository.isBookmarkLoading(coinSymbol = coin.symbol))
-                    })
-                }
     }
 
     override fun stopPresenting() {
@@ -108,7 +99,9 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         Log.d("Cata", "$TAG#getView")
         return bookmarksView
     }
+    //END base presenter methods
 
+    //bookmarks presenter methods
     override fun coinSelected(cryptoCoin: BookmarksCoin) {
         navigator?.openCoinDetailsScreen(cryptoCoin.toBusinessLayerCoin())
     }
@@ -133,46 +126,10 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         bookmarksView?.scrollTo(0)
         bookmarksView?.hideScrollToTopButton()
     }
+    //end bookmarks presenter logic
 
-    override fun displayCurrencyChanged(newDisplayCurrency: SelectionItem) {
-        Log.d("Cata", "$TAG#displayCurrencyChanged")
-        if (activeCurrency.currency == newDisplayCurrency.value) {
-            //the new selection is equal to the previous one. do nothing
-            return
-        }
-        activeCurrency = CurrencyRepresentation.valueOf(newDisplayCurrency.value.toUpperCase())
-        refreshActiveCurrencyForSelectionList(changeCurrencyDialogItems)
-        //remove old subscription
-        compositeDisposable.remove(bookmarksListDisposable)
-        bookmarksListDisposable.dispose()
-        //subscribe to updates for the new currency
-        bookmarksListDisposable = subscribeToBookmarksListUpdates(currency = activeCurrency)
-        compositeDisposable.add(bookmarksListDisposable)
-        //hide the list while the list is being fetched
-        bookmarksView?.setContentVisible(isVisible = false)
-        //launch the request
-        bookmarksRepository.refreshBookmarks(currencyRepresentation = activeCurrency,
-                errorHandler = Consumer {
-                    Log.d("Cata", "Error occurred at displayCurrencyChanged:$it")
-                })
-        Log.d("Cata", "displayCurrencyChanged: selectionItem:${newDisplayCurrency.name}")
-    }
-
-    override fun selectedSnapshotChanged(newSnapshot: SelectionItem) {
-        if (activeSnapshot.stringValue == newSnapshot.value) {
-            //the new selection is equal to the previous one. do nothing
-            return
-        }
-        activeSnapshot = PredefinedSnapshot.of(newSnapshot.value)
-        refreshSelectedSnapshot(changeSnapshotDialogItems)
-        bookmarksView?.refreshContent()
-        Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSnapshot.name}")
-    }
-
-    private fun refreshSelectedSnapshot(selectionList: List<SelectionItem>) {
-        selectionList.onEach {
-            it.isActive = it.value == activeSnapshot.stringValue
-        }
+    private fun setViewData(data: List<BookmarksCoin>) {
+        bookmarksView?.setListData(data)
     }
 
     private fun refreshBookmarks() {
@@ -187,7 +144,7 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
                 }
                 .observeOn(Schedulers.io())
                 .subscribe { bookmarks ->
-                    bookmarksRepository.refreshBookmarksById(currencyRepresentation = activeCurrency,
+                    bookmarksRepository.refreshBookmarksById(currencyRepresentation = displayCurrency,
                             bookmarks = bookmarks,
                             errorHandler = Consumer {
                                 Log.d("Cata", "Error occurred at refreshBookmarks:$it")
@@ -200,52 +157,42 @@ class BookmarksPresenter(private val resourceDecoder: ResourceDecoder,
         compositeDisposable.add(disposable)
     }
 
-    override fun changeCurrencyButtonPressed() {
-        bookmarksView?.openChangeCurrencyDialog(changeCurrencyDialogItems)
+    private fun subscribeToBookmarksListUpdates(currency: CurrencyRepresentation): Disposable {
+        return bookmarksRepository.getBookmarksListObservable(currencyRepresentation = currency)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { coinList ->
+                    //ensure content is visible
+                    bookmarksView?.setContentVisible(isVisible = true)
+                    Log.d("Cata", "Got new bookmarks! activeCurrency: $currency")
+                    setViewData(coinList.map { coin ->
+                        coin.toBookmarksCoin(bookmarksRepository.isBookmarkLoading(coinSymbol = coin.symbol))
+                    })
+                }
     }
 
-    override fun selectSnapshotButtonPressed() {
-        bookmarksView?.openSelectSnapshotDialog(changeSnapshotDialogItems)
+    private fun displayCurrencyChanged(newDisplayCurrency: CurrencyRepresentation) {
+        Log.d("Cata", "$TAG#displayCurrencyChanged")
+        //remove old subscription
+        compositeDisposable.remove(bookmarksListDisposable)
+        bookmarksListDisposable.dispose()
+        //subscribe to updates for the new currency
+        bookmarksListDisposable = subscribeToBookmarksListUpdates(currency = newDisplayCurrency)
+        compositeDisposable.add(bookmarksListDisposable)
+        //hide the list while the list is being fetched
+        bookmarksView?.setContentVisible(isVisible = false)
+        //launch the request
+        bookmarksRepository.refreshBookmarks(currencyRepresentation = newDisplayCurrency,
+                errorHandler = Consumer {
+                    Log.d("Cata", "Error occurred at displayCurrencyChanged:$it")
+                })
     }
 
-    override fun getSelectedCurrency(): CurrencyRepresentation = activeCurrency
-
-    override fun getSelectedSnapshot(): PredefinedSnapshot = activeSnapshot
-
-    private fun setViewData(data: List<BookmarksCoin>) {
-        bookmarksView?.setListData(data)
+    private fun selectedSnapshotChanged(newSnapshot: PredefinedSnapshot) {
+        Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSnapshot.name}")
+        bookmarksView?.refreshContent()
     }
 
-    private fun initChangeCurrencyDialogItems() {
-        val selectionList = resourceDecoder
-                .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.CURRENCIES)
-                .toMutableList()
-        val primaryCurrency = userSettings.getPrimaryCurrency()
-        selectionList.add(index = 0,
-                element = SelectionItem(name = primaryCurrency.name, value = primaryCurrency.currency)
-        )
-        refreshActiveCurrencyForSelectionList(selectionList)
-        changeCurrencyDialogItems = selectionList
-    }
-
-    private fun ensureSnapshotDialogOptionsInitialised() {
-        if (!::changeSnapshotDialogItems.isInitialized) {
-            val snapshotOptions: List<SelectionItem> = resourceDecoder
-                    .decodeSelectionItems(desiredSelectionItems = SelectionItemsResource.SNAPSHOTS)
-            snapshotOptions.onEach {
-                it.isActive = it.value == activeSnapshot.stringValue
-            }
-            changeSnapshotDialogItems = snapshotOptions
-        }
-    }
-
-    private fun refreshActiveCurrencyForSelectionList(selectionList: List<SelectionItem>) {
-        selectionList.onEach {
-            it.isActive = it.value == activeCurrency.currency
-        }
-    }
-
-    //END base presenter methods
     companion object {
         const val TAG = "BookmarksPresenter"
         private const val SCROLL_TO_TOP_LIST_THRESHOLD = 10

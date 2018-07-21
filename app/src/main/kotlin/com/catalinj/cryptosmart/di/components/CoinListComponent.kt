@@ -1,7 +1,8 @@
 package com.catalinj.cryptosmart.di.components
 
-import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinListScope
+import com.catalinj.cryptosmart.di.modules.coinlist.CoinListModule
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinsListFragment
 import dagger.Subcomponent
 
@@ -12,4 +13,6 @@ import dagger.Subcomponent
 @Subcomponent(modules = [CoinListModule::class])
 abstract class CoinListComponent {
     abstract fun inject(frag: CoinsListFragment)
+
+    abstract fun inject(frag: CoinDisplayOptionsToolbar)
 }

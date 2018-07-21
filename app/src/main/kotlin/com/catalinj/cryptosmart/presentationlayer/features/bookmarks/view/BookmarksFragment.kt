@@ -9,12 +9,10 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.di.components.ActivityComponent
@@ -26,9 +24,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwa
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.OnItemSelectedListener
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
@@ -51,9 +47,9 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     private lateinit var recyclerViewAdapter: BookmarksListAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var floatingScrollToTopButton: View
+    private lateinit var optionsToolbar: CoinDisplayOptionsToolbar
     private var hideAnimationInProgress: Boolean = false
-    private val onChangeCurrencyButtonClickedListener = View.OnClickListener { bookmarksPresenter.changeCurrencyButtonPressed() }
-    private val onSnapshotButtonClickedListener = View.OnClickListener { bookmarksPresenter.selectSnapshotButtonPressed() }
+
 
     //android fragment lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,8 +65,8 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).showBottomNavigation()
         bookmarksPresenter.navigator = (activity as MainActivity).navigator
+        (activity as MainActivity).showBottomNavigation()
         bookmarksPresenter.viewAvailable(this)
     }
 
@@ -88,6 +84,10 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
         super.onDestroyView()
         recyclerView.clearOnScrollListeners()
         bookmarksPresenter.viewDestroyed()
+        //also notify the toolbar that the view is destroyed
+        optionsToolbar.getPresenter().viewDestroyed()
+        Log.d(TAG, "$TAG#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
+                "a2:${activity?.isChangingConfigurations}")
     }
     //END android fragment lifecycle
 
@@ -95,14 +95,10 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     override fun initialise() {
         Log.d("Cata", "$TAG#initialise")
         val view = view!!
-        initSwipeRefreshLayout(view)
-        initRecyclerView(view)
-        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
-        //      rebind dialog
-        SelectionDialog.rebindActiveDialogListeners(fragmentManager = fragmentManager!!,
-                possibleDialogIdentifiers = BookmarksSelectionDialogType.children(),
-                listenerFactory = ::getListenerForDialogType)
         initToolbar(view, activity as AppCompatActivity)
+        initRecyclerView(view)
+        initSwipeRefreshLayout(view)
+        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
     }
 
     override fun getPresenter(): BookmarksContract.BookmarksPresenter {
@@ -117,29 +113,15 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     //bookmarks view methods
     override fun setListData(bookmarksList: List<BookmarksCoin>) {
         recyclerViewAdapter.adapterSettings = recyclerViewAdapter.adapterSettings
-                .updateCurrency(newCurrency = bookmarksPresenter.getSelectedCurrency())
+                .updateCurrency(newCurrency = bookmarksPresenter.displayCurrency)
         recyclerViewAdapter.coins = bookmarksList.toMutableList()
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
     override fun refreshContent() {
-        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = bookmarksPresenter.getSelectedCurrency(),
-                snapshot = bookmarksPresenter.getSelectedSnapshot())
+        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = bookmarksPresenter.displayCurrency,
+                snapshot = bookmarksPresenter.displaySnapshot)
         recyclerViewAdapter.notifyDataSetChanged()
-    }
-
-    override fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>) {
-        SelectionDialog.showCancelable(dialogIdentifier = BookmarksSelectionDialogType.ChangeCurrency,
-                fragmentManager = fragmentManager,
-                data = selectionItems,
-                listenerFactory = ::getListenerForDialogType)
-    }
-
-    override fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>) {
-        SelectionDialog.showCancelable(dialogIdentifier = BookmarksSelectionDialogType.SelectSnapshot,
-                fragmentManager = fragmentManager,
-                data = selectionItems,
-                listenerFactory = ::getListenerForDialogType)
     }
 
     override fun showError(errorCode: ErrorCode, retryAction: () -> Unit) {
@@ -201,6 +183,7 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
 
     override fun getDisplayedItemPosition(): Int = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 
+    //loading view methods
     override fun showLoadingIndicator() {
         //do nothing, each card displays its own loading indicator
     }
@@ -208,18 +191,7 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     override fun hideLoadingIndicator() {
         swipeRefreshLayout.isRefreshing = false
     }
-
-    //end bookmarks view methods
-    class Factory(val activityComponent: ActivityComponent) : InjectorFragmentFactory<BookmarksComponent>() {
-
-        override fun onCreateFragment(): InjectorFragment<BookmarksComponent> {
-            return BookmarksFragment()
-        }
-
-        override fun onCreateInjector(): BookmarksComponent {
-            return activityComponent.getBookmarksComponent(BookmarksModule())
-        }
-    }
+    //end bookmarks & loading view view methods
 
     private fun initSwipeRefreshLayout(view: View) {
         swipeRefreshLayout = view.swiperefreshlayout_bookmarks_list
@@ -229,8 +201,8 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     }
 
     private fun initRecyclerView(view: View) {
-        val adapterSettings = CryptoListAdapterSettings(currency = bookmarksPresenter.getSelectedCurrency(),
-                snapshot = bookmarksPresenter.getSelectedSnapshot())
+        val adapterSettings = CryptoListAdapterSettings(currency = bookmarksPresenter.displayCurrency,
+                snapshot = bookmarksPresenter.displaySnapshot)
 
         recyclerView = view.recyclerview_bookmarks_list
         recyclerView.layoutManager = LinearLayoutManager(context!!)
@@ -252,24 +224,27 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     }
 
     private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
-        val toolbar: Toolbar = rootView.findViewById(R.id.my_toolbar)
-        appCompatActivity.setSupportActionBar(toolbar)
-
-        //set the change currency button clicked listener
-        val changeCurrencyButton = toolbar.findViewById<ImageButton>(R.id.button_change_currency)
-        changeCurrencyButton?.setOnClickListener(onChangeCurrencyButtonClickedListener)
-        //set the change currency button clicked listener
-        val selectSnapshotButton = toolbar.findViewById<ImageButton>(R.id.button_snapshots)
-        selectSnapshotButton?.setOnClickListener(onSnapshotButtonClickedListener)
         Log.d("Cata", "have toolbar!")
+        optionsToolbar = rootView.screen_toolbar
+        appCompatActivity.setSupportActionBar(optionsToolbar)
+        lifecycle.addObserver(optionsToolbar)
+        //also inject the toolbar with the same injector
+        injector.inject(optionsToolbar)
+        //notify the toolbar's presenter that its view is available
+        optionsToolbar.getPresenter().viewAvailable(optionsToolbar)
     }
 
-    private fun getListenerForDialogType(dialogType: BookmarksSelectionDialogType): OnItemSelectedListener {
-        return when (dialogType) {
-            BookmarksSelectionDialogType.ChangeCurrency ->
-                { item -> bookmarksPresenter.displayCurrencyChanged(item) }
-            BookmarksSelectionDialogType.SelectSnapshot ->
-                { item -> bookmarksPresenter.selectedSnapshotChanged(item) }
+    /**
+     * Factory for this Fragment.
+     */
+    class Factory(val activityComponent: ActivityComponent) : InjectorFragmentFactory<BookmarksComponent>() {
+
+        override fun onCreateFragment(): InjectorFragment<BookmarksComponent> {
+            return BookmarksFragment()
+        }
+
+        override fun onCreateInjector(): BookmarksComponent {
+            return activityComponent.getBookmarksComponent(BookmarksModule())
         }
     }
 

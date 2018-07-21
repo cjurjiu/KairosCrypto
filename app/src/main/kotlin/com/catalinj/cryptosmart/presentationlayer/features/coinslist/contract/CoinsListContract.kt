@@ -2,20 +2,20 @@ package com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
-import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
-import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.LoadingView
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
 
 /**
  * Created by catalinj on 21.01.2018.
  */
 interface CoinsListContract {
 
-    interface CoinsListPresenter : MvpPresenter<CoinsListPresenter, CoinsListView> {
+    interface CoinsListPresenter : MvpPresenter<CoinsListPresenter, CoinsListView>,
+            CoinsDisplayOptionsContract.CoinDisplayController {
+
         var navigator: Navigator?
 
         fun coinSelected(selectedCoin: CryptoCoin)
@@ -25,18 +25,6 @@ interface CoinsListContract {
         fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int)
 
         fun scrollToTopPressed()
-
-        fun changeCurrencyButtonPressed()
-
-        fun selectSnapshotButtonPressed()
-
-        fun displayCurrencyChanged(newSelectedCurrency: SelectionItem)
-
-        fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem)
-
-        fun getSelectedCurrency(): CurrencyRepresentation
-
-        fun getSelectedSnapshot(): PredefinedSnapshot
     }
 
     interface CoinsListView : MvpView<CoinsListPresenter, CoinsListView>, LoadingView {
@@ -47,9 +35,9 @@ interface CoinsListContract {
 
         fun showError(errorCode: ErrorCode, retryAction: () -> Unit)
 
-        fun scrollTo(scrollPosition: Int)
-
         fun setContentVisible(isVisible: Boolean)
+
+        fun scrollTo(scrollPosition: Int)
 
         fun isScrollToTopVisible(): Boolean
 
@@ -59,8 +47,5 @@ interface CoinsListContract {
 
         fun getDisplayedItemPosition(): Int
 
-        fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>)
-
-        fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>)
     }
 }

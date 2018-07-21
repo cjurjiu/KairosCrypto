@@ -11,12 +11,10 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
@@ -27,10 +25,8 @@ import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.common.extension.toMessageResId
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.OnItemSelectedListener
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
 import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
@@ -66,26 +62,11 @@ class CoinsListFragment :
 
     private lateinit var floatingScrollToTopButton: View
 
+    private lateinit var optionsToolbar: CoinDisplayOptionsToolbar
+
     private var hideAnimationInProgress: Boolean = false
 
-    private val onChangeCurrencyButtonClickedListener = View.OnClickListener { coinListPresenter.changeCurrencyButtonPressed() }
-
-    private val onSnapshotButtonClickedListener = View.OnClickListener { coinListPresenter.selectSnapshotButtonPressed() }
-
-    class Factory(private val activityComponent: ActivityComponent) : InjectorFragmentFactory<CoinListComponent>() {
-
-        override fun onCreateFragment(): InjectorFragment<CoinListComponent> {
-            val f = CoinsListFragment()
-            //do some other initializations, set arguments
-            return f
-        }
-
-        override fun onCreateInjector(): CoinListComponent {
-            return activityComponent.getCoinListComponent(CoinListModule())
-        }
-    }
-
-    //view methods
+    //android lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
@@ -104,19 +85,6 @@ class CoinsListFragment :
         (activity as MainActivity).showBottomNavigation()
         Log.d(TAG, "CoinsListFragment#onViewCreated")
         coinListPresenter.viewAvailable(this)
-    }
-
-    override fun initialise() {
-        val view = view!!
-        val appCompatActivity = (activity as AppCompatActivity)
-        initToolbar(rootView = view, appCompatActivity = appCompatActivity)
-        initRecyclerView(rootView = view, appCompatActivity = appCompatActivity)
-        initSwipeRefreshLayout(rootView = view)
-        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
-//      rebind dialog
-        SelectionDialog.rebindActiveDialogListeners(fragmentManager = fragmentManager!!,
-                possibleDialogIdentifiers = CoinListSelectionDialogType.children(),
-                listenerFactory = ::getListenerForDialogType)
     }
 
     override fun onResume() {
@@ -154,6 +122,8 @@ class CoinsListFragment :
         Log.d(TAG, "CoinsListFragment#onDestroyView")
         recyclerView.clearOnScrollListeners()
         coinListPresenter.viewDestroyed()
+        //also notify the toolbar that the view is destroyed
+        optionsToolbar.getPresenter().viewDestroyed()
         Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }
@@ -169,6 +139,17 @@ class CoinsListFragment :
         super.onDetach()
         Log.d(TAG, "CoinsListFragment#onDetach")
     }
+    //end android lifecycle methods
+
+    //mvp view methods
+    override fun initialise() {
+        val view = view!!
+        val appCompatActivity = (activity as AppCompatActivity)
+        initToolbar(rootView = view, appCompatActivity = appCompatActivity)
+        initRecyclerView(rootView = view, appCompatActivity = appCompatActivity)
+        initSwipeRefreshLayout(rootView = view)
+        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
+    }
 
     override fun onBack(): Boolean {
         Log.d(TAG, "CoinsListFragment#onBack")
@@ -178,18 +159,19 @@ class CoinsListFragment :
     override fun getPresenter(): CoinsListContract.CoinsListPresenter {
         return coinListPresenter
     }
+    //end mvp view methods
 
-    //coin list view presenter
+    //coin list view methods
     override fun setListData(data: List<CryptoCoin>) {
         recyclerViewAdapter.coins = data
-        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.getSelectedCurrency(),
-                snapshot = coinListPresenter.getSelectedSnapshot())
+        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.displayCurrency,
+                snapshot = coinListPresenter.displaySnapshot)
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
     override fun refreshContent() {
-        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.getSelectedCurrency(),
-                snapshot = coinListPresenter.getSelectedSnapshot())
+        recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.displayCurrency,
+                snapshot = coinListPresenter.displaySnapshot)
         recyclerViewAdapter.notifyDataSetChanged()
     }
 
@@ -203,32 +185,8 @@ class CoinsListFragment :
                 })
     }
 
-    override fun showLoadingIndicator() {
-        Log.d("Cata", "Loading started")
-        swipeRefreshLayout.isRefreshing = true
-    }
-
-    override fun hideLoadingIndicator() {
-        Log.d("Cata", "Loading stopped")
-        swipeRefreshLayout.isRefreshing = false
-    }
-
     override fun scrollTo(scrollPosition: Int) {
         recyclerView.scrollToPosition(scrollPosition)
-    }
-
-    override fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>) {
-        SelectionDialog.showCancelable(dialogIdentifier = CoinListSelectionDialogType.ChangeCurrency,
-                fragmentManager = fragmentManager,
-                data = selectionItems,
-                listenerFactory = ::getListenerForDialogType)
-    }
-
-    override fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>) {
-        SelectionDialog.showCancelable(dialogIdentifier = CoinListSelectionDialogType.SelectSnapshot,
-                fragmentManager = fragmentManager,
-                data = selectionItems,
-                listenerFactory = ::getListenerForDialogType)
     }
 
     override fun setContentVisible(isVisible: Boolean) {
@@ -276,17 +234,27 @@ class CoinsListFragment :
 
     override fun getDisplayedItemPosition(): Int = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 
-    private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
-        val toolbar: Toolbar = rootView.findViewById(R.id.my_toolbar)
-        appCompatActivity.setSupportActionBar(toolbar)
+    //loading view methods
+    override fun showLoadingIndicator() {
+        Log.d("Cata", "Loading started")
+        swipeRefreshLayout.isRefreshing = true
+    }
 
-        //set the change currency button clicked listener
-        val changeCurrencyButton = toolbar.findViewById<ImageButton>(R.id.button_change_currency)
-        changeCurrencyButton?.setOnClickListener(onChangeCurrencyButtonClickedListener)
-        //set the change currency button clicked listener
-        val selectSnapshotButton = toolbar.findViewById<ImageButton>(R.id.button_snapshots)
-        selectSnapshotButton?.setOnClickListener(onSnapshotButtonClickedListener)
+    override fun hideLoadingIndicator() {
+        Log.d("Cata", "Loading stopped")
+        swipeRefreshLayout.isRefreshing = false
+    }
+    //end coin list & loading view methods
+
+    private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
         Log.d("Cata", "have toolbar!")
+        optionsToolbar = rootView.screen_toolbar
+        appCompatActivity.setSupportActionBar(optionsToolbar)
+        lifecycle.addObserver(optionsToolbar)
+        //also inject the toolbar with the same injector
+        injector.inject(optionsToolbar)
+        //notify the toolbar's presenter that its view is available
+        optionsToolbar.getPresenter().viewAvailable(optionsToolbar)
     }
 
     private fun initSwipeRefreshLayout(rootView: View) {
@@ -295,8 +263,8 @@ class CoinsListFragment :
     }
 
     private fun initRecyclerView(rootView: View, appCompatActivity: AppCompatActivity) {
-        val adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.getSelectedCurrency(),
-                snapshot = coinListPresenter.getSelectedSnapshot())
+        val adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.displayCurrency,
+                snapshot = coinListPresenter.displaySnapshot)
 
         recyclerView = rootView.recyclerview_coins_list
         recyclerViewAdapter = CoinListAdapter(context = appCompatActivity.baseContext,
@@ -316,12 +284,19 @@ class CoinsListFragment :
         })
     }
 
-    private fun getListenerForDialogType(dialogType: CoinListSelectionDialogType): OnItemSelectedListener {
-        return when (dialogType) {
-            CoinListSelectionDialogType.ChangeCurrency ->
-                { item -> coinListPresenter.displayCurrencyChanged(item) }
-            CoinListSelectionDialogType.SelectSnapshot ->
-                { item -> coinListPresenter.selectedSnapshotChanged(item) }
+    /**
+     * Factory for this Fragment
+     */
+    class Factory(private val activityComponent: ActivityComponent) : InjectorFragmentFactory<CoinListComponent>() {
+
+        override fun onCreateFragment(): InjectorFragment<CoinListComponent> {
+            val f = CoinsListFragment()
+            //do some other initializations, set arguments
+            return f
+        }
+
+        override fun onCreateInjector(): CoinListComponent {
+            return activityComponent.getCoinListComponent(CoinListModule())
         }
     }
 

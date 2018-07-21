@@ -39,7 +39,20 @@ android {
 
     compileOptions {
         targetCompatibility "$config.build_versions.targetCompatibility"
-        sourceCompatibility "$config.build_versions.targetCompatibility"
+        sourceCompatibility "$config.build_versions.sourceCompatibility"
+    }
+
+}
+
+//config java & kotlin compiler to support java8 features
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    sourceCompatibility = "$config.build_versions.sourceCompatibility"
+    targetCompatibility = "$config.build_versions.targetCompatibility"
+
+    kotlinOptions {
+        jvmTarget = "$config.build_versions.targetCompatibility"
+        apiVersion = "$config.build_versions.kotlin_api_version"
+        languageVersion = "$config.build_versions.kotlin_language_version"
     }
 }
 
@@ -74,6 +87,7 @@ dependencies {
     //viewmodel & extensions
     implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
     implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
+    implementation "android.arch.lifecycle:common-java8:$config.lib_versions.extensions"
     //room
     implementation "android.arch.persistence.room:runtime:$config.lib_versions.room"
     // RxJava support for Room

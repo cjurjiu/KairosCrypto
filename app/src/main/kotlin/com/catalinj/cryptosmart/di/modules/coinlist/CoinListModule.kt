@@ -6,6 +6,8 @@ import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.annotations.qualifiers.ActivityContext
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinListScope
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
+import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.presenter.CoinDisplayOptionsPresenter
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter.CoinsListPresenter
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.AndroidResourceDecoder
@@ -20,11 +22,21 @@ class CoinListModule {
 
     @Provides
     @CoinListScope
-    fun provideCoinsListPresenter(@ActivityContext context: Context,
-                                  userSettings: CryptoSmartUserSettings,
-                                  @CoinMarketCapApiQualifier coinsRepository: CoinsRepository): CoinsListContract.CoinsListPresenter {
-        return CoinsListPresenter(AndroidResourceDecoder(context = context),
+    fun provideCoinsListPresenter(@CoinMarketCapApiQualifier coinsRepository: CoinsRepository,
+                                  userSettings: CryptoSmartUserSettings): CoinsListContract.CoinsListPresenter {
+        return CoinsListPresenter(repository = coinsRepository,
+                userSettings = userSettings)
+    }
+
+    @Provides
+    @CoinListScope
+    fun provideCoinDisplayOptionsPresenter(@ActivityContext context: Context,
+                                           coinListPresenter: CoinsListContract.CoinsListPresenter,
+                                           userSettings: CryptoSmartUserSettings):
+            CoinsDisplayOptionsContract.CoinsDisplayOptionsPresenter {
+
+        return CoinDisplayOptionsPresenter(coinDisplayController = coinListPresenter,
                 userSettings = userSettings,
-                repository = coinsRepository)
+                resourceDecoder = AndroidResourceDecoder(context = context))
     }
 }

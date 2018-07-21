@@ -11,6 +11,8 @@ import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.pr
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.presenter.CoinsListPresenter
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.AndroidResourceDecoder
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.contract.ScrollToTopWidgetContract
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.presenter.ScrollToTopWidgetPresenter
 import dagger.Module
 import dagger.Provides
 
@@ -38,5 +40,11 @@ class CoinListModule {
         return CoinDisplayOptionsPresenter(coinDisplayController = coinListPresenter,
                 userSettings = userSettings,
                 resourceDecoder = AndroidResourceDecoder(context = context))
+    }
+
+    @Provides
+    @CoinListScope
+    fun provideScrollToTopWidgetPresenter(): ScrollToTopWidgetContract.ScrollToTopWidgetPresenter {
+        return ScrollToTopWidgetPresenter()
     }
 }

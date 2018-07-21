@@ -1,9 +1,5 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
@@ -25,6 +21,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterS
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
@@ -34,7 +31,8 @@ import javax.inject.Inject
 /**
  * Created by catalin on 14/05/2018.
  */
-class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContract.BookmarksView,
+class BookmarksFragment : InjectorFragment<BookmarksComponent>(),
+        BookmarksContract.BookmarksView,
         BackEventAwareComponent {
 
     override val name: String = TAG
@@ -43,13 +41,12 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     protected lateinit var bookmarksPresenter: BookmarksContract.BookmarksPresenter
     @Inject
     protected lateinit var imageHelper: ImageHelper<String>
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: BookmarksListAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var floatingScrollToTopButton: View
+    private lateinit var floatingScrollToTopButton: ScrollToTopFloatingActionButton
     private lateinit var optionsToolbar: CoinDisplayOptionsToolbar
-    private var hideAnimationInProgress: Boolean = false
-
 
     //android fragment lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,8 +81,10 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
         super.onDestroyView()
         recyclerView.clearOnScrollListeners()
         bookmarksPresenter.viewDestroyed()
-        //also notify the toolbar that the view is destroyed
+        //notify the toolbar that the view is destroyed
         optionsToolbar.getPresenter().viewDestroyed()
+        //notify the floating scroll-to-top button that the view is destroyed
+        floatingScrollToTopButton.getPresenter().viewDestroyed()
         Log.d(TAG, "$TAG#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }
@@ -95,10 +94,10 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     override fun initialise() {
         Log.d("Cata", "$TAG#initialise")
         val view = view!!
-        initToolbar(view, activity as AppCompatActivity)
-        initRecyclerView(view)
-        initSwipeRefreshLayout(view)
-        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
+        initToolbar(view = view, appCompatActivity = activity as AppCompatActivity)
+        initRecyclerView(view = view)
+        initSwipeRefreshLayout(view = view)
+        initFloatingActionButton(view = view)
     }
 
     override fun getPresenter(): BookmarksContract.BookmarksPresenter {
@@ -134,54 +133,9 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
                 })
     }
 
-    override fun scrollTo(scrollPosition: Int) {
-        recyclerView.scrollToPosition(scrollPosition)
-    }
-
     override fun setContentVisible(isVisible: Boolean) {
         recyclerView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
-
-    override fun isScrollToTopVisible(): Boolean = floatingScrollToTopButton.visibility == View.VISIBLE
-
-    override fun revealScrollToTopButton() {
-        val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_reveal) as AnimatorSet
-        floatingScrollToTopButton.visibility = View.VISIBLE
-        set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                floatingScrollToTopButton.setOnClickListener {
-                    bookmarksPresenter.scrollToTopPressed()
-                }
-                set.removeAllListeners()
-            }
-        })
-        set.setTarget(floatingScrollToTopButton)
-        set.start()
-    }
-
-    override fun hideScrollToTopButton() {
-        if (hideAnimationInProgress) {
-            //guard to not start multiple hide animations...
-            return
-        }
-        this.hideAnimationInProgress = true
-        val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_hide) as AnimatorSet
-        set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
-                floatingScrollToTopButton.setOnClickListener(null)
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                floatingScrollToTopButton.visibility = View.GONE
-                hideAnimationInProgress = false
-                set.removeAllListeners()
-            }
-        })
-        set.setTarget(floatingScrollToTopButton)
-        set.start()
-    }
-
-    override fun getDisplayedItemPosition(): Int = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 
     //loading view methods
     override fun showLoadingIndicator() {
@@ -213,25 +167,29 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
             bookmarksPresenter.coinSelected(it)
         }
         recyclerView.adapter = recyclerViewAdapter
-
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(scrolledRecyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                bookmarksPresenter.viewScrolled(recyclerView.computeVerticalScrollOffset(),
-                        recyclerView.computeVerticalScrollRange())
-            }
-        })
     }
 
-    private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
+    private fun initToolbar(view: View, appCompatActivity: AppCompatActivity) {
         Log.d("Cata", "have toolbar!")
-        optionsToolbar = rootView.screen_toolbar
+        optionsToolbar = view.screen_toolbar
         appCompatActivity.setSupportActionBar(optionsToolbar)
         lifecycle.addObserver(optionsToolbar)
         //also inject the toolbar with the same injector
         injector.inject(optionsToolbar)
         //notify the toolbar's presenter that its view is available
         optionsToolbar.getPresenter().viewAvailable(optionsToolbar)
+    }
+
+    private fun initFloatingActionButton(view: View) {
+        floatingScrollToTopButton = view.button_floating_scroll_to_top
+        injector.inject(floatingScrollToTopButton)
+        //call before notifying the presenter that the view is available
+        floatingScrollToTopButton.setItemPositionThreshold(value = SCROLL_TO_TOP_LIST_THRESHOLD)
+        floatingScrollToTopButton.setupWithViewRecyclerView(recyclerView = recyclerView)
+        //finally tell the presenter that the view is ready to be used
+        floatingScrollToTopButton.getPresenter().viewAvailable(floatingScrollToTopButton)
+        //add the floating button as a lifecycle observer
+        lifecycle.addObserver(floatingScrollToTopButton)
     }
 
     /**
@@ -250,5 +208,6 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
 
     companion object {
         const val TAG = "BookmarksView"
+        private const val SCROLL_TO_TOP_LIST_THRESHOLD = 10
     }
 }

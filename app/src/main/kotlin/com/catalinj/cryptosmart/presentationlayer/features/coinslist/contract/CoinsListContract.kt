@@ -23,8 +23,6 @@ interface CoinsListContract {
         fun userPullToRefresh()
 
         fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int)
-
-        fun scrollToTopPressed()
     }
 
     interface CoinsListView : MvpView<CoinsListPresenter, CoinsListView>, LoadingView {
@@ -36,16 +34,5 @@ interface CoinsListContract {
         fun showError(errorCode: ErrorCode, retryAction: () -> Unit)
 
         fun setContentVisible(isVisible: Boolean)
-
-        fun scrollTo(scrollPosition: Int)
-
-        fun isScrollToTopVisible(): Boolean
-
-        fun revealScrollToTopButton()
-
-        fun hideScrollToTopButton()
-
-        fun getDisplayedItemPosition(): Int
-
     }
 }

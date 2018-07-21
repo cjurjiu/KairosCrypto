@@ -21,10 +21,6 @@ interface BookmarksContract {
         fun coinSelected(cryptoCoin: BookmarksCoin)
 
         fun userPullToRefresh()
-
-        fun scrollToTopPressed()
-
-        fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int)
     }
 
     interface BookmarksView : MvpView<BookmarksPresenter, BookmarksView>, LoadingView {
@@ -35,16 +31,6 @@ interface BookmarksContract {
 
         fun showError(errorCode: ErrorCode, retryAction: () -> Unit)
 
-        fun scrollTo(scrollPosition: Int)
-
         fun setContentVisible(isVisible: Boolean)
-
-        fun isScrollToTopVisible(): Boolean
-
-        fun revealScrollToTopButton()
-
-        fun hideScrollToTopButton()
-
-        fun getDisplayedItemPosition(): Int
     }
 }

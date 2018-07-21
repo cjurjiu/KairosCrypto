@@ -1,9 +1,5 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.view
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -27,6 +23,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwa
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
@@ -48,23 +45,15 @@ class CoinsListFragment :
 
     @Inject
     protected lateinit var coinListPresenter: CoinsListContract.CoinsListPresenter
-
     @Inject
     protected lateinit var imageHelper: ImageHelper<String>
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-
     private lateinit var recyclerView: RecyclerView
-
     private lateinit var recyclerViewAdapter: CoinListAdapter
-
     private lateinit var recyclerViewLayoutManager: LinearLayoutManager
-
-    private lateinit var floatingScrollToTopButton: View
-
+    private lateinit var floatingScrollToTopButton: ScrollToTopFloatingActionButton
     private lateinit var optionsToolbar: CoinDisplayOptionsToolbar
-
-    private var hideAnimationInProgress: Boolean = false
 
     //android lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,8 +111,10 @@ class CoinsListFragment :
         Log.d(TAG, "CoinsListFragment#onDestroyView")
         recyclerView.clearOnScrollListeners()
         coinListPresenter.viewDestroyed()
-        //also notify the toolbar that the view is destroyed
+        //notify the toolbar that the view is destroyed
         optionsToolbar.getPresenter().viewDestroyed()
+        //notify the floating scroll-to-top button that the view is destroyed
+        floatingScrollToTopButton.getPresenter().viewDestroyed()
         Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
                 "a2:${activity?.isChangingConfigurations}")
     }
@@ -145,10 +136,10 @@ class CoinsListFragment :
     override fun initialise() {
         val view = view!!
         val appCompatActivity = (activity as AppCompatActivity)
-        initToolbar(rootView = view, appCompatActivity = appCompatActivity)
-        initRecyclerView(rootView = view, appCompatActivity = appCompatActivity)
-        initSwipeRefreshLayout(rootView = view)
-        this.floatingScrollToTopButton = view.button_floating_scroll_to_top
+        initToolbar(view = view, appCompatActivity = appCompatActivity)
+        initRecyclerView(view = view, appCompatActivity = appCompatActivity)
+        initSwipeRefreshLayout(view = view)
+        initFloatingActionButton(view = view)
     }
 
     override fun onBack(): Boolean {
@@ -185,54 +176,9 @@ class CoinsListFragment :
                 })
     }
 
-    override fun scrollTo(scrollPosition: Int) {
-        recyclerView.scrollToPosition(scrollPosition)
-    }
-
     override fun setContentVisible(isVisible: Boolean) {
         recyclerView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
-
-    override fun isScrollToTopVisible(): Boolean = floatingScrollToTopButton.visibility == View.VISIBLE
-
-    override fun revealScrollToTopButton() {
-        val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_reveal) as AnimatorSet
-        floatingScrollToTopButton.visibility = View.VISIBLE
-        set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                floatingScrollToTopButton.setOnClickListener {
-                    coinListPresenter.scrollToTopPressed()
-                }
-                set.removeAllListeners()
-            }
-        })
-        set.setTarget(floatingScrollToTopButton)
-        set.start()
-    }
-
-    override fun hideScrollToTopButton() {
-        if (hideAnimationInProgress) {
-            //guard to not start multiple hide animations...
-            return
-        }
-        this.hideAnimationInProgress = true
-        val set = AnimatorInflater.loadAnimator(context, R.animator.animator_floating_action_button_hide) as AnimatorSet
-        set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
-                floatingScrollToTopButton.setOnClickListener(null)
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                floatingScrollToTopButton.visibility = View.GONE
-                hideAnimationInProgress = false
-                set.removeAllListeners()
-            }
-        })
-        set.setTarget(floatingScrollToTopButton)
-        set.start()
-    }
-
-    override fun getDisplayedItemPosition(): Int = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 
     //loading view methods
     override fun showLoadingIndicator() {
@@ -246,9 +192,9 @@ class CoinsListFragment :
     }
     //end coin list & loading view methods
 
-    private fun initToolbar(rootView: View, appCompatActivity: AppCompatActivity) {
+    private fun initToolbar(view: View, appCompatActivity: AppCompatActivity) {
         Log.d("Cata", "have toolbar!")
-        optionsToolbar = rootView.screen_toolbar
+        optionsToolbar = view.screen_toolbar
         appCompatActivity.setSupportActionBar(optionsToolbar)
         lifecycle.addObserver(optionsToolbar)
         //also inject the toolbar with the same injector
@@ -257,16 +203,16 @@ class CoinsListFragment :
         optionsToolbar.getPresenter().viewAvailable(optionsToolbar)
     }
 
-    private fun initSwipeRefreshLayout(rootView: View) {
-        swipeRefreshLayout = rootView.swiperefreshlayout_coin_lists
+    private fun initSwipeRefreshLayout(view: View) {
+        swipeRefreshLayout = view.swiperefreshlayout_coin_lists
         swipeRefreshLayout.setOnRefreshListener { coinListPresenter.userPullToRefresh() }
     }
 
-    private fun initRecyclerView(rootView: View, appCompatActivity: AppCompatActivity) {
+    private fun initRecyclerView(view: View, appCompatActivity: AppCompatActivity) {
         val adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.displayCurrency,
                 snapshot = coinListPresenter.displaySnapshot)
 
-        recyclerView = rootView.recyclerview_coins_list
+        recyclerView = view.recyclerview_coins_list
         recyclerViewAdapter = CoinListAdapter(context = appCompatActivity.baseContext,
                 coins = emptyList(),
                 adapterSettings = adapterSettings,
@@ -282,6 +228,18 @@ class CoinsListFragment :
                         recyclerView.computeVerticalScrollRange())
             }
         })
+    }
+
+    private fun initFloatingActionButton(view: View) {
+        floatingScrollToTopButton = view.button_floating_scroll_to_top
+        injector.inject(floatingScrollToTopButton)
+        //call before notifying the presenter that the view is available
+        floatingScrollToTopButton.setItemPositionThreshold(value = SCROLL_TO_TOP_LIST_THRESHOLD)
+        floatingScrollToTopButton.setupWithViewRecyclerView(recyclerView = recyclerView)
+        //finally tell the presenter that the view is ready to be used
+        floatingScrollToTopButton.getPresenter().viewAvailable(floatingScrollToTopButton)
+        //add the floating button as a lifecycle observer
+        lifecycle.addObserver(floatingScrollToTopButton)
     }
 
     /**
@@ -302,5 +260,6 @@ class CoinsListFragment :
 
     companion object {
         const val TAG = "CoinsListFragment"
+        private const val SCROLL_TO_TOP_LIST_THRESHOLD = 30
     }
 }

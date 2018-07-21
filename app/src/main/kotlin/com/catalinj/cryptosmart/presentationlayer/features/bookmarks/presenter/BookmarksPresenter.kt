@@ -110,22 +110,6 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
         refreshBookmarks()
         bookmarksView?.hideLoadingIndicator()
     }
-
-    override fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int) {
-        //scroll to top button hide/reveal logic
-        val displayedItemPosition = (bookmarksView?.getDisplayedItemPosition() ?: 0)
-        val scrollToTopVisible = bookmarksView?.isScrollToTopVisible() ?: false
-        if (displayedItemPosition > SCROLL_TO_TOP_LIST_THRESHOLD && !scrollToTopVisible) {
-            bookmarksView?.revealScrollToTopButton()
-        } else if (displayedItemPosition < SCROLL_TO_TOP_LIST_THRESHOLD && scrollToTopVisible) {
-            bookmarksView?.hideScrollToTopButton()
-        }
-    }
-
-    override fun scrollToTopPressed() {
-        bookmarksView?.scrollTo(0)
-        bookmarksView?.hideScrollToTopButton()
-    }
     //end bookmarks presenter logic
 
     private fun setViewData(data: List<BookmarksCoin>) {
@@ -195,6 +179,5 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
 
     companion object {
         const val TAG = "BookmarksPresenter"
-        private const val SCROLL_TO_TOP_LIST_THRESHOLD = 10
     }
 }

@@ -13,6 +13,8 @@ import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter.B
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.presenter.CoinDisplayOptionsPresenter
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.AndroidResourceDecoder
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.contract.ScrollToTopWidgetContract
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.presenter.ScrollToTopWidgetPresenter
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -51,5 +53,11 @@ class BookmarksModule {
 
         return CoinMarketCapBookmarksRepositoryConfigurator(database = database, retrofit = retrofit)
                 .configure()
+    }
+
+    @Provides
+    @BookmarksScope
+    fun provideScrollToTopWidgetPresenter(): ScrollToTopWidgetContract.ScrollToTopWidgetPresenter {
+        return ScrollToTopWidgetPresenter()
     }
 }

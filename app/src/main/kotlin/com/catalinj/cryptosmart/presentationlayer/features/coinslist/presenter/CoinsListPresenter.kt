@@ -115,20 +115,6 @@ class CoinsListPresenter(private val repository: CoinsRepository,
             waitForLoad = true
             fetchMoreCoins()
         }
-
-        //scroll to top button hide/reveal logic
-        val displayedItemPosition = (view?.getDisplayedItemPosition() ?: 0)
-        val scrollToTopVisible = view?.isScrollToTopVisible() ?: false
-        if (displayedItemPosition > SCROLL_TO_TOP_LIST_THRESHOLD && !scrollToTopVisible) {
-            view?.revealScrollToTopButton()
-        } else if (displayedItemPosition < SCROLL_TO_TOP_LIST_THRESHOLD && scrollToTopVisible) {
-            view?.hideScrollToTopButton()
-        }
-    }
-
-    override fun scrollToTopPressed() {
-        view?.scrollTo(0)
-        view?.hideScrollToTopButton()
     }
     //end coin list presenter methods
 
@@ -225,6 +211,5 @@ class CoinsListPresenter(private val repository: CoinsRepository,
 
     private companion object {
         private const val COIN_FETCH_BATCH_SIZE = 100
-        private const val SCROLL_TO_TOP_LIST_THRESHOLD = 30
     }
 }

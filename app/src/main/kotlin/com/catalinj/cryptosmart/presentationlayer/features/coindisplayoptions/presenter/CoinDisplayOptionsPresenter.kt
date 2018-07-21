@@ -7,7 +7,7 @@ import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.ResourceDecoder
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.SelectionItemsResource
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
 
 class CoinDisplayOptionsPresenter(private val coinDisplayController: CoinsDisplayOptionsContract.CoinDisplayController,
                                   private val userSettings: CryptoSmartUserSettings,

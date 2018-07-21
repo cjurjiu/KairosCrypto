@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model
+package com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model
 
 import com.catalinjurjiu.common.NamedComponent
 

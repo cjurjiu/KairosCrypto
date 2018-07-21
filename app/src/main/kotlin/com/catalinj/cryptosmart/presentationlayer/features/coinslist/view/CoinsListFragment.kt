@@ -27,7 +27,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwa
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.CoinsListContract
-import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
 import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper

@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.features.snackbar
+package com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar
 
 import android.animation.Animator
 import android.animation.AnimatorInflater

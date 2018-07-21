@@ -4,7 +4,7 @@ import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
 
 /**
  * Created by catalinj on 21.01.2018.

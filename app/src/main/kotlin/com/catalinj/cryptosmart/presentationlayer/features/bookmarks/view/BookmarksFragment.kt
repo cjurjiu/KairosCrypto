@@ -25,7 +25,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterS
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
-import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_bookmarks.view.*

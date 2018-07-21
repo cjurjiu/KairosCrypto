@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view
+package com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.view
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -14,10 +14,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.ParcelableSelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toParcelableSelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.toSelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.ParcelableSelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.toParcelableSelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.toSelectionItem
 import kotlinx.android.synthetic.main.layout_selection_dialog.view.*
 import kotlinx.android.synthetic.main.layout_simple_list_item.view.*
 import kotlinx.android.synthetic.main.mergeable_layout_separator.view.*

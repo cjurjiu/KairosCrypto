@@ -19,7 +19,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.extension.toMessageResI
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
-import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_info.view.*
 import javax.inject.Inject

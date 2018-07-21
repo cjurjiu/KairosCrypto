@@ -1,6 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.common.decoder
 
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
 
 /**
  * Created by catalin on 22/04/2018.

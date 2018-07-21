@@ -1,6 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coinslist.view
 
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.view.SelectionDialog
 
 sealed class CoinListSelectionDialogType(typeName: String) : SelectionDialog.SelectionDialogIdentifier(identifier = typeName) {
 

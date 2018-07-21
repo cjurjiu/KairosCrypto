@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model
+package com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model
 
 import android.os.Parcel
 import android.os.Parcelable

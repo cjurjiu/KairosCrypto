@@ -12,9 +12,9 @@ import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.presentationlayer.common.extension.getSupportActivity
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coinslist.view.CoinListSelectionDialogType
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.OnItemSelectedListener
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.view.OnItemSelectedListener
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.view.SelectionDialog
 import javax.inject.Inject
 
 class CoinDisplayOptionsToolbar @JvmOverloads constructor(context: Context?,

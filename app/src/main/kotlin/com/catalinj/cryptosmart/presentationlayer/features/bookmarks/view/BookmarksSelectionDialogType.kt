@@ -1,6 +1,6 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.view
 
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.view.SelectionDialog
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.view.SelectionDialog
 
 sealed class BookmarksSelectionDialogType(typeName: String) : SelectionDialog.SelectionDialogIdentifier(identifier = typeName) {
 

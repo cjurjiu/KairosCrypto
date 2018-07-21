@@ -8,7 +8,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.decoder.ResourceDecoder
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.SelectionItemsResource
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.StringArrayResource
 import com.catalinj.cryptosmart.presentationlayer.common.decoder.StringResource
-import com.catalinj.cryptosmart.presentationlayer.features.selectiondialog.model.SelectionItem
+import com.catalinj.cryptosmart.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
 
 class AndroidResourceDecoder(context: Context) : ResourceDecoder {
 

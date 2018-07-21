@@ -143,9 +143,9 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(), BookmarksContr
     }
 
     override fun showError(errorCode: ErrorCode, retryAction: () -> Unit) {
-        SnackBarWrapper.showSnackBar(view = view!!,
-                infoMessage = errorCode.toMessageResId(),
-                actionButtonMessage = R.string.cta_try_again,
+        SnackBarWrapper.showSnackBarWithAction(view = view!!,
+                infoMessageRes = errorCode.toMessageResId(),
+                actionMessageRes = R.string.cta_try_again,
                 clickListener = View.OnClickListener {
                     //invoke the retry action
                     retryAction.invoke()

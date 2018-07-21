@@ -2,6 +2,7 @@ package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscree
 
 import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
+import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
@@ -72,11 +73,7 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
         if (data != null) {
             view?.setCoinInfo(data)
         } else {
-            coinsRepository.fetchCoinDetails(coinId = coinId,
-                    valueRepresentationsArray = arrayOf(primaryCurrency, CurrencyRepresentation.BTC),
-                    errorHandler = Consumer {
-                        Log.d("Cata", "CoinInfoPresenter: Error fetching coin: $it")
-                    })
+            fetchCoinDetails()
         }
     }
 
@@ -110,12 +107,17 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
     }
 
     override fun handleRefresh(): Boolean {
+        fetchCoinDetails()
+        return true
+    }
+
+    private fun fetchCoinDetails() {
         coinsRepository.fetchCoinDetails(coinId = coinId,
                 valueRepresentationsArray = arrayOf(primaryCurrency, CurrencyRepresentation.BTC),
                 errorHandler = Consumer {
                     Log.d("Cata", "CoinInfoPresenter: Error fetching coin: $it")
+                    view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryHandler = ::fetchCoinDetails)
                 })
-        return true
     }
 
     companion object {

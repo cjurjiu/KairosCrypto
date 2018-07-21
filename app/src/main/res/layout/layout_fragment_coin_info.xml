@@ -1,260 +1,265 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.view.CoinInfoFragment">
 
-    <LinearLayout
-        android:id="@+id/container_period_change_coin_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        android:layout_marginTop="@dimen/min_margin_from_screen_edge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_select_period_coin_info_24H"
-            style="@style/CryptoSmart.Style.Button.Flat.Small"
+        <LinearLayout
+            android:id="@+id/container_period_change_coin_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_period_24h" />
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            android:layout_marginTop="@dimen/min_margin_from_screen_edge"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_select_period_coin_info_7D"
-            style="@style/CryptoSmart.Style.Button.Flat.Small.Selected"
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_select_period_coin_info_24H"
+                style="@style/CryptoSmart.Style.Button.Flat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_period_24h" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_select_period_coin_info_7D"
+                style="@style/CryptoSmart.Style.Button.Flat.Small.Selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_period_7d" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_select_period_coin_info_1M"
+                style="@style/CryptoSmart.Style.Button.Flat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_period_1m" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_select_period_coin_info_3M"
+                style="@style/CryptoSmart.Style.Button.Flat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_period_3m" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_unit_value_heading"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_period_7d" />
+            android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+            android:layout_marginTop="8dp"
+            android:text="@string/coin_info_string_value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container_period_change_coin_info" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_select_period_coin_info_1M"
-            style="@style/CryptoSmart.Style.Button.Flat.Small"
+        <TextView
+            android:id="@+id/text_unit_time_period_change"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_period_1m" />
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            android:textColor="?attr/colorAccent"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Change over 7D" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_select_period_coin_info_3M"
-            style="@style/CryptoSmart.Style.Button.Flat.Small"
+        <TextView
+            android:id="@+id/text_unit_value_primary_currency"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_period_3m" />
-    </LinearLayout>
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/text_unit_value_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_unit_value_heading"
+            tools:text="$6.51 USD" />
 
-    <TextView
-        android:id="@+id/text_unit_value_heading"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
-        android:layout_marginTop="8dp"
-        android:text="@string/coin_info_string_value"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_period_change_coin_info" />
+        <TextView
+            android:id="@+id/text_percent_value_change_primary_currency"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_primary_currency"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="-15.94%" />
 
-    <TextView
-        android:id="@+id/text_unit_time_period_change"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        android:textColor="?attr/colorAccent"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_heading"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Change over 7D" />
+        <TextView
+            android:id="@+id/text_unit_value_btc"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/text_unit_value_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_unit_value_primary_currency"
+            tools:text="0.00082371 BTC" />
 
-    <TextView
-        android:id="@+id/text_unit_value_primary_currency"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@id/text_unit_value_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_unit_value_heading"
-        tools:text="$6.51 USD" />
+        <TextView
+            android:id="@+id/text_percent_value_change_btc"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_btc"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="-8.5%" />
 
-    <TextView
-        android:id="@+id/text_percent_value_change_primary_currency"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_primary_currency"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="-15.94%" />
+        <TextView
+            android:id="@+id/text_market_cap_heading"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+            android:layout_marginTop="8dp"
+            android:text="@string/coin_info_string_market_cap"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_unit_value_btc" />
 
-    <TextView
-        android:id="@+id/text_unit_value_btc"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@id/text_unit_value_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_unit_value_primary_currency"
-        tools:text="0.00082371 BTC" />
+        <TextView
+            android:id="@+id/text_market_cap_primary_currency"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/text_market_cap_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_market_cap_heading"
+            tools:text="$867,590,371 USD" />
 
-    <TextView
-        android:id="@+id/text_percent_value_change_btc"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_unit_value_btc"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="-8.5%" />
+        <TextView
+            android:id="@+id/text_market_cap_btc"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/text_market_cap_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_market_cap_primary_currency"
+            tools:text="109,758 BTC" />
 
-    <TextView
-        android:id="@+id/text_market_cap_heading"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
-        android:layout_marginTop="8dp"
-        android:text="@string/coin_info_string_market_cap"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_unit_value_btc" />
+        <TextView
+            android:id="@+id/text_volume_heading"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+            android:layout_marginTop="8dp"
+            android:text="@string/coin_info_string_volume"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_market_cap_btc" />
 
-    <TextView
-        android:id="@+id/text_market_cap_primary_currency"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@id/text_market_cap_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_market_cap_heading"
-        tools:text="$867,590,371 USD" />
+        <TextView
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/time_period_24h_wrapped"
+            android:textColor="?attr/colorAccent"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_volume_heading"
+            app:layout_constraintStart_toEndOf="@id/text_volume_heading" />
 
-    <TextView
-        android:id="@+id/text_market_cap_btc"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@id/text_market_cap_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_market_cap_primary_currency"
-        tools:text="109,758 BTC" />
+        <TextView
+            android:id="@+id/text_volume_primary_currency"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/text_volume_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_volume_heading"
+            tools:text="$26,392,300 USD" />
 
-    <TextView
-        android:id="@+id/text_volume_heading"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
-        android:layout_marginTop="8dp"
-        android:text="@string/coin_info_string_volume"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_market_cap_btc" />
+        <TextView
+            android:id="@+id/text_volume_btc"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/text_volume_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_volume_primary_currency"
+            tools:text="3,339 BTC" />
 
-    <TextView
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="@string/time_period_24h_wrapped"
-        android:textColor="?attr/colorAccent"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_volume_heading"
-        app:layout_constraintStart_toEndOf="@id/text_volume_heading" />
+        <TextView
+            android:id="@+id/text_supply_heading"
+            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_margin_from_screen_edge"
+            android:layout_marginTop="8dp"
+            android:text="@string/coin_info_string_supply"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_volume_btc" />
 
-    <TextView
-        android:id="@+id/text_volume_primary_currency"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@id/text_volume_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_volume_heading"
-        tools:text="$26,392,300 USD" />
+        <TextView
+            android:id="@+id/text_circulating_supply"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/coin_info_string_circulating_supply"
+            app:layout_constraintStart_toStartOf="@id/text_supply_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_supply_heading" />
 
-    <TextView
-        android:id="@+id/text_volume_btc"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@id/text_volume_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_volume_primary_currency"
-        tools:text="3,339 BTC" />
+        <TextView
+            android:id="@+id/text_circulating_supply_value"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_circulating_supply"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="17,008,162 BTC" />
 
-    <TextView
-        android:id="@+id/text_supply_heading"
-        style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin_from_screen_edge"
-        android:layout_marginTop="8dp"
-        android:text="@string/coin_info_string_supply"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_volume_btc" />
+        <TextView
+            android:id="@+id/text_currently_available_supply"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/coin_info_string_available_supply"
+            app:layout_constraintStart_toStartOf="@id/text_supply_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_circulating_supply" />
 
-    <TextView
-        android:id="@+id/text_circulating_supply"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/coin_info_string_circulating_supply"
-        app:layout_constraintStart_toStartOf="@id/text_supply_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_supply_heading" />
+        <TextView
+            android:id="@+id/text_currently_available_supply_value"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_currently_available_supply"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="17,008,162 BTC" />
 
-    <TextView
-        android:id="@+id/text_circulating_supply_value"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_circulating_supply"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="17,008,162 BTC" />
+        <TextView
+            android:id="@+id/text_max_possible_supply"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/coin_info_string_max_possible_supply"
+            app:layout_constraintStart_toStartOf="@id/text_supply_heading"
+            app:layout_constraintTop_toBottomOf="@id/text_currently_available_supply" />
 
-    <TextView
-        android:id="@+id/text_currently_available_supply"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/coin_info_string_available_supply"
-        app:layout_constraintStart_toStartOf="@id/text_supply_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_circulating_supply" />
+        <TextView
+            android:id="@+id/text_max_possible_supply_value"
+            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_max_possible_supply"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="21,000,000 BTC" />
 
-    <TextView
-        android:id="@+id/text_currently_available_supply_value"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_currently_available_supply"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="17,008,162 BTC" />
-
-    <TextView
-        android:id="@+id/text_max_possible_supply"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/coin_info_string_max_possible_supply"
-        app:layout_constraintStart_toStartOf="@id/text_supply_heading"
-        app:layout_constraintTop_toBottomOf="@id/text_currently_available_supply" />
-
-    <TextView
-        android:id="@+id/text_max_possible_supply_value"
-        style="@style/CryptoSmart.Style.Text.Muli.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_max_possible_supply"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="21,000,000 BTC" />
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

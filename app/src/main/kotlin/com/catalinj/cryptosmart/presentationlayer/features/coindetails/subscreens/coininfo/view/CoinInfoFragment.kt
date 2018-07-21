@@ -9,13 +9,17 @@ import android.widget.Button
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
+import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.di.components.CoinDetailsComponent
 import com.catalinj.cryptosmart.di.components.CoinInfoComponent
 import com.catalinj.cryptosmart.di.modules.coindetails.subscreens.CoinInfoModule
 import com.catalinj.cryptosmart.presentationlayer.common.extension.displayPercent
+import com.catalinj.cryptosmart.presentationlayer.common.extension.toMessageResId
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
+import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
+import com.catalinj.cryptosmart.presentationlayer.features.snackbar.SnackBarWrapper
 import com.catalinjurjiu.wheelbarrow.InjectorFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_info.view.*
 import javax.inject.Inject
@@ -119,6 +123,16 @@ class CoinInfoFragment : InjectorFragment<CoinInfoComponent>(),
         return coinInfoPresenter
     }
 
+    override fun onStart() {
+        super.onStart()
+        coinInfoPresenter.startPresenting()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coinInfoPresenter.stopPresenting()
+    }
+
     override fun setCoinInfo(coinDetails: CryptoCoinDetails) {
 
         if (coinDetails.priceData.isEmpty()) {
@@ -159,14 +173,15 @@ class CoinInfoFragment : InjectorFragment<CoinInfoComponent>(),
         maxPossibleSupplyValueTextView.text = CurrencyFormatter.formatCrypto(value = coinDetails.maxSupply, symbol = coinDetails.symbol)
     }
 
-    override fun onStart() {
-        super.onStart()
-        coinInfoPresenter.startPresenting()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        coinInfoPresenter.stopPresenting()
+    override fun showError(errorCode: ErrorCode, retryHandler: () -> Unit) {
+        Executors.mainThread().execute {
+            SnackBarWrapper.showSnackBarWithAction(view = view!!,
+                    infoMessageRes = errorCode.toMessageResId(),
+                    actionMessageRes = R.string.cta_try_again,
+                    clickListener = View.OnClickListener {
+                        retryHandler.invoke()
+                    })
+        }
     }
 
     companion object {

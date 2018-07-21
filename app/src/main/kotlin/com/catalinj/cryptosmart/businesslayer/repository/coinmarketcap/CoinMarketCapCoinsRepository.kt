@@ -138,7 +138,8 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
             //was successful, emit false otherwise.
             Log.d("RxJ", "repo fetchCoinDetails reduce currentResult: $currentResult, newRequestState class:${newRequestState::class}")
             return@reduce (currentResult and (newRequestState is RequestState.Idle.Finished.Success<*>))
-        }.subscribe { success ->
+        }.subscribe({ success ->
+            //onNext
             Log.d("RxJ", "received coin details response!!")
 
             if (success) {
@@ -161,7 +162,7 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
                 }
             } else {
                 requestsList.firstOrNull { request ->
-                    if (request.errors.isEmpty.toFuture().get()) {
+                    if (!request.errors.isEmpty.toFuture().get()) {
                         //if error stream is not empty, notify subscribe the error handler to it.
                         request.errors.subscribe(errorHandler)
                         return@firstOrNull true
@@ -170,7 +171,9 @@ class CoinMarketCapCoinsRepository(private val cryptoSmartDb: CryptoSmartDb,
                     }
                 }
             }
-        }
+        }, {
+            errorHandler.accept(it)
+        })
 
         //execute requests
         requestsList.forEach {

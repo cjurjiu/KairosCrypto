@@ -60,7 +60,7 @@ class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData,
         when (activeView) {
             is CoinInfoContract.CoinInfoView ->
                 childCoinInfoPresenter?.handleRefresh()
-            is CoinMarketsContract.CoinMarketsPresenter ->
+            is CoinMarketsContract.CoinMarketsView ->
                 childCoinMarketsPresenter?.handleRefresh()
             else -> Log.d(TAG, "Received unknown view")
         }

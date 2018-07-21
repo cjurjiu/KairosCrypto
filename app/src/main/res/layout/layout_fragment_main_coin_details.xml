@@ -1,105 +1,111 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coin_details_swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentationlayer.features.coindetails.main.view.CoinDetailsFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/coin_details_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_coin_details"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/image_coin_details_header_container"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/min_margin_from_screen_edge"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_coin_details">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_coin_details_coin_logo"
-                android:layout_width="56dp"
-                android:layout_height="56dp" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_coin_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/image_coin_details_header_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_coin_details_coin_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
-                    tools:text="Nano" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_coin_details_coin_symbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_coin_details_coin_name"
-                    android:textAllCaps="true"
-                    android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small"
-                    tools:text="Nano" />
+                android:layout_margin="@dimen/min_margin_from_screen_edge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_coin_details">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_coin_details_trend"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_toEndOf="@+id/text_coin_details_coin_name"
-                    tools:src="@drawable/ic_vector_trending_up_black_24dp" />
+                    android:id="@+id/image_coin_details_coin_logo"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp" />
 
-                <ToggleButton
-                    android:id="@+id/button_coin_details_bookmarks_toggle"
-                    style="@style/CryptoSmart.Style.Button.VectorDrawable"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="-29dp"
-                    android:layout_marginTop="-12dp"
-                    android:button="@drawable/bg_button_bookmark_toggle"
-                    android:textOff=""
-                    android:textOn=""
-                    android:visibility="invisible"
-                    tools:visibility="visible" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp">
 
-            </RelativeLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_coin_details_coin_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
+                        tools:text="Nano" />
 
-        </LinearLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_coin_details_coin_symbol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text_coin_details_coin_name"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small"
+                        tools:text="Nano" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_coin_details"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_coin_details_header_container">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_coin_details_trend"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toEndOf="@+id/text_coin_details_coin_name"
+                        tools:src="@drawable/ic_vector_trending_up_black_24dp" />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout_coin_details"
-                style="@style/CryptoSmart.Style.TabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top" />
-        </android.support.v4.view.ViewPager>
-    </android.support.constraint.ConstraintLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+                    <ToggleButton
+                        android:id="@+id/button_coin_details_bookmarks_toggle"
+                        style="@style/CryptoSmart.Style.Button.VectorDrawable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="-29dp"
+                        android:layout_marginTop="-12dp"
+                        android:button="@drawable/bg_button_bookmark_toggle"
+                        android:textOff=""
+                        android:textOn=""
+                        android:visibility="invisible"
+                        tools:visibility="visible" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager_coin_details"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_coin_details_header_container">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_layout_coin_details"
+                    style="@style/CryptoSmart.Style.TabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top" />
+            </android.support.v4.view.ViewPager>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</android.support.design.widget.CoordinatorLayout>

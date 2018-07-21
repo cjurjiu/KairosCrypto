@@ -1,6 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract
 
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinDetails
+import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
@@ -23,5 +24,7 @@ interface CoinInfoContract {
     interface CoinInfoView : MvpView<CoinInfoPresenter, CoinInfoView> {
 
         fun setCoinInfo(coinDetails: CryptoCoinDetails)
+
+        fun showError(errorCode: ErrorCode, retryHandler: () -> Unit)
     }
 }

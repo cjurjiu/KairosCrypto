@@ -22,16 +22,44 @@ class SnackBarWrapper {
          *
          */
         fun showSnackBar(view: View,
-                         @StringRes infoMessage: Int,
-                         @StringRes actionButtonMessage: Int,
-                         clickListener: View.OnClickListener) {
+                         @StringRes infoMessageRes: Int) = showSnackBarInternal(view = view,
+                infoMessageRes = infoMessageRes)
+
+
+        /**
+         *
+         */
+        fun showSnackBarWithHint(view: View,
+                                 @StringRes infoMessageRes: Int,
+                                 @StringRes hintRes: Int) = showSnackBarInternal(view = view,
+                infoMessageRes = infoMessageRes,
+                actionMessageRes = hintRes)
+
+        /**
+         *
+         */
+        fun showSnackBarWithAction(view: View,
+                                   @StringRes infoMessageRes: Int,
+                                   @StringRes actionMessageRes: Int,
+                                   clickListener: View.OnClickListener) = showSnackBarInternal(view = view,
+                infoMessageRes = infoMessageRes,
+                actionMessageRes = actionMessageRes,
+                clickListener = clickListener)
+
+        /**
+         *
+         */
+        private fun showSnackBarInternal(view: View,
+                                         @StringRes infoMessageRes: Int,
+                                         @StringRes actionMessageRes: Int? = null,
+                                         clickListener: View.OnClickListener? = null) {
 
             val snackBar = Snackbar.make(view, "", Snackbar.LENGTH_INDEFINITE)
             val snackBarContentLayout = (snackBar.view as Snackbar.SnackbarLayout).getChildAt(0) as LinearLayout
             //wrap click listener to first hide the snackBar, then invoke the user's listener
             val wrappedClickListener = View.OnClickListener {
                 snackBar.dismiss()
-                clickListener.onClick(it)
+                clickListener?.onClick(it)
             }
             //hide the views displayed normally by the snackBar
             hideBuildInViews(snackBarContentLayout = snackBarContentLayout)
@@ -40,9 +68,9 @@ class SnackBarWrapper {
             //inflate our custom layout
             val snackBarCustomContent = prepareCustomContent(context = view.context,
                     parentLayout = snackBarContentLayout,
-                    clickListener = wrappedClickListener,
-                    infoMessage = infoMessage,
-                    actionButtonMessage = actionButtonMessage)
+                    infoMessage = infoMessageRes,
+                    actionButtonMessage = actionMessageRes,
+                    clickListener = wrappedClickListener)
             //add it as the top view to the snackBar
             snackBarContentLayout.addView(snackBarCustomContent, 0)
             //animate the countdown
@@ -55,15 +83,19 @@ class SnackBarWrapper {
 
         private fun prepareCustomContent(context: Context,
                                          parentLayout: LinearLayout,
-                                         clickListener: View.OnClickListener,
                                          @StringRes infoMessage: Int,
-                                         @StringRes actionButtonMessage: Int): View {
+                                         @StringRes actionButtonMessage: Int?,
+                                         clickListener: View.OnClickListener? = null): View {
             val snackBarCustomContent = LayoutInflater.from(context)
                     .inflate(R.layout.snack_message_layout, parentLayout, false)
 
-            snackBarCustomContent.action_button.setOnClickListener(clickListener)
             snackBarCustomContent.text_message.setText(infoMessage)
-            snackBarCustomContent.action_button.setText(actionButtonMessage)
+            if (actionButtonMessage != null) {
+                snackBarCustomContent.action_button.setText(actionButtonMessage)
+                snackBarCustomContent.action_button.setOnClickListener(clickListener)
+            } else {
+                snackBarCustomContent.action_button.visibility = View.GONE
+            }
             return snackBarCustomContent
         }
 

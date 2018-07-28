@@ -15,7 +15,7 @@ import com.catalinj.cryptosmart.di.components.SettingsComponent
 import com.catalinj.cryptosmart.di.modules.settings.SettingsModule
 import com.catalinj.cryptosmart.presentationlayer.MainActivity
 import com.catalinj.cryptosmart.presentationlayer.features.settings.contract.SettingsContract
-import com.catalinjurjiu.wheelbarrow.InjectorFragment
+import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import kotlinx.android.synthetic.main.layout_fragment_settings.view.*
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ import javax.inject.Inject
  * A simple Settings Fragment, which allows changing between dark & light themes, and allows
  * changing the primary currency
  */
-class SettingsFragment : InjectorFragment<SettingsComponent>(), SettingsContract.SettingsView {
+class SettingsFragment : WheelbarrowFragment<SettingsComponent>(), SettingsContract.SettingsView {
     override val name: String = TAG
 
     @Inject
@@ -31,7 +31,7 @@ class SettingsFragment : InjectorFragment<SettingsComponent>(), SettingsContract
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(settingsFragment = this)
+        cargo.inject(settingsFragment = this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -99,12 +99,12 @@ class SettingsFragment : InjectorFragment<SettingsComponent>(), SettingsContract
     }
 
     class SettingsFragmentFactory(private val activityComponent: ActivityComponent) :
-            InjectorFragmentFactory<SettingsComponent>() {
-        override fun onCreateFragment(): InjectorFragment<SettingsComponent> {
+            WheelbarrowFragment.Factory<SettingsComponent>() {
+        override fun onCreateFragment(): WheelbarrowFragment<SettingsComponent> {
             return SettingsFragment()
         }
 
-        override fun onCreateInjector(): SettingsComponent {
+        override fun onCreateCargo(): SettingsComponent {
             return activityComponent.getSettingsComponent(settingsModule = SettingsModule())
         }
     }

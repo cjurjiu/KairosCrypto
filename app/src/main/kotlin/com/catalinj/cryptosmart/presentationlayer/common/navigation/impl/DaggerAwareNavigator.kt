@@ -29,21 +29,21 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
     }
 
     override fun openCoinListScreen() {
-        val frag = CoinsListFragment.Factory(activityComponent = activity.injector).create()
+        val frag = CoinsListFragment.Factory(activityComponent = activity.cargo).create()
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, CoinsListFragment.TAG)
                 .commit()
     }
 
     override fun openBookmarksScreen() {
-        val frag = BookmarksFragment.Factory(activityComponent = activity.injector).create()
+        val frag = BookmarksFragment.Factory(activityComponent = activity.cargo).create()
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, BookmarksFragment.TAG)
                 .commit()
     }
 
     override fun openSettingsScreen() {
-        val frag = SettingsFragment.SettingsFragmentFactory(activityComponent = activity.injector)
+        val frag = SettingsFragment.SettingsFragmentFactory(activityComponent = activity.cargo)
                 .create()
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, frag, SettingsFragment.TAG)
@@ -51,7 +51,7 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
     }
 
     override fun openCoinDetailsScreen(cryptoCoin: CryptoCoin) {
-        val activityComponent = activity.injector
+        val activityComponent = activity.cargo
         val fragmentFactory = CoinDetailsFragment.Factory(activityComponent = activityComponent,
                 cryptoCoin = cryptoCoin)
         val frag = fragmentFactory.create()

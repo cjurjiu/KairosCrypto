@@ -20,14 +20,14 @@ import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyForma
 import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
-import com.catalinjurjiu.wheelbarrow.InjectorFragment
+import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import kotlinx.android.synthetic.main.layout_fragment_coin_info.view.*
 import javax.inject.Inject
 
 /**
  * A simple view(fragment) which displays various information about a particular cryptocurrency.
  */
-class CoinInfoFragment : InjectorFragment<CoinInfoComponent>(),
+class CoinInfoFragment : WheelbarrowFragment<CoinInfoComponent>(),
         CoinInfoContract.CoinInfoView {
 
     override val name: String = TAG
@@ -55,9 +55,9 @@ class CoinInfoFragment : InjectorFragment<CoinInfoComponent>(),
     class Factory(private val coinId: String,
                   private val coinSymbol: String,
                   private val coinDetailsComponent: CoinDetailsComponent)
-        : InjectorFragmentFactory<CoinInfoComponent>() {
+        : WheelbarrowFragment.Factory<CoinInfoComponent>() {
 
-        override fun onCreateFragment(): InjectorFragment<CoinInfoComponent> {
+        override fun onCreateFragment(): WheelbarrowFragment<CoinInfoComponent> {
             val fragment = CoinInfoFragment()
             val args = Bundle()
             args.putString(ARGS_COIN_ID, coinId)
@@ -66,14 +66,14 @@ class CoinInfoFragment : InjectorFragment<CoinInfoComponent>(),
             return fragment
         }
 
-        override fun onCreateInjector(): CoinInfoComponent {
+        override fun onCreateCargo(): CoinInfoComponent {
             return coinDetailsComponent.getCoinInfoComponent(coinInfoModule = CoinInfoModule())
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(coinInfoFragment = this)
+        cargo.inject(coinInfoFragment = this)
         val coinId = arguments!!.getString(ARGS_COIN_ID)
         val coinSymbol = arguments!!.getString(ARGS_COIN_SYMBOL)
         coinInfoPresenter.setCoinId(coinId = coinId)

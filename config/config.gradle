@@ -37,7 +37,9 @@ def library_versions = [
         //glide
         glide              : '4.7.1',
         //android svg
-        android_svg        : '1.2.1'
+        android_svg        : '1.2.1',
+        //wheelbarrow
+        wheelbarrow        : '0.0.3'
 ]
 
 def build_versions = [

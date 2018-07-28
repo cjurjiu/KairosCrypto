@@ -101,9 +101,10 @@ dependencies {
     implementation "me.zhanghai.android.materialprogressbar:library:$config.lib_versions.material_progress"
     //jsoup
     implementation "org.jsoup:jsoup:$config.lib_versions.jsoup"
+    //wheelbarrow
+    implementation "com.catalinjurjiu:wheelbarrow:$config.lib_versions.wheelbarrow"
 
     //local dependencies
-    implementation project(':wheelbarrow')
     implementation project(':common')
     implementation project(':cryptodrawablesprovider')
     //leak canary

@@ -22,13 +22,13 @@ import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinjurjiu.common.NamedComponent
-import com.catalinjurjiu.wheelbarrow.InjectorFragment
+import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_main_coin_details.view.*
 import javax.inject.Inject
 
 class CoinDetailsFragment :
-        InjectorFragment<CoinDetailsComponent>(),
+        WheelbarrowFragment<CoinDetailsComponent>(),
         NamedComponent,
         BackEventAwareComponent,
         CoinDetailsContract.CoinDetailsView {
@@ -48,13 +48,13 @@ class CoinDetailsFragment :
 
     class Factory(private val activityComponent: ActivityComponent,
                   private val cryptoCoin: CryptoCoin)
-        : InjectorFragmentFactory<CoinDetailsComponent>() {
+        : WheelbarrowFragment.Factory<CoinDetailsComponent>() {
 
-        override fun onCreateFragment(): InjectorFragment<CoinDetailsComponent> {
+        override fun onCreateFragment(): WheelbarrowFragment<CoinDetailsComponent> {
             return CoinDetailsFragment()
         }
 
-        override fun onCreateInjector(): CoinDetailsComponent {
+        override fun onCreateCargo(): CoinDetailsComponent {
             return activityComponent.getCoinDetailsComponent(
                     coinListModule = CoinDetailsModule(CoinDetailsPartialData(coinName = cryptoCoin.name,
                             webFriendlyName = cryptoCoin.websiteSlug,
@@ -66,9 +66,9 @@ class CoinDetailsFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(this)
+        cargo.inject(this)
         Log.d(TAG, "CoinDetailsFragment${hashCode().toString(16)}#onCreate.injector:" +
-                injector.hashCode().toString(16) + " presenter:" +
+                cargo.hashCode().toString(16) + " presenter:" +
                 coinDetailsPresenter.hashCode().toString(16))
     }
 
@@ -211,7 +211,7 @@ class CoinDetailsFragment :
         val viewPager = view.view_pager_coin_details
         coinDetailsViewPagerAdapter = CoinDetailsViewPagerAdapter(
                 coinDetailsPartialData = coinDetailsPresenter.getCoinData(),
-                coinDetailsComponent = injector,
+                coinDetailsComponent = cargo,
                 supportFragmentManager = childFragmentManager)
         viewPager.adapter = coinDetailsViewPagerAdapter
         //TabLayout config & setup with ViewPager

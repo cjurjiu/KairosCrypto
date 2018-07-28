@@ -23,7 +23,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.Bookm
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
-import com.catalinjurjiu.wheelbarrow.InjectorFragment
+import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_bookmarks.view.*
 import javax.inject.Inject
@@ -31,7 +31,7 @@ import javax.inject.Inject
 /**
  * Created by catalin on 14/05/2018.
  */
-class BookmarksFragment : InjectorFragment<BookmarksComponent>(),
+class BookmarksFragment : WheelbarrowFragment<BookmarksComponent>(),
         BookmarksContract.BookmarksView,
         BackEventAwareComponent {
 
@@ -51,7 +51,7 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(),
     //android fragment lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(this)
+        cargo.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -175,14 +175,14 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(),
         appCompatActivity.setSupportActionBar(optionsToolbar)
         lifecycle.addObserver(optionsToolbar)
         //also inject the toolbar with the same injector
-        injector.inject(optionsToolbar)
+        cargo.inject(optionsToolbar)
         //notify the toolbar's presenter that its view is available
         optionsToolbar.getPresenter().viewAvailable(optionsToolbar)
     }
 
     private fun initFloatingActionButton(view: View) {
         floatingScrollToTopButton = view.button_floating_scroll_to_top
-        injector.inject(floatingScrollToTopButton)
+        cargo.inject(floatingScrollToTopButton)
         //call before notifying the presenter that the view is available
         floatingScrollToTopButton.setItemPositionThreshold(value = SCROLL_TO_TOP_LIST_THRESHOLD)
         floatingScrollToTopButton.setupWithViewRecyclerView(recyclerView = recyclerView)
@@ -195,13 +195,13 @@ class BookmarksFragment : InjectorFragment<BookmarksComponent>(),
     /**
      * Factory for this Fragment.
      */
-    class Factory(val activityComponent: ActivityComponent) : InjectorFragmentFactory<BookmarksComponent>() {
+    class Factory(val activityComponent: ActivityComponent) : WheelbarrowFragment.Factory<BookmarksComponent>() {
 
-        override fun onCreateFragment(): InjectorFragment<BookmarksComponent> {
+        override fun onCreateFragment(): WheelbarrowFragment<BookmarksComponent> {
             return BookmarksFragment()
         }
 
-        override fun onCreateInjector(): BookmarksComponent {
+        override fun onCreateCargo(): BookmarksComponent {
             return activityComponent.getBookmarksComponent(BookmarksModule())
         }
     }

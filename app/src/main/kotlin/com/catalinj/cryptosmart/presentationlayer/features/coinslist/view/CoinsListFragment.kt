@@ -26,7 +26,7 @@ import com.catalinj.cryptosmart.presentationlayer.features.coinslist.contract.Co
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
 import com.catalinjurjiu.common.NamedComponent
-import com.catalinjurjiu.wheelbarrow.InjectorFragment
+import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
 import javax.inject.Inject
@@ -35,8 +35,7 @@ import javax.inject.Inject
 /**
  * Created by catalinj on 21.01.2018.
  */
-class CoinsListFragment :
-        InjectorFragment<CoinListComponent>(),
+class CoinsListFragment : WheelbarrowFragment<CoinListComponent>(),
         NamedComponent,
         BackEventAwareComponent,
         CoinsListContract.CoinsListView {
@@ -58,8 +57,10 @@ class CoinsListFragment :
     //android lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(this)
-        Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" + injector.hashCode().toString(16) + " presenter:" + coinListPresenter.hashCode().toString(16))
+        cargo.inject(this)
+        Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" +
+                cargo.hashCode().toString(16) + " presenter:" +
+                coinListPresenter.hashCode().toString(16))
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -198,7 +199,7 @@ class CoinsListFragment :
         appCompatActivity.setSupportActionBar(optionsToolbar)
         lifecycle.addObserver(optionsToolbar)
         //also inject the toolbar with the same injector
-        injector.inject(optionsToolbar)
+        cargo.inject(optionsToolbar)
         //notify the toolbar's presenter that its view is available
         optionsToolbar.getPresenter().viewAvailable(optionsToolbar)
     }
@@ -232,7 +233,7 @@ class CoinsListFragment :
 
     private fun initFloatingActionButton(view: View) {
         floatingScrollToTopButton = view.button_floating_scroll_to_top
-        injector.inject(floatingScrollToTopButton)
+        cargo.inject(floatingScrollToTopButton)
         //call before notifying the presenter that the view is available
         floatingScrollToTopButton.setItemPositionThreshold(value = SCROLL_TO_TOP_LIST_THRESHOLD)
         floatingScrollToTopButton.setupWithViewRecyclerView(recyclerView = recyclerView)
@@ -245,15 +246,15 @@ class CoinsListFragment :
     /**
      * Factory for this Fragment
      */
-    class Factory(private val activityComponent: ActivityComponent) : InjectorFragmentFactory<CoinListComponent>() {
+    class Factory(private val activityComponent: ActivityComponent) : WheelbarrowFragment.Factory<CoinListComponent>() {
 
-        override fun onCreateFragment(): InjectorFragment<CoinListComponent> {
+        override fun onCreateFragment(): WheelbarrowFragment<CoinListComponent> {
             val f = CoinsListFragment()
             //do some other initializations, set arguments
             return f
         }
 
-        override fun onCreateInjector(): CoinListComponent {
+        override fun onCreateCargo(): CoinListComponent {
             return activityComponent.getCoinListComponent(CoinListModule())
         }
     }

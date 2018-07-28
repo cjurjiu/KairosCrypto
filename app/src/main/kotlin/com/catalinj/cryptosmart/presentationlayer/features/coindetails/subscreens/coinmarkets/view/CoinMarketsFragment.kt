@@ -20,7 +20,7 @@ import com.catalinj.cryptosmart.presentationlayer.common.extension.toMessageResI
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper
-import com.catalinjurjiu.wheelbarrow.InjectorFragment
+import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import kotlinx.android.synthetic.main.fragment_coin_markets.view.*
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ import javax.inject.Inject
  * A simple view(fragment) which displays the exchanges on which a particular crypocurrency is
  * available for trade.
  */
-class CoinMarketsFragment : InjectorFragment<CoinMarketsComponent>(), CoinMarketsContract.CoinMarketsView {
+class CoinMarketsFragment : WheelbarrowFragment<CoinMarketsComponent>(), CoinMarketsContract.CoinMarketsView {
 
     override val name: String = TAG
     @Inject
@@ -41,7 +41,7 @@ class CoinMarketsFragment : InjectorFragment<CoinMarketsComponent>(), CoinMarket
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(this)
+        cargo.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -158,12 +158,12 @@ class CoinMarketsFragment : InjectorFragment<CoinMarketsComponent>(), CoinMarket
     class Factory(private val coinData: CoinDetailsPartialData,
                   private val coinDetailsComponent: CoinDetailsComponent)
 
-        : InjectorFragmentFactory<CoinMarketsComponent>() {
-        override fun onCreateFragment(): InjectorFragment<CoinMarketsComponent> {
+        : WheelbarrowFragment.Factory<CoinMarketsComponent>() {
+        override fun onCreateFragment(): WheelbarrowFragment<CoinMarketsComponent> {
             return CoinMarketsFragment()
         }
 
-        override fun onCreateInjector(): CoinMarketsComponent {
+        override fun onCreateCargo(): CoinMarketsComponent {
             return coinDetailsComponent.getCoinMarketsComponent(
                     coinMarketsModule = CoinMarketsModule(coinData)
             )

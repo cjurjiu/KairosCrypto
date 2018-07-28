@@ -12,11 +12,14 @@ import com.catalinj.cryptosmart.di.modules.activity.ActivityModule
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.impl.DaggerAwareNavigator
 import com.catalinjurjiu.common.NamedComponent
-import com.catalinjurjiu.wheelbarrow.InjectorActivity
+import com.catalinjurjiu.wheelbarrow.WheelbarrowActivity
 import javax.inject.Inject
 
-class MainActivity : InjectorActivity<ActivityComponent>(), NamedComponent {
+class MainActivity : WheelbarrowActivity<ActivityComponent>(), NamedComponent {
     override val name: String = TAG
+
+    //make cargo public
+    public override val cargo: ActivityComponent by lazy(LazyThreadSafetyMode.NONE) { super.cargo }
 
     val navigator: Navigator by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         DaggerAwareNavigator(this)
@@ -27,7 +30,7 @@ class MainActivity : InjectorActivity<ActivityComponent>(), NamedComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector.inject(this)
+        cargo.inject(this)
 
         if (userSettings.isDarkThemeEnabled()) {
             setTheme(R.style.CryptoSmart_Theme_Dark)
@@ -41,7 +44,7 @@ class MainActivity : InjectorActivity<ActivityComponent>(), NamedComponent {
             navigator.openCoinListScreen()
         }
         Log.d(TAG, "MainActivity${hashCode().toString(16)}#onCreate end. injector: " +
-                injector.hashCode().toString(16))
+                cargo.hashCode().toString(16))
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -49,7 +52,7 @@ class MainActivity : InjectorActivity<ActivityComponent>(), NamedComponent {
         return true
     }
 
-    override fun onCreateInjector(): ActivityComponent {
+    override fun onCreateCargo(): ActivityComponent {
         return (application as CryptoSmartApplication).component
                 .getActivityComponent(ActivityModule(activityContext = this))
     }

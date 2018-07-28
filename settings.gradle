@@ -1,1 +1,1 @@
-include ':app', ':wheelbarrow', ':common', ':cryptodrawablesprovider'
+include ':app', ':common', ':cryptodrawablesprovider'

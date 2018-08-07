@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.datalayer.network.coinmarketcap.parser
 
 import android.util.Log
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoinMarketInfo
+import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinMarketInfo
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.parser.MarketInfoHtmlParser.TableHeaderColumns.PAIR_TABLE_COLUMN_INDEX
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.parser.MarketInfoHtmlParser.TableHeaderColumns.PRICE_TABLE_COLUMN_INDEX
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.parser.MarketInfoHtmlParser.TableHeaderColumns.RANK_TABLE_COLUMN_INDEX
@@ -16,13 +16,13 @@ class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: S
     //todo, provide a base URL
     private val marketInfoPage = Jsoup.parse(marketInfoHtmlPage)
 
-    fun extractMarkets(): List<CryptoCoinMarketInfo> {
+    fun extractMarkets(): List<CoinMarketCapCryptoCoinMarketInfo> {
         //get the markets from the markets table
         val marketsTable = marketInfoPage.select("#markets-table")
 
 //        //parse header data
 //        val marketsTableHead = marketsTable.select("thead tr")[0].select("th")
-        val marketsInfo = mutableListOf<CryptoCoinMarketInfo>()
+        val marketsInfo = mutableListOf<CoinMarketCapCryptoCoinMarketInfo>()
 
         val marketsTableRows = marketsTable.select("tbody tr")
         for (row in marketsTableRows) {
@@ -50,7 +50,7 @@ class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: S
             //updated string
             val updatedString = columnData[UPDATED_TABLE_COLUMN_INDEX].text().trim()
 
-            marketsInfo.add(CryptoCoinMarketInfo(rank = rank,
+            marketsInfo.add(CoinMarketCapCryptoCoinMarketInfo(rank = rank,
                     exchangeName = source,
                     exchangePairUrl = tradingPairUrl,
                     coinSymbol = coinSymbol,

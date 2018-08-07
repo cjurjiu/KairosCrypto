@@ -1,1 +1,1 @@
-include ':app', ':common', ':cryptodrawablesprovider'
+include ':app', ':common', ':cryptodrawablesprovider', ':businesslogic', ':datalayer'

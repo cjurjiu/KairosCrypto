@@ -5,6 +5,7 @@ import android.util.Log
 import com.catalinj.cryptosmart.businesslayer.converter.toBusinessLayerCoin
 import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerCoin
 import com.catalinj.cryptosmart.businesslayer.converter.toDataLayerPriceData
+import com.catalinj.cryptosmart.businesslayer.model.BookmarksCoin
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
@@ -15,7 +16,6 @@ import com.catalinj.cryptosmart.datalayer.database.models.DbBookmark
 import com.catalinj.cryptosmart.datalayer.network.RequestState
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinj.cryptosmart.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.Single

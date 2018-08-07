@@ -31,12 +31,6 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
-//    kapt {
-//        arguments {
-//            ["room.schemaLocation": "$projectDir/schemas".toString()]
-//        }
-//    }
-
     compileOptions {
         targetCompatibility "$config.build_versions.targetCompatibility"
         sourceCompatibility "$config.build_versions.sourceCompatibility"
@@ -57,15 +51,9 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
     //kotlin stdlib
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$config.lib_versions.kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$config.lib_versions.kotlin"
-
-    //android-ktx
-
-    //    implementation "androidx.core:core-ktx:$config.lib_versions.android_ktx"
 
     //support libraries
     implementation "com.android.support:support-v4:$config.lib_versions.support_library"
@@ -81,47 +69,30 @@ dependencies {
     //play services
     implementation "com.google.android.gms:play-services-plus:$config.lib_versions.play_services_plus"
 
-    //retrofit
-    implementation "com.squareup.retrofit2:retrofit:$config.lib_versions.retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$config.lib_versions.converter_gson"
-    implementation "com.squareup.retrofit2:converter-scalars:$config.lib_versions.converter_scalars"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$config.lib_versions.retrofit_rxadapter"
+    //viewmodel & extensions
+    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
+    implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
+    implementation "android.arch.lifecycle:common-java8:$config.lib_versions.extensions"
 
-    //gson
-    implementation "com.google.code.gson:gson:$config.lib_versions.gson"
+    //material loading library
+    implementation "me.zhanghai.android.materialprogressbar:library:$config.lib_versions.material_progress"
+
+    //wheelbarrow
+    implementation "com.catalinjurjiu:wheelbarrow:$config.lib_versions.wheelbarrow"
 
     //dagger2
     implementation "com.google.dagger:dagger:$config.lib_versions.dagger"
     implementation 'com.android.support:support-v4:27.1.1'
     kapt "com.google.dagger:dagger-compiler:$config.lib_versions.dagger_compiler"
 
-    //viewmodel & extensions
-    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
-    implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
-    implementation "android.arch.lifecycle:common-java8:$config.lib_versions.extensions"
-
-    //room
-    implementation "android.arch.persistence.room:runtime:$config.lib_versions.room"
-
-    // RxJava support for Room
-    implementation "android.arch.persistence.room:rxjava2:$config.lib_versions.room"
-    kapt "android.arch.persistence.room:compiler:$config.lib_versions.room"
-
     //rxjava
     implementation "io.reactivex.rxjava2:rxjava:$config.lib_versions.rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$config.lib_versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$config.lib_versions.rxrelay"
 
-    //material loading library
-    implementation "me.zhanghai.android.materialprogressbar:library:$config.lib_versions.material_progress"
-
-    //jsoup
-    implementation "org.jsoup:jsoup:$config.lib_versions.jsoup"
-
-    //wheelbarrow
-    implementation "com.catalinjurjiu:wheelbarrow:$config.lib_versions.wheelbarrow"
-
     //local dependencies
+    implementation project(':businesslayer')
+    implementation project(':datalayer')
     implementation project(':common')
     implementation project(':cryptodrawablesprovider')
 
@@ -129,10 +100,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$config.lib_versions.leak_canary"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$config.lib_versions.leak_canary"
 
-    //test
-
     //TODO testing was not taken into consideration so far.
-
     //Add testing support
     testImplementation "junit:junit:$config.lib_versions.junit"
 
@@ -140,5 +108,4 @@ dependencies {
     androidTestImplementation "android.arch.persistence.room:testing:$config.lib_versions.room"
     androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$config.lib_versions.espresso_core"
-    implementation project(':datalayer')
 }

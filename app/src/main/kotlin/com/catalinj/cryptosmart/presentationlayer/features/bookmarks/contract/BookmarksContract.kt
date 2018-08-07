@@ -1,11 +1,11 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract
 
+import com.catalinj.cryptosmart.businesslayer.model.BookmarksCoin
 import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.presenter.MvpPresenter
 import com.catalinj.cryptosmart.presentationlayer.common.view.LoadingView
 import com.catalinj.cryptosmart.presentationlayer.common.view.MvpView
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
 
 /**

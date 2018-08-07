@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.businesslayer.model.BookmarksCoin
 import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
 import com.catalinj.cryptosmart.di.components.ActivityComponent
 import com.catalinj.cryptosmart.di.components.BookmarksComponent
@@ -19,7 +20,6 @@ import com.catalinj.cryptosmart.presentationlayer.common.extension.toMessageResI
 import com.catalinj.cryptosmart.presentationlayer.common.functional.BackEventAwareComponent
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import com.catalinj.cryptosmart.presentationlayer.features.widgets.snackbar.SnackBarWrapper

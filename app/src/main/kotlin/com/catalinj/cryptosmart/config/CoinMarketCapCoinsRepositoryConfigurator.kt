@@ -1,4 +1,4 @@
-package com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config
+package com.catalinj.cryptosmart.config
 
 import com.catalinj.cryptosmart.businesslayer.repository.CoinsRepository
 import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.CoinMarketCapCoinsRepository

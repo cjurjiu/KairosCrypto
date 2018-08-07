@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.di.modules.coindetails.subscreens
 
 import com.catalinj.cryptosmart.businesslayer.repository.MarketsRepository
-import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config.CoinMarketCapMarketsRepositoryConfigurator
+import com.catalinj.cryptosmart.config.CoinMarketCapMarketsRepositoryConfigurator
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.datalayer.userprefs.CryptoSmartUserSettings
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapHtmlQualifier

@@ -1,8 +1,8 @@
 package com.catalinj.cryptosmart.businesslayer.repository
 
+import com.catalinj.cryptosmart.businesslayer.model.BookmarksCoin
 import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer

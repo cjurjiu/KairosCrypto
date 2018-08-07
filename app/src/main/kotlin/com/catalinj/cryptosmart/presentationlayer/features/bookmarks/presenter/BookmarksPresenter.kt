@@ -1,8 +1,7 @@
 package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.presenter
 
 import android.util.Log
-import com.catalinj.cryptosmart.businesslayer.model.ErrorCode
-import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
+import com.catalinj.cryptosmart.businesslayer.model.*
 import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
 import com.catalinj.cryptosmart.businesslayer.repository.Repository
 import com.catalinj.cryptosmart.datalayer.CurrencyRepresentation
@@ -11,9 +10,6 @@ import com.catalinj.cryptosmart.presentationlayer.common.navigation.Navigator
 import com.catalinj.cryptosmart.presentationlayer.common.threading.Executors
 import com.catalinj.cryptosmart.presentationlayer.common.view.controller.LoadingController
 import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.contract.BookmarksContract
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.toBookmarksCoin
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.toBusinessLayerCoin
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

@@ -1,7 +1,4 @@
-package com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model
-
-import com.catalinj.cryptosmart.businesslayer.model.CryptoCoin
-import com.catalinj.cryptosmart.businesslayer.model.PriceData
+package com.catalinj.cryptosmart.businesslayer.model
 
 data class BookmarksCoin(val id: String,
                          val rank: Int,
@@ -16,8 +13,6 @@ data class BookmarksCoin(val id: String,
                          val isLoading: Boolean)
 
 inline fun CryptoCoin.toBookmarksCoin(isLoading: Boolean = false): BookmarksCoin {
-//    todo, remove the random once actual behavior is being added
-//    val r = Random()
 
     return BookmarksCoin(id = this.id,
             rank = this.rank,
@@ -30,7 +25,6 @@ inline fun CryptoCoin.toBookmarksCoin(isLoading: Boolean = false): BookmarksCoin
             priceData = this.priceData,
             lastUpdated = this.lastUpdated,
             isLoading = isLoading)
-//            isLoading = r.nextBoolean())
 }
 
 inline fun BookmarksCoin.toBusinessLayerCoin(): CryptoCoin {

@@ -1,7 +1,7 @@
 package com.catalinj.cryptosmart.di.modules.coindetails;
 
 import com.catalinj.cryptosmart.businesslayer.repository.BookmarksRepository
-import com.catalinj.cryptosmart.businesslayer.repository.coinmarketcap.config.CoinMarketCapBookmarksRepositoryConfigurator
+import com.catalinj.cryptosmart.config.CoinMarketCapBookmarksRepositoryConfigurator
 import com.catalinj.cryptosmart.datalayer.database.CryptoSmartDb
 import com.catalinj.cryptosmart.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinj.cryptosmart.di.annotations.scopes.CoinDetailsScope

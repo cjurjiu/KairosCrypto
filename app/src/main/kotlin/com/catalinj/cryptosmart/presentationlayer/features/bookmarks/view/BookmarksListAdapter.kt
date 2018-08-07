@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.catalinj.cryptosmart.R
+import com.catalinj.cryptosmart.businesslayer.model.BookmarksCoin
 import com.catalinj.cryptosmart.businesslayer.model.PredefinedSnapshot
 import com.catalinj.cryptosmart.businesslayer.model.changeForSnapshot
 import com.catalinj.cryptosmart.presentationlayer.common.extension.percentAsAbsoluteChange
 import com.catalinj.cryptosmart.presentationlayer.common.extension.trendlineForPercent
 import com.catalinj.cryptosmart.presentationlayer.common.formatter.CurrencyFormatter
 import com.catalinj.cryptosmart.presentationlayer.common.view.CryptoListAdapterSettings
-import com.catalinj.cryptosmart.presentationlayer.features.bookmarks.model.BookmarksCoin
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_bookmarks_list_item.view.*
 

@@ -2,11 +2,11 @@ package com.catalinjurjiu.kairoscrypto.di.modules.bookmarks
 
 import android.content.Context
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.BookmarksRepository
-import com.catalinjurjiu.kairoscrypto.config.CoinMarketCapBookmarksRepositoryConfigurator
+import com.catalinjurjiu.kairoscrypto.businesslayer.repository.coinmarketcap.CoinMarketCapBookmarksRepository
 import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.network.RestServiceFactory
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.ActivityContext
-import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.BookmarksScope
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.bookmarks.presenter.BookmarksPresenter
@@ -17,7 +17,6 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrollt
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.presenter.ScrollToTopWidgetPresenter
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
 
 /**
  * Created by catalin on 14/05/2018.
@@ -49,10 +48,10 @@ class BookmarksModule {
     @Provides
     @BookmarksScope
     fun provideBookmarksRepository(database: KairosCryptoDb,
-                                   @CoinMarketCapApiQualifier retrofit: Retrofit): BookmarksRepository {
+                                   restServiceFactory: RestServiceFactory): BookmarksRepository {
 
-        return CoinMarketCapBookmarksRepositoryConfigurator(database = database, retrofit = retrofit)
-                .configure()
+        return CoinMarketCapBookmarksRepository(kairosCryptoDb = database,
+                coinMarketCapApiService = restServiceFactory.getCoinsRestServiceApi())
     }
 
     @Provides

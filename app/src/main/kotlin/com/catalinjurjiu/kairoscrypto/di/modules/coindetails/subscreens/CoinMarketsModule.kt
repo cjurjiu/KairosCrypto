@@ -1,10 +1,10 @@
 package com.catalinjurjiu.kairoscrypto.di.modules.coindetails.subscreens
 
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
-import com.catalinjurjiu.kairoscrypto.config.CoinMarketCapMarketsRepositoryConfigurator
+import com.catalinjurjiu.kairoscrypto.businesslayer.repository.coinmarketcap.CoinMarketCapMarketsRepository
 import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.network.HtmlServiceFactory
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
-import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapHtmlQualifier
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.CoinMarketsScope
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
@@ -12,7 +12,6 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.sub
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coinmarkets.presenter.CoinMarketsPresenter
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
 
 /**
  * Created by catalin on 06/05/2018.
@@ -36,12 +35,12 @@ class CoinMarketsModule(private val partialCoinData: CoinDetailsPartialData) {
     @Provides
     @CoinMarketsScope
     fun provideMarketsRepository(database: KairosCryptoDb,
-                                 @CoinMarketCapHtmlQualifier retrofit: Retrofit,
+                                 restServiceFactory: HtmlServiceFactory,
                                  userSettings: KairosCryptoUserSettings)
             : MarketsRepository {
 
-        return CoinMarketCapMarketsRepositoryConfigurator(database = database,
-                retrofit = retrofit,
-                userSettings = userSettings).configure()
+        return CoinMarketCapMarketsRepository(kairosCryptoDb = database,
+                coinMarketCapHtmlService = restServiceFactory.getMarketsHtmlServiceApi(),
+                userSettings = userSettings)
     }
 }

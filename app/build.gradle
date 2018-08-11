@@ -90,12 +90,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$config.lib_versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$config.lib_versions.rxrelay"
 
-    //todo abstract away the usage of retrofit. these dependencies should not be present in this module
-    //retrofit
-    implementation "com.squareup.retrofit2:retrofit:$config.lib_versions.retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$config.lib_versions.converter_gson"
-    implementation "com.squareup.retrofit2:converter-scalars:$config.lib_versions.converter_scalars"
-
     //local dependencies
     implementation project(':businesslayer')
     implementation project(':datalayer')

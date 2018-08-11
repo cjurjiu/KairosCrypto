@@ -2,7 +2,6 @@ package com.catalinjurjiu.kairoscrypto.di.modules.coindetails.subscreens
 
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.CoinsRepository
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
-import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.CoinInfoScope
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
@@ -18,7 +17,7 @@ class CoinInfoModule {
 
     @Provides
     @CoinInfoScope
-    fun provideCoinInfoPresenter(@CoinMarketCapApiQualifier repository: CoinsRepository,
+    fun provideCoinInfoPresenter(repository: CoinsRepository,
                                  kairosCryptoUserSettings: KairosCryptoUserSettings,
                                  coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter): CoinInfoContract.CoinInfoPresenter {
         return CoinInfoPresenter(coinsRepository = repository,

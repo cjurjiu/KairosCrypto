@@ -4,7 +4,6 @@ import android.content.Context
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.CoinsRepository
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.ActivityContext
-import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.CoinListScope
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindisplayoptions.contract.CoinsDisplayOptionsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindisplayoptions.presenter.CoinDisplayOptionsPresenter
@@ -24,7 +23,7 @@ class CoinListModule {
 
     @Provides
     @CoinListScope
-    fun provideCoinsListPresenter(@CoinMarketCapApiQualifier coinsRepository: CoinsRepository,
+    fun provideCoinsListPresenter(coinsRepository: CoinsRepository,
                                   userSettings: KairosCryptoUserSettings): CoinsListContract.CoinsListPresenter {
         return CoinsListPresenter(repository = coinsRepository,
                 userSettings = userSettings)

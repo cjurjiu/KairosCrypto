@@ -22,5 +22,4 @@ interface CoinMarketCapHtmlService {
         //serverId of the coin which we want to retrieve
         const val PATH_COIN_WEBSITE_SLUG = "websiteSlug"
     }
-
 }

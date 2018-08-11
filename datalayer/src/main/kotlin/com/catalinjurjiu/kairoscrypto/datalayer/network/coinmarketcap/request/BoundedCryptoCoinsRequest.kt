@@ -2,7 +2,7 @@ package com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.request
 
 import android.util.Log
 import com.catalinjurjiu.kairoscrypto.datalayer.CurrencyRepresentation
-import com.catalinjurjiu.kairoscrypto.datalayer.network.ComposableApiRequest
+import com.catalinjurjiu.kairoscrypto.datalayer.network.abstractrequest.ComposableApiRequest
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinListResponse
 import io.reactivex.Observable

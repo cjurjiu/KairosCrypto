@@ -1,5 +1,6 @@
-package com.catalinjurjiu.kairoscrypto.datalayer.network
+package com.catalinjurjiu.kairoscrypto.datalayer.network.abstractrequest
 
+import com.catalinjurjiu.kairoscrypto.datalayer.network.RequestState
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers

@@ -1,4 +1,4 @@
-package com.catalinjurjiu.kairoscrypto.datalayer.database.dao
+package com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -8,7 +8,7 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbCryptoCoinMark
 import io.reactivex.Flowable
 
 @Dao
-interface CryptoCoinMarketsDao {
+interface RoomCryptoCoinMarketsDao {
 
     @Query(value = "SELECT * FROM ${DbCryptoCoinMarketInfo.TABLE_NAME}" +
             " WHERE ${DbCryptoCoinMarketInfo.ColumnNames.COIN_SYMBOL} = :coinSymbol" +

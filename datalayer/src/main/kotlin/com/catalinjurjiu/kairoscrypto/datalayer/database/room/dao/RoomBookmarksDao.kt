@@ -1,4 +1,4 @@
-package com.catalinjurjiu.kairoscrypto.datalayer.database.dao
+package com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao
 
 import android.arch.persistence.room.*
 import com.catalinjurjiu.kairoscrypto.datalayer.database.models.*
@@ -9,7 +9,7 @@ import io.reactivex.Single
  * Created by catalin on 11/05/2018.
  */
 @Dao
-interface BookmarksDao {
+interface RoomBookmarksDao {
 
     @Query("SELECT * FROM ${DbBookmark.BOOKMARKS_TABLE_NAME}")
     fun getBookmarks(): Single<List<DbBookmark>>

@@ -1,12 +1,12 @@
 package com.catalinjurjiu.kairoscrypto.config
 
+import com.catalinjurjiu.common.Configurator
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.coinmarketcap.CoinMarketCapMarketsRepository
-import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.CoinMarketCapHtmlService
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapHtmlQualifier
-import com.catalinjurjiu.common.Configurator
 import retrofit2.Retrofit
 
 /**

@@ -1,4 +1,4 @@
-package com.catalinjurjiu.kairoscrypto.datalayer.database.dao
+package com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -11,7 +11,7 @@ import io.reactivex.Flowable
  * Created by catalinj on 28.01.2018.
  */
 @Dao
-interface PartialCryptoCoinDao {
+interface RoomPartialCryptoCoinDao {
 
     /**
      * Get a Flowable which monitors the list of known [DbPartialCryptoCoin].

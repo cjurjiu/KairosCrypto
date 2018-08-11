@@ -1,4 +1,4 @@
-package com.catalinjurjiu.kairoscrypto.datalayer.database.dao
+package com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Query
@@ -13,7 +13,7 @@ import io.reactivex.Flowable
  * Created by catalin on 09/05/2018.
  */
 @Dao
-interface CryptoCoinDao {
+interface RoomCryptoCoinDao {
 
     /**
      * Gets all available [DbCryptoCoin]s, ordered by rank, ascending.

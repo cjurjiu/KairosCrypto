@@ -35,16 +35,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$config.lib_versions.kotlin"
 
     //retrofit
-    api "com.squareup.retrofit2:retrofit:$config.lib_versions.retrofit"
-    api "com.squareup.retrofit2:converter-gson:$config.lib_versions.converter_gson"
-    api "com.squareup.retrofit2:converter-scalars:$config.lib_versions.converter_scalars"
+    implementation "com.squareup.retrofit2:retrofit:$config.lib_versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$config.lib_versions.converter_gson"
+    implementation "com.squareup.retrofit2:converter-scalars:$config.lib_versions.converter_scalars"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$config.lib_versions.retrofit_rxadapter"
-
     //gson
     implementation "com.google.code.gson:gson:$config.lib_versions.gson"
 
     //room
-    api "android.arch.persistence.room:runtime:$config.lib_versions.room"
+    implementation "android.arch.persistence.room:runtime:$config.lib_versions.room"
     //room rxjava room support
     implementation "android.arch.persistence.room:rxjava2:$config.lib_versions.room"
 

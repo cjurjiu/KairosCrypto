@@ -2,10 +2,10 @@ package com.catalinjurjiu.kairoscrypto.config
 
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.CoinsRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.coinmarketcap.CoinMarketCapCoinsRepository
-import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.CoinMarketCapApiService
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapApiQualifier
 import com.catalinjurjiu.common.Configurator
+import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import retrofit2.Retrofit
 
 /**

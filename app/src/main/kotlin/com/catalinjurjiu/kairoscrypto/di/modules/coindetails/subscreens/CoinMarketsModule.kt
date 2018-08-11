@@ -2,7 +2,7 @@ package com.catalinjurjiu.kairoscrypto.di.modules.coindetails.subscreens
 
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
 import com.catalinjurjiu.kairoscrypto.config.CoinMarketCapMarketsRepositoryConfigurator
-import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapHtmlQualifier
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.CoinMarketsScope

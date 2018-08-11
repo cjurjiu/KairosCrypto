@@ -10,7 +10,7 @@ import com.catalinjurjiu.kairoscrypto.businesslayer.model.CryptoCoinDetails
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.CoinsRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.Repository
 import com.catalinjurjiu.kairoscrypto.datalayer.CurrencyRepresentation
-import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbPartialCryptoCoin
 import com.catalinjurjiu.kairoscrypto.datalayer.network.RequestState
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.CoinMarketCapApiService

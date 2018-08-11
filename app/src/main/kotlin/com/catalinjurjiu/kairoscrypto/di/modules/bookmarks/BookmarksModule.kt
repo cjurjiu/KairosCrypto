@@ -3,7 +3,7 @@ package com.catalinjurjiu.kairoscrypto.di.modules.bookmarks
 import android.content.Context
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.BookmarksRepository
 import com.catalinjurjiu.kairoscrypto.config.CoinMarketCapBookmarksRepositoryConfigurator
-import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.ActivityContext
 import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.CoinMarketCapApiQualifier

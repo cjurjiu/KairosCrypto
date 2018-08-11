@@ -1,10 +1,10 @@
-package com.catalinjurjiu.kairoscrypto.datalayer.database
+package com.catalinjurjiu.kairoscrypto.datalayer.database.room
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.catalinjurjiu.kairoscrypto.datalayer.database.dao.*
+import com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao.*
 import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbBookmark
 import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbCryptoCoinMarketInfo
 import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbPartialCryptoCoin
@@ -18,30 +18,30 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbPriceData
             DbPriceData::class,
             DbBookmark::class,
             DbCryptoCoinMarketInfo::class])
-abstract class KairosCryptoDb : RoomDatabase() {
+abstract class KairosCryptoRoomDb : RoomDatabase() {
 
-    abstract fun getCryptoCoinDao(): CryptoCoinDao
+    abstract fun getCryptoCoinDao(): RoomCryptoCoinDao
 
-    abstract fun getPlainCryptoCoinDao(): PartialCryptoCoinDao
+    abstract fun getPlainCryptoCoinDao(): RoomPartialCryptoCoinDao
 
-    abstract fun getCoinMarketCapPriceDataDao(): PriceDataDao
+    abstract fun getCoinMarketCapPriceDataDao(): RoomPriceDataDao
 
-    abstract fun getBookmarksDao(): BookmarksDao
+    abstract fun getBookmarksDao(): RoomBookmarksDao
 
-    abstract fun getMarketsInfoDao(): CryptoCoinMarketsDao
+    abstract fun getMarketsInfoDao(): RoomCryptoCoinMarketsDao
 
     companion object InstanceHolder {
 
-        private const val DATABASE_NAME: String = "KairosCryptoDb"
+        private const val DATABASE_NAME: String = "KairosCryptoRoomDb"
 
         private val lock: Any = Any()
 
-        private var INSTANCE: KairosCryptoDb? = null
+        private var INSTANCE: KairosCryptoRoomDb? = null
 
-        fun getInstance(context: Context): KairosCryptoDb {
+        fun getInstance(context: Context): KairosCryptoRoomDb {
             synchronized(lock) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context, KairosCryptoDb::class.java, DATABASE_NAME)
+                    INSTANCE = Room.databaseBuilder(context, KairosCryptoRoomDb::class.java, DATABASE_NAME)
                             .fallbackToDestructiveMigration()
                             .build()
                 }

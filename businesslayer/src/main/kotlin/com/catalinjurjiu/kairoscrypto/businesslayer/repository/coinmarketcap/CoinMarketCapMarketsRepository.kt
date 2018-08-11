@@ -6,7 +6,7 @@ import com.catalinjurjiu.kairoscrypto.businesslayer.converter.toDataLayerMarketI
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.CryptoCoinMarketInfo
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.Repository
-import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDb
+import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.CoinMarketCapHtmlService
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.parser.MarketInfoHtmlParser
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings

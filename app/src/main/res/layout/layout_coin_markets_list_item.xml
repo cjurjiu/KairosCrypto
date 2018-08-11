@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/min_margin_from_screen_edge"
         android:layout_marginTop="@dimen/min_margin_from_screen_edge"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium_Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_small"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Large"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_markets_coin_rank"
         app:layout_constraintStart_toEndOf="@+id/text_markets_coin_rank"
         tools:text="Binance" />
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_small"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium.Light"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium.Light"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_markets_coin_rank"
         app:layout_constraintStart_toEndOf="@+id/text_markets_exchange_name"
         tools:text="BTC/NANO" />
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_markets_exchange_pair"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="$10.73 USD" />
@@ -53,7 +53,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
         android:text="@string/string_markets_label_volume_24h"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_markets_exchange_name" />
 
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_small"
         android:layout_marginTop="8dp"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium_Large"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_markets_label_volume_24h"
         app:layout_constraintStart_toEndOf="@id/text_markets_label_volume_24h"
         tools:text="$756,294,485 USD" />
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
         android:paddingBottom="@dimen/min_margin_from_screen_edge"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_markets_label_volume_24h"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="10.94%" />

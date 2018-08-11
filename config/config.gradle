@@ -1,5 +1,5 @@
 def library_versions = [
-        kotlin             : '1.2.60',
+        kotlin             : '1.2.51',
         support_library    : '27.1.1',
         room               : '1.1.1',
         //android ktx

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/min_margin_from_screen_edge"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large.Regular"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium_Large.Regular"
         tools:text="1" />
 
     <ImageView
@@ -34,7 +34,7 @@
             android:id="@+id/text_coin_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+            android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium_Large"
             tools:text="Nano" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Small"
             tools:text="10.53" />
     </LinearLayout>
 
@@ -59,7 +59,7 @@
             android:id="@+id/text_coin_increase_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small"
+            android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Small"
             tools:text="+34.85%" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small.Light"
+            android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Small.Light"
             tools:text="$3.23" />
     </LinearLayout>
 

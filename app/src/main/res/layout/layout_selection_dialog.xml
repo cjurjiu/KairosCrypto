@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CryptoSmart.Style.Dialog"
+    style="@style/KairosCrypto.Style.Dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/dialog_title"
-        style="@style/CryptoSmart.Style.Dialog.TitleText"
+        style="@style/KairosCrypto.Style.Dialog.TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dialog_pick_transform_type"
         tools:text="@string/dialog_pick_transform_type" />
 
-    <com.catalinj.cryptosmart.presentationlayer.common.view.custom.MaxHeightRecyclerView
+    <com.catalinjurjiu.kairoscrypto.presentationlayer.common.view.custom.MaxHeightRecyclerView
         android:id="@+id/dialog_selection_list"
-        style="@style/CryptoSmart.Style.Dialog.RecyclerView"
+        style="@style/KairosCrypto.Style.Dialog.RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/dialog_title"
@@ -23,7 +23,7 @@
 
     <Button
         android:id="@+id/dialog_cancel_button"
-        style="@style/CryptoSmart.Style.Button.Flat"
+        style="@style/KairosCrypto.Style.Button.Flat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

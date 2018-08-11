@@ -5,7 +5,7 @@
 
     <ImageButton
         android:id="@+id/button_change_currency"
-        style="@style/CryptoSmart.Style.Toolbar.Button"
+        style="@style/KairosCrypto.Style.Toolbar.Button"
         android:layout_width="@dimen/min_tap_area_side"
         android:layout_height="match_parent"
         android:layout_marginEnd="4dp"
@@ -14,7 +14,7 @@
 
     <ImageButton
         android:id="@id/button_snapshots"
-        style="@style/CryptoSmart.Style.Toolbar.Button"
+        style="@style/KairosCrypto.Style.Toolbar.Button"
         android:layout_width="@dimen/min_tap_area_side"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"

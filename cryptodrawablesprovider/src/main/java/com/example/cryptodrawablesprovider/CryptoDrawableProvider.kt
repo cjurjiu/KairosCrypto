@@ -7,7 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.widget.ImageView
 import com.example.cryptodrawablesprovider.glideconfig.GlideApp
 import com.example.cryptodrawablesprovider.glideconfig.GlideRequests
-import com.example.cryptodrawablesprovider.svg.CryptoSmartSvgLoadListener
+import com.example.cryptodrawablesprovider.svg.KairosCryptoSvgLoadListener
 
 
 /**
@@ -20,7 +20,7 @@ class GithubCryptoIconHelper(private val context: Context) : ImageHelper<String>
 
     private val requestsManager: GlideRequests = GlideApp.with(context.applicationContext)
     private val errorDrawable = ContextCompat.getDrawable(context, ERROR_DRAWABLE_ID)
-    private val listener = CryptoSmartSvgLoadListener()
+    private val listener = KairosCryptoSvgLoadListener()
 
     override fun setImage(imageView: ImageView, resourceIdentifier: String) {
         val resourceUrl = String.format(GITHUB_URL, resourceIdentifier.toLowerCase())

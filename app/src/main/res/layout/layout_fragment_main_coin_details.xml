@@ -48,7 +48,7 @@
                         android:id="@+id/text_coin_details_coin_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Large"
+                        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Large"
                         tools:text="Nano" />
 
                     <android.support.v7.widget.AppCompatTextView
@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/text_coin_details_coin_name"
                         android:textAllCaps="true"
-                        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Small"
+                        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Small"
                         tools:text="Nano" />
 
                     <android.support.v7.widget.AppCompatImageView
@@ -71,7 +71,7 @@
 
                     <ToggleButton
                         android:id="@+id/button_coin_details_bookmarks_toggle"
-                        style="@style/CryptoSmart.Style.Button.VectorDrawable"
+                        style="@style/KairosCrypto.Style.Button.VectorDrawable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -100,7 +100,7 @@
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tab_layout_coin_details"
-                    style="@style/CryptoSmart.Style.TabLayout"
+                    style="@style/KairosCrypto.Style.TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top" />

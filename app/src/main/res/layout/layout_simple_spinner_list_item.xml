@@ -7,5 +7,5 @@
     android:minHeight="@dimen/min_tap_area_side_small"
     android:minWidth="@dimen/min_tap_area_side_small"
     android:padding="8dp"
-    android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+    android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium_Large"
     tools:text="USD" />

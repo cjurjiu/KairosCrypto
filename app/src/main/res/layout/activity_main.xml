@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CryptoSmart.Style.Background"
+    style="@style/KairosCrypto.Style.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.catalinj.cryptosmart.presentationlayer.MainActivity">
+    tools:context="com.catalinjurjiu.kairoscrypto.presentationlayer.MainActivity">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -15,7 +15,7 @@
 
     <android.support.design.widget.BottomNavigationView
         android:id="@id/bottom_navigation"
-        style="@style/CryptoSmart.Style.BottomBar"
+        style="@style/KairosCrypto.Style.BottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

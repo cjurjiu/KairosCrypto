@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.catalinj.cryptosmart.presentationlayer.features.coindetails.subscreens.coininfo.view.CoinInfoFragment">
+    tools:context="com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coininfo.view.CoinInfoFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,28 +20,28 @@
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_select_period_coin_info_24H"
-                style="@style/CryptoSmart.Style.Button.Flat.Small"
+                style="@style/KairosCrypto.Style.Button.Flat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time_period_24h" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_select_period_coin_info_7D"
-                style="@style/CryptoSmart.Style.Button.Flat.Small.Selected"
+                style="@style/KairosCrypto.Style.Button.Flat.Small.Selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time_period_7d" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_select_period_coin_info_1M"
-                style="@style/CryptoSmart.Style.Button.Flat.Small"
+                style="@style/KairosCrypto.Style.Button.Flat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time_period_1m" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_select_period_coin_info_3M"
-                style="@style/CryptoSmart.Style.Button.Flat.Small"
+                style="@style/KairosCrypto.Style.Button.Flat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time_period_3m" />
@@ -49,7 +49,7 @@
 
         <TextView
             android:id="@+id/text_unit_value_heading"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_margin_from_screen_edge"
@@ -60,7 +60,7 @@
 
         <TextView
             android:id="@+id/text_unit_time_period_change"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/text_unit_value_primary_currency"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -82,7 +82,7 @@
 
         <TextView
             android:id="@+id/text_percent_value_change_primary_currency"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
@@ -92,7 +92,7 @@
 
         <TextView
             android:id="@+id/text_unit_value_btc"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -103,7 +103,7 @@
 
         <TextView
             android:id="@+id/text_percent_value_change_btc"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
@@ -113,7 +113,7 @@
 
         <TextView
             android:id="@+id/text_market_cap_heading"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_margin_from_screen_edge"
@@ -124,7 +124,7 @@
 
         <TextView
             android:id="@+id/text_market_cap_primary_currency"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -135,7 +135,7 @@
 
         <TextView
             android:id="@+id/text_market_cap_btc"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -146,7 +146,7 @@
 
         <TextView
             android:id="@+id/text_volume_heading"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_margin_from_screen_edge"
@@ -156,7 +156,7 @@
             app:layout_constraintTop_toBottomOf="@id/text_market_cap_btc" />
 
         <TextView
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -167,7 +167,7 @@
 
         <TextView
             android:id="@+id/text_volume_primary_currency"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -178,7 +178,7 @@
 
         <TextView
             android:id="@+id/text_volume_btc"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -189,7 +189,7 @@
 
         <TextView
             android:id="@+id/text_supply_heading"
-            style="@style/CryptoSmart.Style.Text.Muli.Medium.Regular"
+            style="@style/KairosCrypto.Style.Text.Muli.Medium.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_margin_from_screen_edge"
@@ -200,7 +200,7 @@
 
         <TextView
             android:id="@+id/text_circulating_supply"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -211,7 +211,7 @@
 
         <TextView
             android:id="@+id/text_circulating_supply_value"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
@@ -221,7 +221,7 @@
 
         <TextView
             android:id="@+id/text_currently_available_supply"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -232,7 +232,7 @@
 
         <TextView
             android:id="@+id/text_currently_available_supply_value"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/min_margin_from_screen_edge"
@@ -242,7 +242,7 @@
 
         <TextView
             android:id="@+id/text_max_possible_supply"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -253,7 +253,7 @@
 
         <TextView
             android:id="@+id/text_max_possible_supply_value"
-            style="@style/CryptoSmart.Style.Text.Muli.Small"
+            style="@style/KairosCrypto.Style.Text.Muli.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/min_margin_from_screen_edge"

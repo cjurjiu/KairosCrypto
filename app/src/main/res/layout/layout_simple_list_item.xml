@@ -6,16 +6,16 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_item_simple_list"
-        style="@style/CryptoSmart.Style.Button.Flat.WithRippleMask"
+        style="@style/KairosCrypto.Style.Button.Flat.WithRippleMask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/min_margin_from_screen_edge"
-        android:textAppearance="@style/CryptoSmart.Style.Text.Muli.Medium_Large"
+        android:textAppearance="@style/KairosCrypto.Style.Text.Muli.Medium_Large"
         tools:text="USD" />
 
     <ImageView
         android:id="@+id/image_selected_item_simple_list"
-        style="@style/CryptoSmart.Style.Image.VectorDrawable"
+        style="@style/KairosCrypto.Style.Image.VectorDrawable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"

@@ -4,18 +4,18 @@
     <attr name="colorBackground" format="color|reference" />
 
     <!--STYLING ELEMENTS HIERARCHY SETUP-->
-    <style name="CryptoSmart" />
+    <style name="KairosCrypto" />
 
-    <style name="CryptoSmart.Theme" parent="CryptoSmart" />
+    <style name="KairosCrypto.Theme" parent="KairosCrypto" />
 
-    <style name="CryptoSmart.Style" parent="CryptoSmart" />
+    <style name="KairosCrypto.Style" parent="KairosCrypto" />
 
-    <style name="CryptoSmart.Style.Text" parent="CryptoSmart" />
+    <style name="KairosCrypto.Style.Text" parent="KairosCrypto" />
 
     <!--THEMES-->
 
     <!--Application light theme (default).-->
-    <style name="CryptoSmart.Theme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="KairosCrypto.Theme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/gray_primary</item>
         <item name="colorPrimaryDark">@color/gray_primary_dark</item>
         <item name="colorAccent">@color/gray_secondary</item>
@@ -25,7 +25,7 @@
     </style>
 
     <!-- Application dark theme. -->
-    <style name="CryptoSmart.Theme.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="KairosCrypto.Theme.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white_50_opacity</item>
         <item name="colorAccent">@color/gray_secondary_dark</item>
@@ -44,12 +44,12 @@
     </style>
 
     <!--ARBITRARY APPEARANCE-->
-    <style name="CryptoSmart.Style.Background">
+    <style name="KairosCrypto.Style.Background">
         <item name="android:background">?attr/colorBackground</item>
     </style>
 
     <!--PROGRESS BAR-->
-    <style name="CryptoSmart.Style.Progress.Horizontal.Indeterminate.BookmarksCard" parent="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding">
+    <style name="KairosCrypto.Style.Progress.Horizontal.Indeterminate.BookmarksCard" parent="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding">
         <item name="android:indeterminate">true</item>
         <item name="mpb_progressStyle">horizontal</item>
         <item name="mpb_useIntrinsicPadding">false
@@ -57,55 +57,55 @@
     </style>
 
     <!--IMAGES-->
-    <style name="CryptoSmart.Style.Image">
+    <style name="KairosCrypto.Style.Image">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:minHeight">@dimen/min_tap_area_side</item>
         <item name="android:minWidth">@dimen/min_tap_area_side</item>
     </style>
 
-    <style name="CryptoSmart.Style.Image.VectorDrawable" parent="CryptoSmart.Style.Image">
+    <style name="KairosCrypto.Style.Image.VectorDrawable" parent="KairosCrypto.Style.Image">
         <item name="android:scaleType">centerInside</item>
         <item name="android:tint">?attr/colorPrimary</item>
     </style>
 
     <!--BUTTONS-->
-    <style name="CryptoSmart.Style.Button" parent="CryptoSmart.Style.Image">
+    <style name="KairosCrypto.Style.Button" parent="KairosCrypto.Style.Image">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="CryptoSmart.Style.Button.VectorDrawable" parent="CryptoSmart.Style.Button">
+    <style name="KairosCrypto.Style.Button.VectorDrawable" parent="KairosCrypto.Style.Button">
         <item name="android:background">@drawable/themed_background_with_ripple</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:tint">?attr/colorPrimary</item>
         <item name="android:buttonTint">?attr/colorPrimary</item>
     </style>
 
-    <style name="CryptoSmart.Style.Button.Flat" parent="CryptoSmart.Style.Button">
+    <style name="KairosCrypto.Style.Button.Flat" parent="KairosCrypto.Style.Button">
         <item name="android:elevation">0dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:background">@drawable/themed_background_with_ripple</item>
-        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Medium_Large</item>
+        <item name="android:textAppearance">@style/KairosCrypto.Style.Text.Muli.Medium_Large</item>
     </style>
 
-    <style name="CryptoSmart.Style.Button.Flat.Small" parent="CryptoSmart.Style.Button.Flat">
-        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Small</item>
+    <style name="KairosCrypto.Style.Button.Flat.Small" parent="KairosCrypto.Style.Button.Flat">
+        <item name="android:textAppearance">@style/KairosCrypto.Style.Text.Muli.Small</item>
         <item name="android:minHeight">@dimen/min_tap_area_side_small</item>
         <item name="android:minWidth">@dimen/min_tap_area_side_small</item>
     </style>
 
-    <style name="CryptoSmart.Style.Button.Flat.Small.Selected" parent="CryptoSmart.Style.Button.Flat">
-        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Medium.Light</item>
+    <style name="KairosCrypto.Style.Button.Flat.Small.Selected" parent="KairosCrypto.Style.Button.Flat">
+        <item name="android:textAppearance">@style/KairosCrypto.Style.Text.Muli.Medium.Light</item>
         <item name="android:minHeight">@dimen/min_tap_area_side_small</item>
         <item name="android:minWidth">@dimen/min_tap_area_side_small</item>
     </style>
 
-    <style name="CryptoSmart.Style.Button.Flat.WithRippleMask" parent="CryptoSmart.Style.Button.Flat">
+    <style name="KairosCrypto.Style.Button.Flat.WithRippleMask" parent="KairosCrypto.Style.Button.Flat">
         <item name="android:background">@drawable/themed_background_with_masked_ripple</item>
     </style>
 
     <!--TOOLBAR-->
-    <style name="CryptoSmart.Style.Toolbar">
+    <style name="KairosCrypto.Style.Toolbar">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:elevation">4dp</item>
@@ -113,28 +113,28 @@
         <item name="contentInsetEnd">0dp</item>
     </style>
 
-    <style name="CryptoSmart.Style.Toolbar.Button" parent="CryptoSmart.Style.Button.VectorDrawable">
+    <style name="KairosCrypto.Style.Toolbar.Button" parent="KairosCrypto.Style.Button.VectorDrawable">
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
     <!--BOTTOM BAR-->
-    <style name="CryptoSmart.Style.BottomBar">
+    <style name="KairosCrypto.Style.BottomBar">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:elevation">8dp</item>
     </style>
 
     <!--VIEW PAGER TABS-->
-    <style name="CryptoSmart.Style.TabLayout">
+    <style name="KairosCrypto.Style.TabLayout">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:elevation">4dp</item>
-        <item name="tabTextAppearance">@style/CryptoSmart.Style.Text.Muli.Medium</item>
+        <item name="tabTextAppearance">@style/KairosCrypto.Style.Text.Muli.Medium</item>
         <item name="tabSelectedTextColor">?attr/colorPrimaryDark</item>
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">0.5dp</item>
     </style>
 
     <!--CARDS-->
-    <style name="CryptoSmart.Style.BookmarksCard">
+    <style name="KairosCrypto.Style.BookmarksCard">
         <item name="android:background">@drawable/themed_card_background_clickable</item>
         <item name="android:elevation">4dp</item>
         <item name="android:clickable">true</item>
@@ -146,62 +146,62 @@
     <!--MULI FONT-->
 
     <!--small fonts-->
-    <style name="CryptoSmart.Style.Text.Muli.Small" parent="CryptoSmart">
+    <style name="KairosCrypto.Style.Text.Muli.Small" parent="KairosCrypto">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="fontFamily">@font/font_muli_extra_light</item>
     </style>
 
-    <style name="CryptoSmart.Style.Text.Muli.Small.Light" parent="CryptoSmart.Style.Text.Muli.Small">
+    <style name="KairosCrypto.Style.Text.Muli.Small.Light" parent="KairosCrypto.Style.Text.Muli.Small">
         <item name="fontFamily">@font/font_muli_light</item>
     </style>
 
     <!--medium fonts-->
-    <style name="CryptoSmart.Style.Text.Muli.Medium" parent="CryptoSmart">
+    <style name="KairosCrypto.Style.Text.Muli.Medium" parent="KairosCrypto">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="fontFamily">@font/font_muli_extra_light</item>
     </style>
 
-    <style name="CryptoSmart.Style.Text.Muli.Medium.Light" parent="CryptoSmart.Style.Text.Muli.Medium">
+    <style name="KairosCrypto.Style.Text.Muli.Medium.Light" parent="KairosCrypto.Style.Text.Muli.Medium">
         <item name="fontFamily">@font/font_muli_light</item>
     </style>
 
-    <style name="CryptoSmart.Style.Text.Muli.Medium.Regular" parent="CryptoSmart.Style.Text.Muli.Medium">
+    <style name="KairosCrypto.Style.Text.Muli.Medium.Regular" parent="KairosCrypto.Style.Text.Muli.Medium">
         <item name="fontFamily">@font/font_muli_regular</item>
     </style>
 
     <!--medium large fonts-->
-    <style name="CryptoSmart.Style.Text.Muli.Medium_Large" parent="CryptoSmart">
+    <style name="KairosCrypto.Style.Text.Muli.Medium_Large" parent="KairosCrypto">
         <item name="android:textSize">@dimen/text_size_medium_large</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="fontFamily">@font/font_muli_light</item>
     </style>
 
-    <style name="CryptoSmart.Style.Text.Muli.Medium_Large.Regular" parent="CryptoSmart.Style.Text.Muli.Medium_Large">
+    <style name="KairosCrypto.Style.Text.Muli.Medium_Large.Regular" parent="KairosCrypto.Style.Text.Muli.Medium_Large">
         <item name="fontFamily">@font/font_muli_regular</item>
     </style>
 
     <!--large fonts-->
-    <style name="CryptoSmart.Style.Text.Muli.Large" parent="CryptoSmart">
+    <style name="KairosCrypto.Style.Text.Muli.Large" parent="KairosCrypto">
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="fontFamily">@font/font_muli_regular</item>
     </style>
 
     <!--DIALOGS-->
-    <style name="CryptoSmart.Style.Dialog">
+    <style name="KairosCrypto.Style.Dialog">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:padding">8dp</item>
         <item name="android:maxHeight">300dp</item>
     </style>
 
-    <style name="CryptoSmart.Style.Dialog.TitleText">
+    <style name="KairosCrypto.Style.Dialog.TitleText">
         <item name="android:layout_margin">16dp</item>
-        <item name="android:textAppearance">@style/CryptoSmart.Style.Text.Muli.Large</item>
+        <item name="android:textAppearance">@style/KairosCrypto.Style.Text.Muli.Large</item>
     </style>
 
-    <style name="CryptoSmart.Style.Dialog.RecyclerView">
+    <style name="KairosCrypto.Style.Dialog.RecyclerView">
         <item name="android:background">?attr/colorBackground</item>
         <item name="android:maxHeight">300dp</item>
         <item name="maxHeight">300dp</item>

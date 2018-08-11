@@ -10,14 +10,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
+        <com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar
             android:id="@+id/screen_toolbar"
-            style="@style/CryptoSmart.Style.Toolbar"
+            style="@style/KairosCrypto.Style.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
             <include layout="@layout/include_coin_list_display_options" />
-        </com.catalinj.cryptosmart.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar>
+        </com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindisplayoptions.view.CoinDisplayOptionsToolbar>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefreshlayout_bookmarks_list"
@@ -32,9 +32,9 @@
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-    <com.catalinj.cryptosmart.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
+    <com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
         android:id="@+id/button_floating_scroll_to_top"
-        style="@style/CryptoSmart.Style.Button"
+        style="@style/KairosCrypto.Style.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

@@ -110,7 +110,7 @@ class BookmarksFragment : WheelbarrowFragment<BookmarksComponent>(),
     //end mvp view methods
 
     //bookmarks view methods
-    override fun setListData(bookmarksList: List<BookmarksCoin>) {
+    override fun setData(bookmarksList: List<BookmarksCoin>) {
         recyclerViewAdapter.adapterSettings = recyclerViewAdapter.adapterSettings
                 .updateCurrency(newCurrency = bookmarksPresenter.displayCurrency)
         recyclerViewAdapter.coins = bookmarksList.toMutableList()

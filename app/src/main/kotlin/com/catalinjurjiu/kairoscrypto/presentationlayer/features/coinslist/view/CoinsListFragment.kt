@@ -154,8 +154,8 @@ class CoinsListFragment : WheelbarrowFragment<CoinListComponent>(),
     //end mvp view methods
 
     //coin list view methods
-    override fun setListData(data: List<CryptoCoin>) {
-        recyclerViewAdapter.coins = data
+    override fun setListData(coinList: List<CryptoCoin>) {
+        recyclerViewAdapter.coins = coinList
         recyclerViewAdapter.adapterSettings = CryptoListAdapterSettings(currency = coinListPresenter.displayCurrency,
                 snapshot = coinListPresenter.displaySnapshot)
         recyclerViewAdapter.notifyDataSetChanged()

@@ -193,7 +193,7 @@ class CoinDetailsFragment :
         bookmarkToggleButton.setOnCheckedChangeListener(null)
         bookmarkToggleButton.isChecked = isBookmark
         bookmarkToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            coinDetailsPresenter.toggleButtonPressed(isChecked = isChecked)
+            coinDetailsPresenter.bookmarksCheckButtonPressed(isChecked = isChecked)
         }
         bookmarkToggleButton.visibility = View.VISIBLE
     }

@@ -98,8 +98,8 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
     //END base presenter methods
 
     //bookmarks presenter methods
-    override fun coinSelected(cryptoCoin: BookmarksCoin) {
-        navigator?.openCoinDetailsScreen(cryptoCoin.toBusinessLayerCoin())
+    override fun coinSelected(bookmarksCoin: BookmarksCoin) {
+        navigator?.openCoinDetailsScreen(bookmarksCoin.toBusinessLayerCoin())
     }
 
     override fun userPullToRefresh() {
@@ -109,7 +109,7 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
     //end bookmarks presenter logic
 
     private fun setViewData(data: List<BookmarksCoin>) {
-        bookmarksView?.setListData(data)
+        bookmarksView?.setData(data)
     }
 
     private fun refreshBookmarks() {
@@ -120,7 +120,7 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess {
-                    bookmarksView?.setListData(it)
+                    bookmarksView?.setData(it)
                 }
                 .observeOn(Schedulers.io())
                 .subscribe { bookmarks ->

@@ -101,7 +101,7 @@ class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData,
         navigator?.navigateBack()
     }
 
-    override fun toggleButtonPressed(isChecked: Boolean) {
+    override fun bookmarksCheckButtonPressed(isChecked: Boolean) {
         val function = if (isChecked) {
             bookmarksRepository::addBookmark
         } else {

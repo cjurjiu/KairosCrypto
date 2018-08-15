@@ -10,6 +10,8 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.mai
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coinmarkets.contract.CoinMarketsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coinmarkets.presenter.CoinMarketsPresenter
+import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.contract.ScrollToTopWidgetContract
+import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.presenter.ScrollToTopWidgetPresenter
 import dagger.Module
 import dagger.Provides
 
@@ -22,14 +24,12 @@ class CoinMarketsModule(private val partialCoinData: CoinDetailsPartialData) {
     @Provides
     @CoinMarketsScope
     fun provideCoinMarketsPresenter(coinDetailsPresenter: CoinDetailsContract.CoinDetailsPresenter,
-                                    repository: MarketsRepository,
-                                    userSettings: KairosCryptoUserSettings)
+                                    repository: MarketsRepository)
             : CoinMarketsContract.CoinMarketsPresenter {
 
         return CoinMarketsPresenter(coinData = partialCoinData,
                 repository = repository,
-                parentPresenter = coinDetailsPresenter,
-                userSettings = userSettings)
+                parentPresenter = coinDetailsPresenter)
     }
 
     @Provides
@@ -42,5 +42,11 @@ class CoinMarketsModule(private val partialCoinData: CoinDetailsPartialData) {
         return CoinMarketCapMarketsRepository(kairosCryptoDb = database,
                 coinMarketCapHtmlService = restServiceFactory.getMarketsHtmlServiceApi(),
                 userSettings = userSettings)
+    }
+
+    @Provides
+    @CoinMarketsScope
+    fun provideScrollToTopWidgetPresenter(): ScrollToTopWidgetContract.ScrollToTopWidgetPresenter {
+        return ScrollToTopWidgetPresenter()
     }
 }

@@ -3,7 +3,6 @@ package com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.su
 import android.util.Log
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.ErrorCode
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
-import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.threading.Executors
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
@@ -17,12 +16,10 @@ import io.reactivex.functions.Consumer
  */
 class CoinMarketsPresenter(private val coinData: CoinDetailsPartialData,
                            private val repository: MarketsRepository,
-                           private val parentPresenter: CoinDetailsContract.CoinDetailsPresenter,
-                           private val userSettings: KairosCryptoUserSettings) :
+                           parentPresenter: CoinDetailsContract.CoinDetailsPresenter) :
         CoinMarketsContract.CoinMarketsPresenter {
 
     private var view: CoinMarketsContract.CoinMarketsView? = null
-    private val primaryCurrency = userSettings.getPrimaryCurrency()
     private val compositeDisposable = CompositeDisposable()
 
     init {
@@ -72,25 +69,4 @@ class CoinMarketsPresenter(private val coinData: CoinDetailsPartialData,
         fetchData()
         return true
     }
-
-    override fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int) {
-        //scroll to top button hide/reveal logic
-        val displayedItemPosition = (view?.getDisplayedItemPosition() ?: 0)
-        val scrollToTopVisible = view?.isScrollToTopVisible() ?: false
-        if (displayedItemPosition > SCROLL_TO_TOP_LIST_THRESHOLD && !scrollToTopVisible) {
-            view?.revealScrollToTopButton()
-        } else if (displayedItemPosition < SCROLL_TO_TOP_LIST_THRESHOLD && scrollToTopVisible) {
-            view?.hideScrollToTopButton()
-        }
-    }
-
-    override fun scrollToTopPressed() {
-        view?.scrollTo(0)
-        view?.hideScrollToTopButton()
-    }
-
-    private companion object {
-        const val SCROLL_TO_TOP_LIST_THRESHOLD = 30
-    }
-
 }

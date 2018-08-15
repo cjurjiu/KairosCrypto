@@ -3,6 +3,7 @@ package com.catalinjurjiu.kairoscrypto.di.components
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.CoinMarketsScope
 import com.catalinjurjiu.kairoscrypto.di.modules.coindetails.subscreens.CoinMarketsModule
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coinmarkets.view.CoinMarketsFragment
+import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import dagger.Subcomponent
 
 /**
@@ -13,4 +14,6 @@ import dagger.Subcomponent
 abstract class CoinMarketsComponent {
 
     abstract fun inject(coinMarketsFragment: CoinMarketsFragment)
+
+    abstract fun inject(scrollToTopWidget: ScrollToTopFloatingActionButton)
 }

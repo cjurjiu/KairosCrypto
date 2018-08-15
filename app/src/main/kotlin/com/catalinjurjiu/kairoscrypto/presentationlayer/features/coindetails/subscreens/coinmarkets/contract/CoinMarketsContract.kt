@@ -21,11 +21,6 @@ interface CoinMarketsContract {
          * Performs a data refresh.
          */
         fun handleRefresh(): Boolean
-
-        //todo remove, replace with scrolltotop widget
-        fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int)
-
-        fun scrollToTopPressed()
     }
 
     /**
@@ -51,19 +46,5 @@ interface CoinMarketsContract {
          * action.
          */
         fun showError(errorCode: ErrorCode, retryAction: () -> Unit)
-
-        //todo remove, replace with scrolltotop widget
-        //scroll to top behavior
-        fun scrollTo(scrollPosition: Int)
-
-        fun setContentVisible(isVisible: Boolean)
-
-        fun isScrollToTopVisible(): Boolean
-
-        fun revealScrollToTopButton()
-
-        fun hideScrollToTopButton()
-
-        fun getDisplayedItemPosition(): Int
     }
 }

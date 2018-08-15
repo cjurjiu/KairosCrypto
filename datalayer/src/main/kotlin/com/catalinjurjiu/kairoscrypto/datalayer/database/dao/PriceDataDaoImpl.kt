@@ -6,6 +6,9 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao.RoomPriceDataD
 import io.reactivex.Flowable
 
 /**
+ * Dao which wraps over a [RoomPriceDataDao] to respect the contract defined by
+ * the [PriceDataDao] contract.
+ *
  * Created by catalin on 08/05/2018.
  */
 internal class PriceDataDaoImpl(private val roomPriceDataDao: RoomPriceDataDao) : PriceDataDao {
@@ -20,9 +23,5 @@ internal class PriceDataDaoImpl(private val roomPriceDataDao: RoomPriceDataDao) 
 
     override fun insert(coinsPriceData: List<DbPriceData>): List<Long> {
         return roomPriceDataDao.insert(coinsPriceData = coinsPriceData)
-    }
-
-    override fun update(coinsPriceData: List<DbPriceData>): Int {
-        return roomPriceDataDao.update(coinsPriceData = coinsPriceData)
     }
 }

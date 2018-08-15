@@ -9,6 +9,9 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
+ * Dao which wraps over a [RoomBookmarksDao] to respect the contract defined by
+ * the [BookmarksDao] contract.
+ *
  * Created by catalin on 11/05/2018.
  */
 internal class BookmarksDaoImpl(private val roomBookmarksDao: RoomBookmarksDao) : BookmarksDao {
@@ -37,8 +40,8 @@ internal class BookmarksDaoImpl(private val roomBookmarksDao: RoomBookmarksDao) 
         return roomBookmarksDao.insert(dbBookmark = dbBookmark)
     }
 
-    override fun insert(dbBookmark: List<DbBookmark>): List<Long> {
-        return roomBookmarksDao.insert(dbBookmark = dbBookmark)
+    override fun insert(dbBookmarks: List<DbBookmark>): List<Long> {
+        return roomBookmarksDao.insert(dbBookmarks = dbBookmarks)
     }
 
     override fun delete(dbBookmark: DbBookmark): Int {

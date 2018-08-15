@@ -5,6 +5,12 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.models.DbCryptoCoinMark
 import com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao.RoomCryptoCoinMarketsDao
 import io.reactivex.Flowable
 
+/**
+ * Dao which wraps over a [RoomCryptoCoinMarketsDao] to respect the contract defined by
+ * the [CryptoCoinMarketsDao] contract.
+ *
+ * Created by catalin on 09/05/2018.
+ */
 internal class CryptoCoinMarketsDaoImpl(private val roomCryptoCoinMarketsDao: RoomCryptoCoinMarketsDao) :
         CryptoCoinMarketsDao {
 

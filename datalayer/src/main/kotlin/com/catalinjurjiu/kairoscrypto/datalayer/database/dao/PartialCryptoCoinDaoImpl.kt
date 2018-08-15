@@ -6,7 +6,10 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.room.dao.RoomPartialCry
 import io.reactivex.Flowable
 
 /**
- * Created by catalinj on 28.01.2018.
+ * Dao which wraps over a [RoomPartialCryptoCoinDao] to respect the contract defined by
+ * the [PartialCryptoCoinDao] contract.
+ *
+ * Created by catalin on 28/01/2018.
  */
 internal class PartialCryptoCoinDaoImpl(private val roomPartialCryptoCoinDao: RoomPartialCryptoCoinDao) :
         PartialCryptoCoinDao {

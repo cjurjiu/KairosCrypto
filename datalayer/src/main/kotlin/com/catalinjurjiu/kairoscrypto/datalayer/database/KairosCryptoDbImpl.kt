@@ -6,6 +6,12 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.dao.*
 import com.catalinjurjiu.kairoscrypto.datalayer.database.dao.*
 import com.catalinjurjiu.kairoscrypto.datalayer.database.room.KairosCryptoRoomDb
 
+/**
+ * Wraps over a [KairosCryptoRoomDb] in order to respect the contract defined by
+ * [KairosCryptoDb].
+ *
+ * Get the singleton instance via [KairosCryptoDbFactory.getDatabase].
+ */
 internal class KairosCryptoDbImpl(private val roomKairosCryptoDb: KairosCryptoRoomDb) : KairosCryptoDb {
 
     override fun getCryptoCoinDao(): CryptoCoinDao {

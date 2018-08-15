@@ -2,8 +2,11 @@ package com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.model
 
 import com.google.gson.annotations.SerializedName
 
+
 /**
- * Created by catalin on 07/05/2018.
+ * Model for a crypto currency coin, as returned by the coinmarketcap.com API.
+ *
+ * Created by catalinj on 27.01.2018.
  */
 data class CoinMarketCapCryptoCoinListResponse(
         @SerializedName("data") val data: Map<String, CoinMarketCapCryptoCoin>,

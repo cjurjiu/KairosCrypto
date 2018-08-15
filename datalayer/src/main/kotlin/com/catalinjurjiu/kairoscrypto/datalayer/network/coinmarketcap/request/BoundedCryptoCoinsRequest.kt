@@ -15,7 +15,7 @@ class BoundedCryptoCoinsRequest(private val startIndex: Int,
 
     override fun fetchData(): Observable<CoinMarketCapCryptoCoinListResponse> {
         Log.d("RxJ", "fetch data")
-        return coinMarketCapApiService.rxFetchCoinsListBounded(start = startIndex,
+        return coinMarketCapApiService.fetchCoinsList(start = startIndex,
                 limit = numberOfCoins,
                 currency = currencyRepresentation.currency)
     }

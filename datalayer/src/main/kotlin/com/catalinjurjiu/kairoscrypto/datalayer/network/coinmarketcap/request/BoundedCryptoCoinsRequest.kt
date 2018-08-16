@@ -1,6 +1,5 @@
 package com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.request
 
-import android.util.Log
 import com.catalinjurjiu.kairoscrypto.datalayer.CurrencyRepresentation
 import com.catalinjurjiu.kairoscrypto.datalayer.network.abstractrequest.ComposableApiRequest
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.CoinMarketCapApiService
@@ -14,7 +13,6 @@ class BoundedCryptoCoinsRequest(private val startIndex: Int,
         ComposableApiRequest<CoinMarketCapCryptoCoinListResponse>() {
 
     override fun fetchData(): Observable<CoinMarketCapCryptoCoinListResponse> {
-        Log.d("RxJ", "fetch data")
         return coinMarketCapApiService.fetchCoinsList(start = startIndex,
                 limit = numberOfCoins,
                 currency = currencyRepresentation.currency)

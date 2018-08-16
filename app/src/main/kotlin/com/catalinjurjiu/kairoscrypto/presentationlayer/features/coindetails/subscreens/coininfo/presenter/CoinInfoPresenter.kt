@@ -39,8 +39,6 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
                 .debounce(50, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { coinDetails ->
-                    Log.d("Cata", "CoinInfoPresenter-> coinDetailsObservable#onNext." +
-                            "Coin serverId: ${coinDetails.id}")
                     val relevantPriceDataItems = coinDetails.priceData.keys
                             .filter {
                                 it == primaryCurrency.currency
@@ -115,7 +113,7 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
         coinsRepository.fetchCoinDetails(coinId = coinId,
                 valueRepresentationsArray = arrayOf(primaryCurrency, CurrencyRepresentation.BTC),
                 errorHandler = Consumer {
-                    Log.d("Cata", "CoinInfoPresenter: Error fetching coin: $it")
+                    Log.d(TAG, "CoinInfoPresenter: Error fetching coin: $it")
                     view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryHandler = ::fetchCoinDetails)
                 })
     }

@@ -24,28 +24,20 @@ class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData,
     private var childCoinMarketsPresenter: CoinMarketsContract.CoinMarketsPresenter? = null
     private var coinIsBookmark: Boolean = false
 
-    init {
-        Log.d("Cata", "Injected CoinDetailsPresenter")
-    }
-
     override fun startPresenting() {
-        Log.d("Cata", "CoinDetailsPresenter#startPresenting")
         updateView(data = coinPartialData)
     }
 
     override fun stopPresenting() {
-        Log.d("Cata", "CoinDetailsPresenter#stopPresenting")
         compositeDisposable.clear()
     }
 
     override fun viewAvailable(view: CoinDetailsContract.CoinDetailsView) {
-        Log.d("Cata", "CoinDetailsPresenter#viewAvailable")
         this.view = view
         view.initialise()
     }
 
     override fun viewDestroyed() {
-        Log.d("Cata", "CoinDetailsPresenter#viewDestroyed")
         view = null
         navigator = null
     }
@@ -55,7 +47,6 @@ class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData,
     }
 
     override fun userPullToRefresh() {
-        Log.d("Cata", "CoinDetailsPresenter#userPullToRefresh")
         val activeView = view?.getActiveChildView()
         when (activeView) {
             is CoinInfoContract.CoinInfoView ->
@@ -112,7 +103,6 @@ class CoinDetailsPresenter(private var coinPartialData: CoinDetailsPartialData,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { success ->
-                    Log.d("Cata", "Operation success! $success")
                     updateBookmarkToggleButton(coinPartialData.coinSymbol)
                 }
     }

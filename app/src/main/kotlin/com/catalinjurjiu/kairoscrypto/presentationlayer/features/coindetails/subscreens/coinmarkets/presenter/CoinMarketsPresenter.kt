@@ -1,6 +1,5 @@
 package com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coinmarkets.presenter
 
-import android.util.Log
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.ErrorCode
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.threading.Executors
@@ -33,7 +32,6 @@ class CoinMarketsPresenter(private val coinData: CoinDetailsPartialData,
                     //onNext
                     view?.setData(it)
                 })
-        Log.d("Cata", "Markets presenter #startPresenting.")
         fetchData()
     }
 

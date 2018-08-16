@@ -68,31 +68,25 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
         } else {
             setViewData(data)
         }
-
-        Log.d("Cata", "$TAG#startPresenting")
     }
 
     override fun stopPresenting() {
-        Log.d("Cata", "$TAG#stopPresenting")
         compositeDisposable.clear()
     }
 
     override fun viewAvailable(view: BookmarksContract.BookmarksView) {
-        Log.d("Cata", "$TAG#viewAvailable")
         loadController = LoadingController(view)
         bookmarksView = view
         view.initialise()
     }
 
     override fun viewDestroyed() {
-        Log.d("Cata", "$TAG#viewDestroyed")
         navigator = null
         loadController?.cleanUp()
         loadController = null
     }
 
     override fun getView(): BookmarksContract.BookmarksView? {
-        Log.d("Cata", "$TAG#getView")
         return bookmarksView
     }
     //END base presenter methods
@@ -127,7 +121,7 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
                     bookmarksRepository.refreshBookmarksById(currencyRepresentation = displayCurrency,
                             bookmarks = bookmarks,
                             errorHandler = Consumer {
-                                Log.d("Cata", "Error occurred at refreshBookmarks:$it")
+                                Log.d(TAG, "Error occurred at refreshBookmarks:$it")
                                 Executors.mainThread().execute {
                                     bookmarksView?.showError(errorCode = ErrorCode.GENERIC_ERROR,
                                             retryAction = ::refreshBookmarks)
@@ -144,7 +138,6 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
                 .subscribe { coinList ->
                     //ensure content is visible
                     bookmarksView?.setContentVisible(isVisible = true)
-                    Log.d("Cata", "Got new bookmarks! activeCurrency: $currency")
                     setViewData(coinList.map { coin ->
                         coin.toBookmarksCoin(bookmarksRepository.isBookmarkLoading(coinSymbol = coin.symbol))
                     })
@@ -152,7 +145,6 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
     }
 
     private fun displayCurrencyChanged(newDisplayCurrency: CurrencyRepresentation) {
-        Log.d("Cata", "$TAG#displayCurrencyChanged")
         //remove old subscription
         compositeDisposable.remove(bookmarksListDisposable)
         bookmarksListDisposable.dispose()
@@ -164,12 +156,12 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
         //launch the request
         bookmarksRepository.refreshBookmarks(currencyRepresentation = newDisplayCurrency,
                 errorHandler = Consumer {
-                    Log.d("Cata", "Error occurred at displayCurrencyChanged:$it")
+                    //todo
+                    Log.d(TAG, "Error occurred at displayCurrencyChanged:$it")
                 })
     }
 
     private fun selectedSnapshotChanged(newSnapshot: PredefinedSnapshot) {
-        Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSnapshot.name}")
         bookmarksView?.refreshContent()
     }
 

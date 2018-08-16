@@ -1,6 +1,5 @@
 package com.catalinjurjiu.kairoscrypto.presentationlayer.features.settings.presenter
 
-import android.util.Log
 import com.catalinjurjiu.kairoscrypto.datalayer.CurrencyRepresentation
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.settings.contract.SettingsContract
@@ -33,7 +32,6 @@ class SettingsPresenter(private val userSettings: KairosCryptoUserSettings) : Se
     }
 
     override fun darkThemeSettingChanged(darkThemeChecked: Boolean) {
-        Log.d("Cata", "User darkThemeSettingChanged: $darkThemeChecked")
         userSettings.saveDarkThemeEnabled(darkThemeEnabled = darkThemeChecked)
         view?.applyNewTheme()
     }
@@ -43,7 +41,6 @@ class SettingsPresenter(private val userSettings: KairosCryptoUserSettings) : Se
             //discard redundant changes
             return
         }
-        Log.d("Cata", "User selected new primary currency: $primaryCurrency")
         userSettings.savePrimaryCurrency(primaryCurrency)
     }
 

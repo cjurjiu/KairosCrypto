@@ -39,12 +39,16 @@ class CoinMarketCapMarketsRepository(private val kairosCryptoDb: KairosCryptoDb,
                     val parser = MarketInfoHtmlParser(coinSymbol = coinSymbol,
                             marketInfoHtmlPage = it)
                     val markets = parser.extractMarkets().map { it.toDataLayerMarketInto() }
-                    Log.w("Cata", "Add markets to DB. size: ${markets.size}")
+                    Log.w(TAG, "Add markets to DB. size: ${markets.size}")
                     val addedIds = kairosCryptoDb.getMarketsInfoDao().insert(markets)
-                    Log.w("Cata", "Add markets markets with ids:$addedIds")
+                    Log.w(TAG, "Add markets markets with ids:$addedIds")
                 }, { it ->
                     //onError
                     errorHandler.accept(it)
                 })
+    }
+
+    private companion object {
+        const val TAG = "CMCMarketsRepository"
     }
 }

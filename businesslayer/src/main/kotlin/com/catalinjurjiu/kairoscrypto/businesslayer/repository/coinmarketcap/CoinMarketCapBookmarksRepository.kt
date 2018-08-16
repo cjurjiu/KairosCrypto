@@ -76,14 +76,13 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                 }
 
         requestsObservable.subscribe({ request ->
-            Log.d("RxJ", "OnNext reqest: $request")
 
             //onNext
             request.response.subscribe { coinDetailsResponse ->
                 val coinDetails = coinDetailsResponse.data
                 val coinId = kairosCryptoDb.getPlainCryptoCoinDao().insert(coinDetails.toDataLayerCoin())
                 val priceDetailsIds = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(coinDetails.toDataLayerPriceData())
-                Log.d("RxJ", "repo refreshBookmarks response. inserted coin w id: " +
+                Log.d(TAG, "Repo refreshBookmarks response. inserted coin with id: " +
                         "$coinId and price data with ids: $priceDetailsIds")
             }
             request.errors.subscribe(errorHandler)
@@ -91,10 +90,12 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
             request.execute()
         }, {
             //onError
-            Log.d("RxJ", "OnError ftw")
+            //todo
+            Log.d(TAG, "OnError: $it.")
         }, {
             //onComplete
-            Log.d("RxJ", "OnComplete ftw")
+            //todo
+            Log.d(TAG, "OnComplete.")
         })
     }
 
@@ -117,7 +118,6 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                 .subscribe({ coinRequestPair ->
                     val coin = coinRequestPair.first
                     val request = coinRequestPair.second
-                    Log.d("RxJ", "OnNext reqest: $request")
                     //setup
                     request.response.subscribe { coinDetailsResponse ->
                         //onNext
@@ -127,7 +127,7 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                         loadingCoinsList.remove(coin.symbol)
                         val coinId = kairosCryptoDb.getPlainCryptoCoinDao().insert(coinDetails.toDataLayerCoin())
                         val priceDetailsIds = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(coinDetails.toDataLayerPriceData())
-                        Log.d("RxJ", "repo refreshBookmarks response. inserted coin w id: " +
+                        Log.d(TAG, "Repo refreshBookmarks response. inserted coin with id: " +
                                 "$coinId and price data with ids: $priceDetailsIds")
                     }
                     request.errors.subscribe(errorHandler)
@@ -144,11 +144,13 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                     //launch request
                     request.execute()
                 }, {
+                    //todo
                     //onError
-                    Log.d("RxJ", "OnError ftw")
+                    Log.d(TAG, "OnError: $it.")
                 }, {
+                    //todo
                     //onComplete
-                    Log.d("RxJ", "OnComplete ftw")
+                    Log.d(TAG, "OnComplete.")
                 })
     }
 
@@ -203,7 +205,7 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
         }
                 .scan { t1, t2 -> t1 + t2 }
                 .map { intResult ->
-                    Log.d("RxJ", "repo loading state result: $intResult")
+                    Log.d(TAG, "Bookmarks repo loading state result: $intResult")
                     return@map if (intResult > 0) {
                         Repository.LoadingState.Loading
                     } else {
@@ -214,4 +216,7 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                 .publish()
     }
 
+    private companion object {
+        const val TAG = "CMCBookmarksRepository"
+    }
 }

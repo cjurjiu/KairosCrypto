@@ -2,7 +2,6 @@ package com.catalinjurjiu.kairoscrypto.presentationlayer.features.settings.view
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +65,7 @@ class SettingsFragment : WheelbarrowFragment<SettingsComponent>(), SettingsContr
 
         currencyRepresentationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d("Cata", "Spinner on nothing selected.")
+                //nothing
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

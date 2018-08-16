@@ -136,11 +136,9 @@ class CoinInfoFragment : WheelbarrowFragment<CoinInfoComponent>(),
     override fun setCoinInfo(coinDetails: CryptoCoinDetails) {
 
         if (coinDetails.priceData.isEmpty()) {
-            Log.e("Cata", "Price data empty??")
+            Log.e(TAG, "Price data empty. Ignore setCoinInfo request.")
             //ignore
             return
-        } else {
-            Log.e("Cata", "Price data contains currencies:${coinDetails.priceData.keys}")
         }
 
         val primaryCurrencyPriceData = coinDetails.priceData[CurrencyRepresentation.USD.currency]!!

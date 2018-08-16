@@ -102,16 +102,12 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     }
 
     override fun userPullToRefresh() {
-        Log.d("Cata", "PULL TO REFRESH")
         refreshCoins()
     }
 
     override fun viewScrolled(currentScrollPosition: Int, maxScrollPosition: Int) {
-        Log.d("Cata2", "Scroll! position:$currentScrollPosition maxScroll:$maxScrollPosition")
-
         //fetch more coin logic
         if (currentScrollPosition / maxScrollPosition.toFloat() > 0.75f && !waitForLoad) {
-            Log.d("Cata2", "scroll trigger load!")
             waitForLoad = true
             fetchMoreCoins()
         }
@@ -119,7 +115,6 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     //end coin list presenter methods
 
     private fun fetchInitialBatch() {
-        Log.d("Cata", "CoinListPresenter#fetchMoreCoins")
         val startIndex = 0
         repository.fetchCoins(startIndex = startIndex,
                 numberOfCoins = COIN_FETCH_BATCH_SIZE,
@@ -132,7 +127,6 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     }
 
     private fun fetchMoreCoins() {
-        Log.d("Cata", "CoinListPresenter#fetchMoreCoins")
         val startIndex = availableCoins.orEmpty().size
         repository.fetchCoins(startIndex = startIndex,
                 numberOfCoins = COIN_FETCH_BATCH_SIZE,
@@ -145,14 +139,13 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     }
 
     private fun refreshCoins() {
-        Log.d("Cata", "CoinListPresenter#refreshCoins")
         waitForLoad = false
         val fetchedCoinsNumber = availableCoins?.count() ?: COIN_FETCH_BATCH_SIZE
         repository.fetchCoins(startIndex = 0,
                 numberOfCoins = fetchedCoinsNumber,
                 currencyRepresentation = displayCurrency,
                 errorHandler = Consumer {
-                    Log.d("Cata", "CoinListPresenter#refreshCoins error: $it")
+                    Log.d("CoinListPresenter", "CoinListPresenter#refreshCoins error: $it")
 
                     Executors.mainThread().execute {
                         view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::refreshCoins)
@@ -175,7 +168,6 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     private fun updateDisplayedCoins(coins: List<CryptoCoin>) {
         //ensure the content is visible
         view?.setContentVisible(isVisible = true)
-        Log.d("RxJ", "Update displayed coins: size: ${coins.count()}")
         availableCoins = coins
         view?.setListData(coins)
         waitForLoad = false
@@ -185,13 +177,11 @@ class CoinsListPresenter(private val repository: CoinsRepository,
         return repository.getCoinListObservable(currency)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.d("RxJ", "Update coins")
                     updateDisplayedCoins(it)
                 }
     }
 
     private fun displayCurrencyChanged(newSelectedCurrency: CurrencyRepresentation) {
-        Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
         //remove old subscription
         compositeDisposable.remove(coinListDisposable)
         coinListDisposable.dispose()
@@ -205,7 +195,6 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     }
 
     private fun selectedSnapshotChanged(newSelectedSnapshot: PredefinedSnapshot) {
-        Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
         view?.refreshContent()
     }
 

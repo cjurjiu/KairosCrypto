@@ -7,10 +7,10 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.kairoscrypto.R
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.CryptoCoin
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.ErrorCode
@@ -25,7 +25,6 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindisplayopti
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coinslist.contract.CoinsListContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.view.ScrollToTopFloatingActionButton
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.snackbar.SnackBarWrapper
-import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
 import com.example.cryptodrawablesprovider.ImageHelper
 import kotlinx.android.synthetic.main.layout_fragment_coin_list.view.*
@@ -58,14 +57,10 @@ class CoinsListFragment : WheelbarrowFragment<CoinListComponent>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cargo.inject(this)
-        Log.d(TAG, "CoinsListFragment${hashCode().toString(16)}#onCreate.injector:" +
-                cargo.hashCode().toString(16) + " presenter:" +
-                coinListPresenter.hashCode().toString(16))
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "CoinsListFragment#onCreateView")
         return inflater.inflate(R.layout.layout_fragment_coin_list, container, false)!!
     }
 
@@ -73,63 +68,27 @@ class CoinsListFragment : WheelbarrowFragment<CoinListComponent>(),
         super.onViewCreated(view, savedInstanceState)
         coinListPresenter.navigator = (activity as MainActivity).navigator
         (activity as MainActivity).showBottomNavigation()
-        Log.d(TAG, "CoinsListFragment#onViewCreated")
         coinListPresenter.viewAvailable(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "CoinsListFragment#onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "CoinsListFragment#onPause")
     }
 
     override fun onStart() {
         super.onStart()
         coinListPresenter.startPresenting()
-        Log.d(TAG, "CoinsListFragment#onStart")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "CoinsListFragment#onStop")
         coinListPresenter.stopPresenting()
-        Log.d(TAG, "CoinsListFragment#onStop. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
-                "a2:${activity?.isChangingConfigurations}")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.d(TAG, "CoinsListFragment#onSaveInstanceState. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
-                "a2:${activity?.isChangingConfigurations}")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "CoinsListFragment#onDestroyView")
         recyclerView.clearOnScrollListeners()
         coinListPresenter.viewDestroyed()
         //notify the toolbar that the view is destroyed
         optionsToolbar.getPresenter().viewDestroyed()
         //notify the floating scroll-to-top button that the view is destroyed
         floatingScrollToTopButton.getPresenter().viewDestroyed()
-        Log.d(TAG, "CoinsListFragment#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
-                "a2:${activity?.isChangingConfigurations}")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "CoinsListFragment#onDestroy")
-        Log.d(TAG, "CoinsListFragment#onDestroy. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
-                "a2:${activity?.isChangingConfigurations}")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "CoinsListFragment#onDetach")
     }
     //end android lifecycle methods
 
@@ -144,7 +103,6 @@ class CoinsListFragment : WheelbarrowFragment<CoinListComponent>(),
     }
 
     override fun onBack(): Boolean {
-        Log.d(TAG, "CoinsListFragment#onBack")
         return false
     }
 
@@ -183,18 +141,15 @@ class CoinsListFragment : WheelbarrowFragment<CoinListComponent>(),
 
     //loading view methods
     override fun showLoadingIndicator() {
-        Log.d("Cata", "Loading started")
         swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideLoadingIndicator() {
-        Log.d("Cata", "Loading stopped")
         swipeRefreshLayout.isRefreshing = false
     }
     //end coin list & loading view methods
 
     private fun initToolbar(view: View, appCompatActivity: AppCompatActivity) {
-        Log.d("Cata", "have toolbar!")
         optionsToolbar = view.screen_toolbar
         appCompatActivity.setSupportActionBar(optionsToolbar)
         lifecycle.addObserver(optionsToolbar)

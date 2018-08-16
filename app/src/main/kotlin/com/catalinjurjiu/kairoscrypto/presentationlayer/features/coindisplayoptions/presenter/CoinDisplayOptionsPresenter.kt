@@ -1,6 +1,5 @@
 package com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindisplayoptions.presenter
 
-import android.util.Log
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.PredefinedSnapshot
 import com.catalinjurjiu.kairoscrypto.datalayer.CurrencyRepresentation
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
@@ -19,25 +18,20 @@ class CoinDisplayOptionsPresenter(private val coinDisplayController: CoinsDispla
     private lateinit var changeSnapshotDialogItems: List<SelectionItem>
 
     override fun startPresenting() {
-        Log.d("Cata", "Toolbar Presenter: startPresenting")
-
         initDisplayCurrencyDialogItems()
         initSnapshotDialogOptions()
     }
 
     override fun stopPresenting() {
-        Log.d("Cata", "Toolbar Presenter: stopPresenting")
         //don't need anything here as of now
     }
 
     override fun viewAvailable(view: CoinsDisplayOptionsContract.CoinsDisplayOptionsView) {
-        Log.d("Cata", "Toolbar Presenter: viewAvailable")
         this.view = view
         view.initialise()
     }
 
     override fun viewDestroyed() {
-        Log.d("Cata", "Toolbar Presenter: viewDestroyed")
         this.view = null
     }
 
@@ -58,7 +52,6 @@ class CoinDisplayOptionsPresenter(private val coinDisplayController: CoinsDispla
         }
         coinDisplayController.displayCurrency = CurrencyRepresentation.valueOf(newSelectedCurrency.value.toUpperCase())
         refreshActiveCurrencyForSelectionList(selectionList = changeCurrencyDialogItems)
-        Log.d("Cata", "displayCurrencyChanged: selectionItem:${newSelectedCurrency.name}")
     }
 
     override fun selectedSnapshotChanged(newSelectedSnapshot: SelectionItem) {
@@ -68,7 +61,6 @@ class CoinDisplayOptionsPresenter(private val coinDisplayController: CoinsDispla
         }
         coinDisplayController.displaySnapshot = PredefinedSnapshot.of(newSelectedSnapshot.value)
         refreshSelectedSnapshot(selectionList = changeSnapshotDialogItems)
-        Log.d("Cata", "selectedSnapshotChanged: selectionItem:${newSelectedSnapshot.name}")
     }
 
     private fun initDisplayCurrencyDialogItems() {

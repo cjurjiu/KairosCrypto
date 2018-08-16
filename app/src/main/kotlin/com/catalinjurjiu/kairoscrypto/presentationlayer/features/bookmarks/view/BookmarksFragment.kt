@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,14 +84,11 @@ class BookmarksFragment : WheelbarrowFragment<BookmarksComponent>(),
         optionsToolbar.getPresenter().viewDestroyed()
         //notify the floating scroll-to-top button that the view is destroyed
         floatingScrollToTopButton.getPresenter().viewDestroyed()
-        Log.d(TAG, "$TAG#onDestroyView. isRemoving:$isRemoving isActivityFinishing:${activity?.isFinishing} " +
-                "a2:${activity?.isChangingConfigurations}")
     }
     //END android fragment lifecycle
 
     //mvp view methods
     override fun initialise() {
-        Log.d("Cata", "$TAG#initialise")
         val view = view!!
         initToolbar(view = view, appCompatActivity = activity as AppCompatActivity)
         initRecyclerView(view = view)
@@ -170,7 +166,6 @@ class BookmarksFragment : WheelbarrowFragment<BookmarksComponent>(),
     }
 
     private fun initToolbar(view: View, appCompatActivity: AppCompatActivity) {
-        Log.d("Cata", "have toolbar!")
         optionsToolbar = view.screen_toolbar
         appCompatActivity.setSupportActionBar(optionsToolbar)
         lifecycle.addObserver(optionsToolbar)

@@ -6,7 +6,6 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.Toolbar
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.ImageButton
 import com.catalinjurjiu.kairoscrypto.R
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.extension.getSupportActivity
@@ -41,20 +40,17 @@ class CoinDisplayOptionsToolbar @JvmOverloads constructor(context: Context?,
     //lifecycle methods
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        Log.d("Cata", "Toolbar: onStart")
         coinDisplayOptionsPresenter.startPresenting()
     }
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
-        Log.d("Cata", "Toolbar: onStop")
         coinDisplayOptionsPresenter.stopPresenting()
     }
     //end lifecycle methods
 
     //mvp view methods
     override fun initialise() {
-        Log.d("Cata", "Toolbar: initialise")
         //set the change currency button clicked listener
         val changeCurrencyButton = this.findViewById<ImageButton>(R.id.button_change_currency)
         changeCurrencyButton?.setOnClickListener { coinDisplayOptionsPresenter.changeCurrencyButtonPressed() }

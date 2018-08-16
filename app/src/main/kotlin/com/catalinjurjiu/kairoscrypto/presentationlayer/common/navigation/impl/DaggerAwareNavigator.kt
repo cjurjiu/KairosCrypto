@@ -74,7 +74,7 @@ class DaggerAwareNavigator(private val activity: MainActivity) : Navigator {
             R.id.bookmarks -> openBookmarksScreen()
             R.id.coin_list -> openCoinListScreen()
             R.id.settings -> openSettingsScreen()
-            else -> Log.d("Cata", "User selected unknown bottom nav option")
+            else -> Log.d("DaggerAwareNavigator", "User selected unknown bottom nav option")
         }
         //we always want to mark the clicked item as selected
         return true

@@ -11,7 +11,6 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import com.catalinjurjiu.kairoscrypto.R
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.scrolltotop.contract.ScrollToTopWidgetContract
@@ -33,13 +32,11 @@ class ScrollToTopFloatingActionButton @JvmOverloads constructor(context: Context
     //android lifecycle methods
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        Log.d("Cata", "ScrollToTopFloatingActionButton: onStart")
         scrollToTopPresenter.startPresenting()
     }
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
-        Log.d("Cata", "ScrollToTopFloatingActionButton: onStop")
         scrollToTopPresenter.stopPresenting()
     }
     //end android lifecycle methods

@@ -66,7 +66,6 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                 coinMarketCapApiService = coinMarketCapApiService)
 
         apiRequest.response.observeOn(Schedulers.io()).subscribe {
-            Log.d("RxJ", "repo getFreshCoins response do next coins size:" + it.data.size)
             //network coins from the response
             val networkCoins: List<CoinMarketCapCryptoCoin> = it.data.map { coin -> coin.value }
             //db coins & insert
@@ -74,9 +73,8 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
             kairosCryptoDb.getPlainCryptoCoinDao().insert(dbCoins)
             //price data
             val coinsPriceData = networkCoins.flatMap { it.toDataLayerPriceData() }
-            Log.d("RxJ", "coinsPriceData size: ${coinsPriceData.size}")
             val insertedDataIds = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
-            Log.d("RxJ", "repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
+            Log.d(TAG, "Repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
                     "inserted ids:" + insertedDataIds)
         }
         apiRequest.errors.subscribe(errorHandler)
@@ -129,18 +127,15 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
         }
 
         Observable.concat(observablesToZip).doOnComplete {
-            Log.d("RxJ", "state observables have finished, call onComplete to composite tracker.")
             compositeStateTracker.onComplete()
         }.subscribe()
 
         compositeStateTracker.observeOn(Schedulers.io()).reduce<Boolean>(true) { currentResult, newRequestState ->
             //accumulate the states of finished requests. In the end emit true if everything
             //was successful, emit false otherwise.
-            Log.d("RxJ", "repo fetchCoinDetails reduce currentResult: $currentResult, newRequestState class:${newRequestState::class}")
             return@reduce (currentResult and (newRequestState is RequestState.Idle.Finished.Success<*>))
         }.subscribe({ success ->
             //onNext
-            Log.d("RxJ", "received coin details response!!")
 
             if (success) {
                 //all requests went through and everything was fetched successfully.
@@ -150,13 +145,11 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                             .observeOn(Schedulers.io())
                             .subscribe { coinResponse ->
                                 val coin = coinResponse.data
-                                Log.d("RxJ", "Write coin data to db. Available price data:" +
-                                        "${coin.quotes.keys}")
                                 val dbCoin: DbPartialCryptoCoin = coin.toDataLayerCoin()
                                 kairosCryptoDb.getPlainCryptoCoinDao().insert(dbCoin)
                                 val dbPriceData = coin.toDataLayerPriceData()
                                 val ids = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(dbPriceData)
-                                Log.d("RxJ", "Wrote coin data(${coin.name}) to db. " +
+                                Log.d(TAG, "Wrote coin data(${coin.name}) to db. " +
                                         "Available price data:${dbPriceData.map { it.currency }}. ids:$ids")
                             }
                 }
@@ -192,7 +185,7 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
         }
                 .scan { t1, t2 -> t1 + t2 }
                 .map { intResult ->
-                    Log.d("RxJ", "repo loading state result: $intResult")
+                    Log.d(TAG, "Coin repo loading state result: $intResult")
                     return@map if (intResult > 0) {
                         Repository.LoadingState.Loading
                     } else {
@@ -203,4 +196,7 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                 .publish()
     }
 
+    private companion object {
+        const val TAG = "CMCCoinsRepository"
+    }
 }

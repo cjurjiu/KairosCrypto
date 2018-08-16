@@ -62,7 +62,7 @@ class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: S
                     updatedFlag = updatedString,
                     lastUpdatedTimestamp = System.currentTimeMillis()))
         }
-        Log.d("Cata", "PARSING FINISHED. FOUND ${marketsInfo.size} entries")
+        Log.d("MarketsInfoParser", "Parsing finished. Found: ${marketsInfo.size} entries.")
         return marketsInfo
     }
 

@@ -6,6 +6,13 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 
 /**
+ * Immutable object which models a Bookmark as it is stored as a row in the Database.
+ *
+ * @property id Int which represents the unique ID of the coin. auto-increment, primary key.
+ * @property bookmarkedCoinSymbol String representing the coin symbol (e.g. BTC for Bitcoin). maps
+ * to an entry from the [DbPartialCryptoCoin.COIN_TABLE_NAME] table.
+ * @property dateAdded The time when the coin was bookmarked, as a timestamp since epoch.
+ *
  * Created by catalinj on 27.01.2018.
  */
 @Entity(tableName = DbBookmark.BOOKMARKS_TABLE_NAME,

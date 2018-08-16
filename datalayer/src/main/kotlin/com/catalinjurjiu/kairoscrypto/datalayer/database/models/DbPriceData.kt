@@ -4,13 +4,36 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 
 /**
- * Created by catalin on 08/05/2018.
+ * Immutable object which models value information (price) for a particular Crypto Coin, in one
+ * currency.
+ *
+ * Has a composite primary key composed of both the Symbol of a coin & the currency in which the
+ * price data is stored. This is because one coin can have multiple "Price Data" objects (db rows)
+ * associated with it. For instance, the value of a particular cryptocurrency could be represented
+ * both relative to the Dollar (USD), and relative to Bitcoin (BTC).
+ *
+ * @property coinSymbol Primary key. the symbol of the coin whose price data this object stores.
+ * @property currency Primary key. currency identifier representing the currency in which the value
+ * of designated coin is stored.
+ * @property coinServerId Unique ID which can identify the coin owning this price data on the
+ * server/backend that provided the price data.
+ * @property price The units of value of [currency] for the coin (represented by [coinSymbol]) which
+ * owns this value.
+ * @property marketCap The units of value of the total market cap of the coin which owns this value,
+ * represented in [currency].
+ * @property volume24h The units of value traded in the last 24 hours of the coin which owns this value,
+ * represented in [currency].
+ * @property percentChange1h The change in value over the last hour, in percents.
+ * @property percentChange24h The change in value over the last 24 hours, in percents.
+ * @property percentChange7d The change in value over the last 7 days, in percents.
+ * @property lastUpdated Timestamp since epoch when this price data was last updated.
+ *
+ * Created by catalinj on 27.01.2018.
  */
 @Entity(tableName = DbPriceData.PRICE_DATA_TABLE_NAME,
         primaryKeys = [DbPriceData.ColumnNames.COIN_SYMBOL, DbPriceData.ColumnNames.CURRENCY]
-//      foreign keys seem to cause race conditions on inserts? comment them for not
-//        ,
-//        foreignKeys = [
+//      foreign keys seem to cause race conditions on inserts? comment them for now
+//        ,foreignKeys = [
 //            (ForeignKey(entity = DbPartialCryptoCoin::class,
 //                    parentColumns = [DbPartialCryptoCoin.ColumnNames.SYMBOL],
 //                    childColumns = [DbPriceData.ColumnNames.COIN_SYMBOL],

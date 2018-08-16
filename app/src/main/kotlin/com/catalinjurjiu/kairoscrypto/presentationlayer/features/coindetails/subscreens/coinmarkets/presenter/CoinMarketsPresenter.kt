@@ -46,7 +46,7 @@ class CoinMarketsPresenter(private val coinData: CoinDetailsPartialData,
     }
 
     override fun stopPresenting() {
-        //todo
+        //todo - do we need to do anything here?
     }
 
     override fun viewAvailable(view: CoinMarketsContract.CoinMarketsView) {

@@ -11,11 +11,11 @@ class SettingsPresenter(private val userSettings: KairosCryptoUserSettings) : Se
     private var primaryCurrency: CurrencyRepresentation = userSettings.getPrimaryCurrency()
 
     override fun startPresenting() {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //nothing to do here
     }
 
     override fun stopPresenting() {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //nothing to do here
     }
 
     override fun viewAvailable(view: SettingsContract.SettingsView) {

@@ -17,7 +17,6 @@ import java.io.InputStream
 class SvgDecoder : ResourceDecoder<InputStream, SVG> {
 
     override fun handles(@NonNull source: InputStream, @NonNull options: Options): Boolean {
-        // TODO: Can we tell?
         return true
     }
 

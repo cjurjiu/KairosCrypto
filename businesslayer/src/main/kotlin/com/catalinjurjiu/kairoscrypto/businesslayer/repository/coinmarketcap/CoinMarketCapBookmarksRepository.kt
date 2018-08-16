@@ -90,11 +90,11 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
             request.execute()
         }, {
             //onError
-            //todo
+            //todo properly handle error
             Log.d(TAG, "OnError: $it.")
         }, {
             //onComplete
-            //todo
+            //todo properly handle onComplete
             Log.d(TAG, "OnComplete.")
         })
     }
@@ -144,11 +144,11 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                     //launch request
                     request.execute()
                 }, {
-                    //todo
+                    //todo properly handle error
                     //onError
                     Log.d(TAG, "OnError: $it.")
                 }, {
-                    //todo
+                    //todo properly handle onComplete
                     //onComplete
                     Log.d(TAG, "OnComplete.")
                 })

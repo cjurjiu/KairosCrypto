@@ -13,12 +13,12 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.selecti
 class AndroidResourceDecoder(context: Context) : ResourceDecoder {
 
     override fun decodeString(identifier: StringResource): String {
-        //todo
+        //nothing for the moment
         return ""
     }
 
     override fun decodeStringArray(identifier: StringArrayResource): List<String> {
-        //todo
+        //nothing for the moment
         return emptyList()
     }
 

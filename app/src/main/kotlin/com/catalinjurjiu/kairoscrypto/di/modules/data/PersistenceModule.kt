@@ -5,6 +5,7 @@ import com.catalinjurjiu.kairoscrypto.datalayer.database.KairosCryptoDbFactory
 import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettingsImpl
+import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.ApplicationContext
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.ApplicationScope
 import dagger.Module
 import dagger.Provides
@@ -17,13 +18,13 @@ class PersistenceModule {
 
     @Provides
     @ApplicationScope
-    fun provideKairosCryptoDatabase(ctx: Context): KairosCryptoDb {
+    fun provideKairosCryptoDatabase(@ApplicationContext ctx: Context): KairosCryptoDb {
         return KairosCryptoDbFactory.getDatabase(ctx)
     }
 
     @Provides
     @ApplicationScope
-    fun provideSettings(ctx: Context): KairosCryptoUserSettings {
+    fun provideSettings(@ApplicationContext ctx: Context): KairosCryptoUserSettings {
         return KairosCryptoUserSettingsImpl(ctx)
     }
 }

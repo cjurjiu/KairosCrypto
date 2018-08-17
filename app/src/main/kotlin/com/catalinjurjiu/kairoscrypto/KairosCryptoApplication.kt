@@ -1,6 +1,8 @@
 package com.catalinjurjiu.kairoscrypto
 
+import android.app.Activity
 import android.app.Application
+import com.catalinjurjiu.common.Holder
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.components.AppComponent
 import com.catalinjurjiu.kairoscrypto.di.components.DaggerAppComponent
@@ -9,7 +11,6 @@ import com.catalinjurjiu.kairoscrypto.di.modules.data.NetworkModule
 import com.catalinjurjiu.kairoscrypto.di.modules.data.PersistenceModule
 import com.catalinjurjiu.kairoscrypto.di.modules.data.RepositoryModule
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.formatter.CurrencyFormatter
-import com.catalinjurjiu.common.Holder
 import com.squareup.leakcanary.LeakCanary
 import javax.inject.Inject
 
@@ -32,9 +33,11 @@ class KairosCryptoApplication : Application(), Holder<AppComponent> {
     @Inject
     protected lateinit var userSettings: KairosCryptoUserSettings
 
+    private var activeActivity: Activity? = null
+
     private val cryptoAppComponent: AppComponent by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         DaggerAppComponent.builder()
-                .appModule(AppModule(applicationContext))
+                .appModule(AppModule(application = this))
                 .networkModule(NetworkModule())
                 .repositoryModule(RepositoryModule())
                 .persistenceModule(PersistenceModule())
@@ -49,11 +52,10 @@ class KairosCryptoApplication : Application(), Holder<AppComponent> {
             // You should not init your app in this process.
             return
         }
-        LeakCanary.install(this);
+        LeakCanary.install(this)
         component = cryptoAppComponent
         component.inject(this)
         CurrencyFormatter.refreshLocale(context = this)
         println("Application onCreate")
     }
-
 }

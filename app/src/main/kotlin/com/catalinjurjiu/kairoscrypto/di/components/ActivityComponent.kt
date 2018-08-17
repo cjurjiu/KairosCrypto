@@ -1,7 +1,6 @@
 package com.catalinjurjiu.kairoscrypto.di.components
 
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.ActivityScope
-import com.catalinjurjiu.kairoscrypto.di.modules.activity.ActivityModule
 import com.catalinjurjiu.kairoscrypto.di.modules.bookmarks.BookmarksModule
 import com.catalinjurjiu.kairoscrypto.di.modules.coindetails.CoinDetailsModule
 import com.catalinjurjiu.kairoscrypto.di.modules.coinlist.CoinListModule
@@ -13,7 +12,7 @@ import dagger.Subcomponent
  * Created by catalinj on 04.02.2018.
  */
 @ActivityScope
-@Subcomponent(modules = [(ActivityModule::class)])
+@Subcomponent
 abstract class ActivityComponent {
 
     abstract fun inject(mainActivity: MainActivity)

@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.kairoscrypto.KairosCryptoApplication
 import com.catalinjurjiu.kairoscrypto.R
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.components.ActivityComponent
-import com.catalinjurjiu.kairoscrypto.di.modules.activity.ActivityModule
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.navigation.Navigator
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.navigation.impl.DaggerAwareNavigator
-import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.WheelbarrowActivity
 import javax.inject.Inject
 
@@ -54,7 +53,7 @@ class MainActivity : WheelbarrowActivity<ActivityComponent>(), NamedComponent {
 
     override fun onCreateCargo(): ActivityComponent {
         return (application as KairosCryptoApplication).component
-                .getActivityComponent(ActivityModule(activityContext = this))
+                .getActivityComponent()
     }
 
     override fun onStop() {
@@ -86,5 +85,4 @@ class MainActivity : WheelbarrowActivity<ActivityComponent>(), NamedComponent {
     private companion object {
         const val TAG = "MainActivity"
     }
-
 }

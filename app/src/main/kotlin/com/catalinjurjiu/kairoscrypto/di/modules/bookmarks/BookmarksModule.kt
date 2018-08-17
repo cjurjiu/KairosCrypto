@@ -1,12 +1,11 @@
 package com.catalinjurjiu.kairoscrypto.di.modules.bookmarks
 
-import android.content.Context
+import com.catalinjurjiu.common.ActiveActivityProvider
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.BookmarksRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.coinmarketcap.CoinMarketCapBookmarksRepository
 import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.network.RestServiceFactory
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
-import com.catalinjurjiu.kairoscrypto.di.annotations.qualifiers.ActivityContext
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.BookmarksScope
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.bookmarks.contract.BookmarksContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.bookmarks.presenter.BookmarksPresenter
@@ -35,12 +34,13 @@ class BookmarksModule {
 
     @Provides
     @BookmarksScope
-    fun provideCoinDisplayOptionsPresenter(@ActivityContext context: Context,
+    fun provideCoinDisplayOptionsPresenter(activeActivityProvider: ActiveActivityProvider,
                                            bookmarksPresenter: BookmarksContract.BookmarksPresenter,
                                            userSettings: KairosCryptoUserSettings)
             : CoinsDisplayOptionsContract.CoinsDisplayOptionsPresenter {
 
-        return CoinDisplayOptionsPresenter(resourceDecoder = AndroidResourceDecoder(context = context),
+        val resDecoder = AndroidResourceDecoder(activeActivityProvider = activeActivityProvider)
+        return CoinDisplayOptionsPresenter(resourceDecoder = resDecoder,
                 coinDisplayController = bookmarksPresenter,
                 userSettings = userSettings)
     }

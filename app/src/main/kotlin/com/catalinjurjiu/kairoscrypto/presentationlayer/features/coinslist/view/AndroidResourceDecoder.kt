@@ -3,6 +3,7 @@ package com.catalinjurjiu.kairoscrypto.presentationlayer.features.coinslist.view
 import android.content.Context
 import android.content.res.Resources
 import android.support.annotation.ArrayRes
+import com.catalinjurjiu.common.ActiveActivityProvider
 import com.catalinjurjiu.kairoscrypto.R
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.decoder.ResourceDecoder
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.decoder.SelectionItemsResource
@@ -10,7 +11,7 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.common.decoder.StringArr
 import com.catalinjurjiu.kairoscrypto.presentationlayer.common.decoder.StringResource
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.widgets.selectiondialog.model.SelectionItem
 
-class AndroidResourceDecoder(context: Context) : ResourceDecoder {
+class AndroidResourceDecoder(private val activeActivityProvider: ActiveActivityProvider) : ResourceDecoder {
 
     override fun decodeString(identifier: StringResource): String {
         //nothing for the moment
@@ -29,7 +30,7 @@ class AndroidResourceDecoder(context: Context) : ResourceDecoder {
         }
     }
 
-    private val resources: Resources = context.resources
+    private val resources: Resources = getUpToDateContext().resources
 
     private fun decodeChangeCoinDialogItems(): List<SelectionItem> =
             decodeSelectionItemList(visibleValuesResId = R.array.change_currency_dialog_options,
@@ -53,4 +54,6 @@ class AndroidResourceDecoder(context: Context) : ResourceDecoder {
         }
         return selectionItemList
     }
+
+    private fun getUpToDateContext(): Context = activeActivityProvider.activeActivity
 }

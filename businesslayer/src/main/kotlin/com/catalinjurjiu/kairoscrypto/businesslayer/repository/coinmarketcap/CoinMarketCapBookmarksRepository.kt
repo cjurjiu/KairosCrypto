@@ -47,8 +47,10 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
     override val loadingStateObservable: Observable<Repository.LoadingState>
 
     private val loadingStateRelay = BehaviorRelay.create<RequestState>()
-    //worry about leaks later? sounds like a great idea!
-    //TODO properly dispose subscription whenever this repository will have to die
+
+    //dispose is never called currently on this composite disposable, since it only currently stores
+    //the disposable of the loading observable, which needs to be active as long as this repository
+    //is alive
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
@@ -106,7 +108,6 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
     @SuppressLint("CheckResult")
     override fun refreshBookmarksById(currencyRepresentation: CurrencyRepresentation,
                                       bookmarks: List<BookmarksCoin>,
-//                                      progressListener: Consumer<CryptoCoin>,
                                       errorHandler: Consumer<Throwable>) {
         Observable.defer { Observable.fromIterable(bookmarks) }
                 .subscribeOn(Schedulers.io())

@@ -98,8 +98,7 @@ class CoinInfoFragment : WheelbarrowFragment<CoinInfoComponent>(),
 
     override fun initialise() {
         val view = view!!
-        //todo set listeners to buttons
-        //todo still missing are listeners for <selectPeriodCoinInfo*> buttons
+        //todo@Catalin add missing listeners to <selectPeriodCoinInfo*> buttons
         selectPeriodCoinInfo24HButton = view.button_select_period_coin_info_24H
         selectPeriodCoinInfo7DButton = view.button_select_period_coin_info_7D
         selectPeriodCoinInfo1MButton = view.button_select_period_coin_info_1M

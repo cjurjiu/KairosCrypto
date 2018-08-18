@@ -44,11 +44,19 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
 
     override val loadingStateObservable: Observable<Repository.LoadingState>
 
+    /**
+     * Aggregates the loading state of all the requests made by this repository and emits only
+     * when the loading state of the repository changes.
+     *
+     * If one or more requests are in flight, this emits a [Repository.LoadingState.Loading] object.
+     * If not requests are in flight, then it emits a [Repository.LoadingState.Idle] object. Used by
+     * the [loadingStateObservable].
+     */
     private val loadingStateRelay = BehaviorRelay.create<RequestState>()
 
-    //dispose is never called currently on this composite disposable, since it only currently stores
+    //Dispose is never called currently on this composite disposable, since it only currently stores
     //the disposable of the loading observable, which needs to be active as long as this repository
-    //is alive
+    //is alive.
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {

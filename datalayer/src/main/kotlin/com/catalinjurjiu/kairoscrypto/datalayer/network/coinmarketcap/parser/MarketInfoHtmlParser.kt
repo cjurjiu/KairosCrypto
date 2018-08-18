@@ -11,17 +11,31 @@ import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.parser.Mar
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.parser.MarketInfoHtmlParser.TableHeaderColumns.VOLUME_PRC_TABLE_COLUMN_INDEX
 import org.jsoup.Jsoup
 
+/**
+ * Interprets the HTML of a CoinMarketCap page which shows markets data for a coin into a list of
+ * [CoinMarketCapCryptoCoinMarketInfo] objects.
+ *
+ * This is achieved when [extractMarkets] is invoked.
+ *
+ * @constructor Creates a new instance of the [MarketInfoHtmlParser].
+ *
+ * When the constructor is invoked, the HTML stored in [marketInfoPage] will be parsed synchronously
+ * into a [Document][org.jsoup.nodes.Document]. Invoke the constructor form a background thread to
+ * prevent blocking the main thread.
+ *
+ * @param coinSymbol The symbol of the coin for which market data is interpreted.
+ * @param marketInfoHtmlPage String which contains the HTML of the page that stores the market data
+ * for the targeted coin.
+ */
 class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: String) {
 
-    //todo, provide a base URL
     private val marketInfoPage = Jsoup.parse(marketInfoHtmlPage)
 
     fun extractMarkets(): List<CoinMarketCapCryptoCoinMarketInfo> {
         //get the markets from the markets table
         val marketsTable = marketInfoPage.select("#markets-table")
 
-//        //parse header data
-//        val marketsTableHead = marketsTable.select("thead tr")[0].select("th")
+        //parse header data
         val marketsInfo = mutableListOf<CoinMarketCapCryptoCoinMarketInfo>()
 
         val marketsTableRows = marketsTable.select("tbody tr")
@@ -67,7 +81,7 @@ class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: S
     }
 
     object TableHeaderColumns {
-        //header strings
+        //header indexes
         const val RANK_TABLE_COLUMN_INDEX = 0
         const val SOURCE_TABLE_COLUMN_INDEX = 1
         const val PAIR_TABLE_COLUMN_INDEX = 2
@@ -75,24 +89,5 @@ class MarketInfoHtmlParser(private val coinSymbol: String, marketInfoHtmlPage: S
         const val PRICE_TABLE_COLUMN_INDEX = 4
         const val VOLUME_PRC_TABLE_COLUMN_INDEX = 5
         const val UPDATED_TABLE_COLUMN_INDEX = 6
-        //header strings
-        const val RANK_TABLE_HEADER_STRING = "#"
-        const val SOURCE_TABLE_HEADER_STRING = "Source"
-        const val PAIR_TABLE_HEADER_STRING = "Pair"
-        const val VOLUME_24H_TABLE_HEADER_STRING = "Volume (24h)"
-        const val PRICE_TABLE_HEADER_STRING = "Price"
-        const val VOLUME_PRC_TABLE_HEADER_STRING = "Volume (%)"
-        const val UPDATED_TABLE_HEADER_STRING = "Updated"
-        //ids
-        const val SOURCE_TABLE_HEADER_ID = "th-source"
-        const val PAIR_TABLE_HEADER_ID = "th-pair"
-
-        val HEADERS_LIST = listOf(RANK_TABLE_HEADER_STRING,
-                SOURCE_TABLE_HEADER_STRING,
-                PAIR_TABLE_HEADER_STRING,
-                VOLUME_24H_TABLE_HEADER_STRING,
-                PRICE_TABLE_HEADER_STRING,
-                VOLUME_PRC_TABLE_HEADER_STRING,
-                UPDATED_TABLE_HEADER_STRING)
     }
 }

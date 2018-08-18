@@ -54,7 +54,7 @@ abstract class ComposableApiRequest<T> {
         this.errors = errors
     }
 
-    abstract fun fetchData(): Observable<T>
+    protected abstract fun fetchData(): Observable<T>
 
     fun execute() {
         _trigger.accept(0)

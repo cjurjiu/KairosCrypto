@@ -4,7 +4,6 @@ import com.catalinjurjiu.kairoscrypto.businesslayer.repository.MarketsRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.coinmarketcap.CoinMarketCapMarketsRepository
 import com.catalinjurjiu.kairoscrypto.datalayer.database.contract.KairosCryptoDb
 import com.catalinjurjiu.kairoscrypto.datalayer.network.HtmlServiceFactory
-import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
 import com.catalinjurjiu.kairoscrypto.di.annotations.scopes.CoinMarketsScope
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract.CoinDetailsPresenter.CoinDetailsPartialData
@@ -35,13 +34,10 @@ class CoinMarketsModule(private val partialCoinData: CoinDetailsPartialData) {
     @Provides
     @CoinMarketsScope
     fun provideMarketsRepository(database: KairosCryptoDb,
-                                 restServiceFactory: HtmlServiceFactory,
-                                 userSettings: KairosCryptoUserSettings)
-            : MarketsRepository {
+                                 restServiceFactory: HtmlServiceFactory): MarketsRepository {
 
         return CoinMarketCapMarketsRepository(kairosCryptoDb = database,
-                coinMarketCapHtmlService = restServiceFactory.getMarketsHtmlServiceApi(),
-                userSettings = userSettings)
+                coinMarketCapHtmlService = restServiceFactory.getMarketsHtmlServiceApi())
     }
 
     @Provides

@@ -1,7 +1,8 @@
 package com.catalinjurjiu.kairoscrypto.businesslayer.model
 
 /**
- * Created by catalin on 08/05/2018.
+ * Business layer, data-layer independent representation of an object which stores the value of
+ * Cryptocurrency in one other currency (typically FIAT, but can also be Bitcoin).
  */
 data class PriceData(val currency: String,
                      val price: Float,

@@ -156,8 +156,10 @@ class BookmarksPresenter(private val bookmarksRepository: BookmarksRepository,
         //launch the request
         bookmarksRepository.refreshBookmarks(currencyRepresentation = newDisplayCurrency,
                 errorHandler = Consumer {
-                    //todo - handle error
-                    Log.d(TAG, "Error occurred at displayCurrencyChanged:$it")
+                    Executors.mainThread().execute {
+                        Log.d(TAG, "Error occurred at BookmarksPresenter#displayCurrencyChanged:$it")
+                        bookmarksView?.showError(ErrorCode.GENERIC_ERROR, retryAction = ::refreshBookmarks)
+                    }
                 })
     }
 

@@ -1,5 +1,8 @@
 package com.catalinjurjiu.kairoscrypto.businesslayer.model
 
+/**
+ * Business layer, data-layer independent representation of a Bookmarked Crypto Currency.
+ */
 data class BookmarksCoin(val id: String,
                          val rank: Int,
                          val name: String,

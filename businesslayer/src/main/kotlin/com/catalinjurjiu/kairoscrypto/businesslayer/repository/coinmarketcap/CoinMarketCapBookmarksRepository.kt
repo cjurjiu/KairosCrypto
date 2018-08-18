@@ -42,15 +42,26 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                                        private val coinMarketCapApiService: CoinMarketCapApiService)
     : BookmarksRepository {
 
-    private val loadingCoinsList = CopyOnWriteArrayList<String>()
-
     override val loadingStateObservable: Observable<Repository.LoadingState>
 
+    /**
+     * List which stores the "coin symbol" of coins which are currently loading.
+     */
+    private val loadingCoinsList = CopyOnWriteArrayList<String>()
+
+    /**
+     * Aggregates the loading state of all the requests made by this repository and emits only
+     * when the loading state of the repository changes.
+     *
+     * If one or more requests are in flight, this emits a [Repository.LoadingState.Loading] object.
+     * If not requests are in flight, then it emits a [Repository.LoadingState.Idle] object. Used by
+     * the [loadingStateObservable].
+     */
     private val loadingStateRelay = BehaviorRelay.create<RequestState>()
 
-    //dispose is never called currently on this composite disposable, since it only currently stores
+    //Dispose is never called currently on this composite disposable, since it only currently stores
     //the disposable of the loading observable, which needs to be active as long as this repository
-    //is alive
+    //is alive.
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
@@ -66,6 +77,8 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
     override fun refreshBookmarks(currencyRepresentation: CurrencyRepresentation,
                                   errorHandler: Consumer<Throwable>) {
 
+        //create an observable which emits a CryptoCoinDetailsRequest for each coin returned by
+        //BookmarksDao#getBookmarkedCoins()
         val requestsObservable: Observable<CryptoCoinDetailsRequest> = Observable.defer {
             Observable.fromIterable(kairosCryptoDb.getBookmarksDao().getBookmarkedCoins())
         }
@@ -77,8 +90,9 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                             coinId = bookmarkedCoin.cryptoCoin.serverId)
                 }
 
+        //subscribe to each CryptoCoinDetailsRequest's response, error & loading streams, then
+        //execute start the request.
         requestsObservable.subscribe({ request ->
-
             //onNext
             request.response.subscribe { coinDetailsResponse ->
                 val coinDetails = coinDetailsResponse.data
@@ -92,12 +106,11 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
             request.execute()
         }, {
             //onError
-            //todo properly handle error
-            Log.d(TAG, "OnError: $it.")
+            Log.d(TAG, "Bookmarks refresh onError: $it.")
+            errorHandler.accept(it)
         }, {
             //onComplete
-            //todo properly handle onComplete
-            Log.d(TAG, "OnComplete.")
+            Log.d(TAG, "Bookmarks refresh finished successfully.")
         })
     }
 
@@ -145,13 +158,12 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                     //launch request
                     request.execute()
                 }, {
-                    //todo properly handle error
                     //onError
-                    Log.d(TAG, "OnError: $it.")
+                    Log.d(TAG, "Bookmarks refresh by id onError: $it.")
+                    errorHandler.accept(it)
                 }, {
-                    //todo properly handle onComplete
                     //onComplete
-                    Log.d(TAG, "OnComplete.")
+                    Log.d(TAG, "Bookmarks refresh by id finished successfully.")
                 })
     }
 

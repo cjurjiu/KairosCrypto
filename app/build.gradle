@@ -100,7 +100,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$config.lib_versions.leak_canary"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$config.lib_versions.leak_canary"
 
-    //TODO testing was not taken into consideration so far.
+    //TODO@Catalin testing was not taken into consideration so far. Perform testing setup
     //Add testing support
     testImplementation "junit:junit:$config.lib_versions.junit"
 

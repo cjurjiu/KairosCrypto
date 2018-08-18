@@ -17,5 +17,7 @@ enum class ErrorCode {
      * A generic error has occurred. This could potentially span over a large number of HTTP Error
      * codes. Generally, it could be anything that's not [REQUEST_FAILED_ERROR] & [TIMEOUT_ERROR].
      */
-    GENERIC_ERROR,
+    //TODO@Catalin only GENERIC_ERROR is actually used as of now. Ensure correct ErrorCode is sent
+    //for each network exception.
+    GENERIC_ERROR
 }

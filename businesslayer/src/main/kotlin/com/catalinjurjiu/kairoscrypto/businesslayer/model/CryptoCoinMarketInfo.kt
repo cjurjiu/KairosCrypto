@@ -1,7 +1,8 @@
 package com.catalinjurjiu.kairoscrypto.businesslayer.model
 
 /**
- * Represents one entry in the markets table
+ * Business layer, data-layer independent representation of a Market (exchange) on which a
+ * Crypto Currency is traded.
  */
 data class CryptoCoinMarketInfo(val rank: Int,
                                 val exchangeName: String,

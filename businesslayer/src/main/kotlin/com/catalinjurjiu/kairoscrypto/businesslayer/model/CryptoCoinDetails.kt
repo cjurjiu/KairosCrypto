@@ -1,7 +1,7 @@
 package com.catalinjurjiu.kairoscrypto.businesslayer.model
 
 /**
- * Business layer, source independent, representation of the details for a Crypto Currency.
+ * Business layer, data-layer independent representation of the details for a Crypto Currency.
  */
 data class CryptoCoinDetails(val id: String,
                              val rank: Int,

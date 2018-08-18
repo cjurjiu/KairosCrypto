@@ -36,7 +36,7 @@ class CoinMarketsPresenter(private val coinData: CoinDetailsPartialData,
     }
 
     private fun fetchData() {
-        repository.updateMarketsData(coinSymbol = coinData.coinSymbol,
+        repository.fetchMarketsData(coinSymbol = coinData.coinSymbol,
                 webFriendlyName = coinData.webFriendlyName,
                 errorHandler = Consumer {
                     Executors.mainThread().execute {
@@ -46,7 +46,7 @@ class CoinMarketsPresenter(private val coinData: CoinDetailsPartialData,
     }
 
     override fun stopPresenting() {
-        //todo - do we need to do anything here?
+        //nothing to do here, the disposables are cleared when the view is destroyed
     }
 
     override fun viewAvailable(view: CoinMarketsContract.CoinMarketsView) {

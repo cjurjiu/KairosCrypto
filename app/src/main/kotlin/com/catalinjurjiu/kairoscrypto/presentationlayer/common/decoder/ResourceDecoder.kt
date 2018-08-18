@@ -15,7 +15,7 @@ interface ResourceDecoder {
 }
 
 enum class StringResource {
-    //todo - add resources
+    //add here values for strings that need to be referenced from a presenter
 }
 
 enum class StringArrayResource {

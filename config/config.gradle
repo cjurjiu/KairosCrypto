@@ -1,45 +1,44 @@
 def library_versions = [
-        kotlin             : '1.2.51',
-        support_library    : '27.1.1',
-        room               : '1.1.1',
+        kotlin              : '1.2.51',
+        support_library     : '27.1.1',
+        room                : '1.1.1',
         //android ktx
-        android_ktx        : '1.0.0-alpha1',
+        android_ktx         : '1.0.0-alpha1',
         //constraint layout
-        constraint_layout  : '1.1.2',
+        constraint_layout   : '1.1.2',
         //play services
-        play_services_plus : '15.0.1',
+        play_services_plus  : '15.0.1',
         //retrofit
-        retrofit           : '2.3.0',
-        converter_gson     : '2.3.0',
-        converter_scalars  : '2.3.0',
-        retrofit_rxadapter : '2.4.0',
+        retrofit            : '2.3.0',
+        converter_gson      : '2.3.0',
+        converter_scalars   : '2.3.0',
+        retrofit_rxadapter  : '2.4.0',
         //gson
-        gson               : '2.8.2',
+        gson                : '2.8.2',
         //dagger2
-        dagger             : '2.14.1',
-        dagger_compiler    : '2.14.1',
-        //viewmodel & extensions
-        viewmodel          : '1.1.1',
-        extensions         : '1.1.1',
+        dagger              : '2.14.1',
+        dagger_compiler     : '2.14.1',
+        //lifecycle extensions
+        lifecycle_extensions: '1.1.1',
         //leak canary
-        leak_canary        : '1.5.4',
-        junit              : '4.12',
-        android_test_runner: '1.0.1',
-        espresso_core      : '3.0.1',
+        leak_canary         : '1.5.4',
+        junit               : '4.12',
+        android_test_runner : '1.0.1',
+        espresso_core       : '3.0.1',
         //rxjava
-        rxjava             : '2.1.12',
-        rxandroid          : '2.0.2',
-        rxrelay            : '2.0.0',
+        rxjava              : '2.1.12',
+        rxandroid           : '2.0.2',
+        rxrelay             : '2.0.0',
         //material progress
-        material_progress  : '1.4.2',
+        material_progress   : '1.4.2',
         //jsoup
-        jsoup              : '1.11.3',
+        jsoup               : '1.11.3',
         //glide
-        glide              : '4.7.1',
+        glide               : '4.7.1',
         //android svg
-        android_svg        : '1.2.1',
+        android_svg         : '1.2.1',
         //wheelbarrow
-        wheelbarrow        : '0.0.4'
+        wheelbarrow         : '0.0.4'
 ]
 
 def build_versions = [

@@ -69,10 +69,9 @@ dependencies {
     //play services
     implementation "com.google.android.gms:play-services-plus:$config.lib_versions.play_services_plus"
 
-    //viewmodel & extensions
-    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
-    implementation "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
-    implementation "android.arch.lifecycle:common-java8:$config.lib_versions.extensions"
+    //lifecycle extensions
+    implementation "android.arch.lifecycle:extensions:$config.lib_versions.lifecycle_extensions"
+    implementation "android.arch.lifecycle:common-java8:$config.lib_versions.lifecycle_extensions"
 
     //material loading library
     implementation "me.zhanghai.android.materialprogressbar:library:$config.lib_versions.material_progress"

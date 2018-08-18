@@ -27,7 +27,6 @@ class AppModule(application: KairosCryptoApplication) {
     @Provides
     @ApplicationScope
     fun provideActiveActivityProvider(): ActiveActivityProvider {
-        Log.d("Cata", "provideActiveActivityProvider")
         return activeActivityProvider
     }
 }

@@ -47,7 +47,7 @@ def build_versions = [
         targetSdkVersion       : "27",
         targetCompatibility    : '1.8',
         sourceCompatibility    : '1.8',
-        build_tools            : "3.2.0-alpha15",
+        build_tools            : "3.2.1",
         kotlin_api_version     : '1.2',
         kotlin_language_version: '1.2',
 ]

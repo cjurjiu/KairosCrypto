@@ -19,8 +19,8 @@ import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.request.Bo
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.request.CryptoCoinDetailsRequest
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.observables.ConnectableObservable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit
  * This repository implementation uses an offline-first approach: it first stores the coins in the
  * database, and only provides data from the database, never directly from the network.
  *
+ * The size of one page of returned data is [CoinsRepository.DEFAULT_DATA_PAGE_SIZE].
+ *
  * @constructor Creates a new instance of this repository.
  * @param kairosCryptoDb database object used to store the coins fetched over the network.
  * @param coinMarketCapApiService service used to fetch the coins from CoinMarketCap.com
@@ -41,6 +43,8 @@ import java.util.concurrent.TimeUnit
 class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                                    private val coinMarketCapApiService: CoinMarketCapApiService)
     : CoinsRepository {
+
+    override val dataPageSize: Int = CoinsRepository.DEFAULT_DATA_PAGE_SIZE
 
     override val loadingStateObservable: Observable<Repository.LoadingState>
 
@@ -65,15 +69,16 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
         loadingStateObservable = connectableLoadingObservable
     }
 
-    override fun fetchCoins(startIndex: Int,
-                            numberOfCoins: Int,
-                            currencyRepresentation: CurrencyRepresentation,
-                            errorHandler: Consumer<Throwable>) {
+    override fun fetchCoins(pageIndex: Int,
+                            numberOfPages: Int,
+                            currencyRepresentation: CurrencyRepresentation): Single<Int> {
 
-        val apiRequest = BoundedCryptoCoinsRequest(startIndex = startIndex,
-                numberOfCoins = numberOfCoins,
+        val coinIndex = pageIndex * dataPageSize + 1
+        val apiRequest = BoundedCryptoCoinsRequest(startIndex = coinIndex,
+                numberOfCoins = dataPageSize * numberOfPages,
                 currencyRepresentation = currencyRepresentation,
                 coinMarketCapApiService = coinMarketCapApiService)
+        val resultSubject: PublishSubject<Int> = PublishSubject.create()
 
         apiRequest.response.observeOn(Schedulers.io()).subscribe {
             //network coins from the response
@@ -86,10 +91,13 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
             val insertedDataIds = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
             Log.d(TAG, "Repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
                     "inserted ids:" + insertedDataIds)
+            resultSubject.onNext(pageIndex + numberOfPages - 1)
+            resultSubject.onComplete()
         }
-        apiRequest.errors.subscribe(errorHandler)
+        apiRequest.errors.subscribe { error -> resultSubject.onError(error) }
         apiRequest.state.subscribe { loadingStateRelay.accept(it) }
         apiRequest.execute()
+        return Single.fromObservable(resultSubject)
     }
 
     override fun getCoinListObservable(currencyRepresentation: CurrencyRepresentation): Observable<List<CryptoCoin>> {
@@ -109,9 +117,9 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
     }
 
     override fun fetchCoinDetails(coinId: String,
-                                  valueRepresentationsArray: Array<CurrencyRepresentation>,
-                                  errorHandler: Consumer<Throwable>) {
-
+                                  valueRepresentationsArray: Array<CurrencyRepresentation>)
+            : Single<String> {
+        val resultSubject: PublishSubject<String> = PublishSubject.create()
         val requestsList = mutableListOf<CryptoCoinDetailsRequest>()
         val compositeStateTracker: PublishSubject<RequestState> = PublishSubject.create()
         val observablesToZip = mutableListOf<Observable<RequestState>>()
@@ -161,13 +169,15 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                                 val ids = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(dbPriceData)
                                 Log.d(TAG, "Wrote coin data(${coin.name}) to db. " +
                                         "Available price data:${dbPriceData.map { it.currency }}. ids:$ids")
+                                resultSubject.onNext(coinId)
+                                resultSubject.onComplete()
                             }
                 }
             } else {
                 requestsList.firstOrNull { request ->
                     if (!request.errors.isEmpty.toFuture().get()) {
                         //if error stream is not empty, notify subscribe the error handler to it.
-                        request.errors.subscribe(errorHandler)
+                        request.errors.subscribe { resultSubject.onError(it) }
                         return@firstOrNull true
                     } else {
                         return@firstOrNull false
@@ -175,13 +185,14 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                 }
             }
         }, {
-            errorHandler.accept(it)
+            resultSubject.onError(it)
         })
 
         //execute requests
         requestsList.forEach {
             it.execute()
         }
+        return Single.fromObservable(resultSubject)
     }
 
     private fun getLoadingObservable(): ConnectableObservable<Repository.LoadingState> {

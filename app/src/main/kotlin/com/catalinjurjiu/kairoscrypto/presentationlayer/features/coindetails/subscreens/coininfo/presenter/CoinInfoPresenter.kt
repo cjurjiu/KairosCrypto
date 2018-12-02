@@ -7,11 +7,12 @@ import com.catalinjurjiu.kairoscrypto.businesslayer.repository.CoinsRepository
 import com.catalinjurjiu.kairoscrypto.businesslayer.repository.Repository
 import com.catalinjurjiu.kairoscrypto.datalayer.CurrencyRepresentation
 import com.catalinjurjiu.kairoscrypto.datalayer.userprefs.KairosCryptoUserSettings
+import com.catalinjurjiu.kairoscrypto.presentationlayer.common.threading.Executors
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.main.contract.CoinDetailsContract
 import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coindetails.subscreens.coininfo.contract.CoinInfoContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 /**
@@ -110,12 +111,17 @@ class CoinInfoPresenter(private val coinsRepository: CoinsRepository,
     }
 
     private fun fetchCoinDetails() {
-        coinsRepository.fetchCoinDetails(coinId = coinId,
-                valueRepresentationsArray = arrayOf(primaryCurrency, CurrencyRepresentation.BTC),
-                errorHandler = Consumer {
+        val subscription = coinsRepository.fetchCoinDetails(coinId = coinId,
+                valueRepresentationsArray = arrayOf(primaryCurrency, CurrencyRepresentation.BTC))
+                .observeOn(Schedulers.from(Executors.mainThread()))
+                .subscribe({
+                    /*empty on success*/
+                }, {
+                    //onError
                     Log.d(TAG, "CoinInfoPresenter: Error fetching coin: $it")
                     view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryHandler = ::fetchCoinDetails)
                 })
+        compositeDisposable.add(subscription)
     }
 
     companion object {

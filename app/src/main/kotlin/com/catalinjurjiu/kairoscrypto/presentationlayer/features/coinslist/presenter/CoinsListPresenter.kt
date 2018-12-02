@@ -1,6 +1,5 @@
 package com.catalinjurjiu.kairoscrypto.presentationlayer.features.coinslist.presenter
 
-import android.util.Log
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.CryptoCoin
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.ErrorCode
 import com.catalinjurjiu.kairoscrypto.businesslayer.model.PredefinedSnapshot
@@ -15,7 +14,8 @@ import com.catalinjurjiu.kairoscrypto.presentationlayer.features.coinslist.contr
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
+import kotlin.math.max
 
 /**
  * Created by catalinj on 21.01.2018.
@@ -114,43 +114,49 @@ class CoinsListPresenter(private val repository: CoinsRepository,
     }
     //end coin list presenter methods
 
+    private var latestFetchedPage: Int = -1
+
     private fun fetchInitialBatch() {
-        val startIndex = 0
-        repository.fetchCoins(startIndex = startIndex,
-                numberOfCoins = COIN_FETCH_BATCH_SIZE,
-                currencyRepresentation = displayCurrency,
-                errorHandler = Consumer {
-                    Executors.mainThread().execute {
-                        view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::fetchInitialBatch)
-                    }
+        val subscription = repository.fetchCoins(pageIndex = 0, currencyRepresentation = displayCurrency)
+                .observeOn(Schedulers.from(Executors.mainThread()))
+                .subscribe({ fetchedPage ->
+                    //onSuccess
+                    this.latestFetchedPage = fetchedPage
+                }, {
+                    //onError
+                    view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::fetchInitialBatch)
                 })
+        compositeDisposable.add(subscription)
     }
 
     private fun fetchMoreCoins() {
-        val startIndex = availableCoins.orEmpty().size
-        repository.fetchCoins(startIndex = startIndex,
-                numberOfCoins = COIN_FETCH_BATCH_SIZE,
-                currencyRepresentation = displayCurrency,
-                errorHandler = Consumer {
-                    Executors.mainThread().execute {
-                        view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::fetchMoreCoins)
-                    }
+        val subscription = repository.fetchCoins(pageIndex = latestFetchedPage + 1,
+                currencyRepresentation = displayCurrency)
+                .observeOn(Schedulers.from(Executors.mainThread()))
+                .subscribe({ fetchedPage ->
+                    //onSuccess
+                    this.latestFetchedPage = fetchedPage
+                }, {
+                    //onError
+                    view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::fetchMoreCoins)
                 })
+        compositeDisposable.add(subscription)
     }
 
     private fun refreshCoins() {
         waitForLoad = false
-        val fetchedCoinsNumber = availableCoins?.count() ?: COIN_FETCH_BATCH_SIZE
-        repository.fetchCoins(startIndex = 0,
-                numberOfCoins = fetchedCoinsNumber,
-                currencyRepresentation = displayCurrency,
-                errorHandler = Consumer {
-                    Log.d("CoinListPresenter", "CoinListPresenter#refreshCoins error: $it")
-
-                    Executors.mainThread().execute {
-                        view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::refreshCoins)
-                    }
+        val subscription = repository.fetchCoins(pageIndex = 0,
+                numberOfPages = max(latestFetchedPage, 1),
+                currencyRepresentation = displayCurrency)
+                .observeOn(Schedulers.from(Executors.mainThread()))
+                .subscribe({ fetchedPage ->
+                    //onSuccess
+                    this.latestFetchedPage = fetchedPage
+                }, {
+                    //onError
+                    view?.showError(errorCode = ErrorCode.GENERIC_ERROR, retryAction = ::refreshCoins)
                 })
+        compositeDisposable.add(subscription)
     }
 
     private fun updateLoadingState(loadingState: Repository.LoadingState) {
@@ -196,9 +202,5 @@ class CoinsListPresenter(private val repository: CoinsRepository,
 
     private fun selectedSnapshotChanged(newSelectedSnapshot: PredefinedSnapshot) {
         view?.refreshContent()
-    }
-
-    private companion object {
-        private const val COIN_FETCH_BATCH_SIZE = 100
     }
 }

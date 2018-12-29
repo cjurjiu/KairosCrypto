@@ -10,8 +10,9 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //add the api key
+        buildConfigField("String", "COINMARKETCAP_API_KEY", localProperties.getProperty("coinMarketCapApiKey"))
     }
 
     sourceSets {
@@ -58,6 +59,7 @@ dependencies {
 
     //jsoup
     implementation "org.jsoup:jsoup:$config.lib_versions.jsoup"
+
     //testing stuff
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

@@ -61,7 +61,7 @@ data class DbPriceData(
         @ColumnInfo(name = ColumnNames.PERCENT_CHANGE_7D)
         val percentChange7d: Float,
         @ColumnInfo(name = ColumnNames.LAST_UPDATED)
-        val lastUpdated: Long = -1) {
+        val lastUpdated: String = "") {
 
     companion object {
         const val PRICE_DATA_TABLE_NAME = "price_data"

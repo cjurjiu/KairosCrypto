@@ -95,7 +95,7 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
         requestsObservable.subscribe({ request ->
             //onNext
             request.response.subscribe { coinDetailsResponse ->
-                val coinDetails = coinDetailsResponse.data
+                val coinDetails = coinDetailsResponse.data.entries.first().value
                 val coinId = kairosCryptoDb.getPlainCryptoCoinDao().insert(coinDetails.toDataLayerCoin())
                 val priceDetailsIds = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(coinDetails.toDataLayerPriceData())
                 Log.d(TAG, "Repo refreshBookmarks response. inserted coin with id: " +
@@ -135,7 +135,7 @@ class CoinMarketCapBookmarksRepository(private val kairosCryptoDb: KairosCryptoD
                     //setup
                     request.response.subscribe { coinDetailsResponse ->
                         //onNext
-                        val coinDetails = coinDetailsResponse.data
+                        val coinDetails = coinDetailsResponse.data.entries.first().value
                         //also remove the coin from the list of loading coins before inserting into
                         //DB, to prevent db change notifications before the list is updated
                         loadingCoinsList.remove(coin.symbol)

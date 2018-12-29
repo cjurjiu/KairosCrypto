@@ -11,13 +11,13 @@ data class CoinMarketCapCryptoCoin(
         @SerializedName("id") val id: String,
         @SerializedName("name") val name: String,
         @SerializedName("symbol") val symbol: String,
-        @SerializedName("website_slug") val websiteSlug: String,
-        @SerializedName("rank") val rank: Int,
+        @SerializedName("slug") val websiteSlug: String,
+        @SerializedName("cmc_rank") val rank: Int,
         @SerializedName("circulating_supply") val circulatingSupply: Double,
         @SerializedName("total_supply") val totalSupply: Double,
         @SerializedName("max_supply") val maxSupply: Double,
-        @SerializedName("quotes") val quotes: Map<String, Quote>,
-        @SerializedName("last_updated") val lastUpdated: Long
+        @SerializedName("quote") val quotes: Map<String, Quote>,
+        @SerializedName("last_updated") val lastUpdated: String
 )
 
 data class Quote(

@@ -128,4 +128,4 @@ private val EmptyPriceData = PriceData(
         percentChange1h = 0F,
         percentChange24h = 0F,
         percentChange7d = 0F,
-        lastUpdated = 0L)
+        lastUpdated = "")

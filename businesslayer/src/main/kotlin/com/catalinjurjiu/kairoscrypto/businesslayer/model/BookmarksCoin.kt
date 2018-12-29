@@ -12,7 +12,7 @@ data class BookmarksCoin(val id: String,
                          val totalSupply: Double,
                          val maxSupply: Double,
                          var priceData: Map<String, PriceData>,
-                         val lastUpdated: Long,
+                         val lastUpdated: String,
                          val isLoading: Boolean)
 
 inline fun CryptoCoin.toBookmarksCoin(isLoading: Boolean = false): BookmarksCoin {

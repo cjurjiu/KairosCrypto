@@ -54,6 +54,7 @@ class SelectionDialog : DialogFragment() {
                 .setView(view)
                 .setCancelable(isDialogCancelable)
                 .create()
+        view.dialog_title.text = arguments?.getString(KEY_TITLE).orEmpty()
         initRecyclerView(view = view)
         initCancelButton(view = view)
         return dialog
@@ -123,7 +124,13 @@ class SelectionDialog : DialogFragment() {
     class Builder {
         private var selectionListener: OnItemSelectedListener? = null
         private var data: ArrayList<ParcelableSelectionItem>? = null
+        private var dialogTitle: String = ""
         private var isCancelable: Boolean = true
+
+        fun title(title: String): Builder {
+            this.dialogTitle = title
+            return this
+        }
 
         fun data(data: List<SelectionItem>): Builder {
             val parcelableData = ArrayList(data.map {
@@ -148,8 +155,9 @@ class SelectionDialog : DialogFragment() {
             val arguments = Bundle()
             data?.let {
                 arguments.putParcelableArrayList(KEY_DATA, data)
-                arguments.putBoolean(KEY_CANCELABLE, isCancelable)
             }
+            arguments.putBoolean(KEY_CANCELABLE, isCancelable)
+            arguments.putString(KEY_TITLE, dialogTitle)
             selectionListener?.let {
                 dialog.selectionListener = selectionListener
             }
@@ -159,25 +167,30 @@ class SelectionDialog : DialogFragment() {
     }
 
     companion object {
+        private const val KEY_TITLE = "SelectionDialog::Arguments::title"
         private const val KEY_DATA = "SelectionDialog::Arguments::data"
         private const val KEY_CANCELABLE = "SelectionDialog::Arguments::isCancelable"
 
         fun <T : SelectionDialogIdentifier> showCancelable(dialogIdentifier: T,
                                                            fragmentManager: FragmentManager?,
+                                                           title: String = "",
                                                            data: List<SelectionItem>,
                                                            listenerFactory: ListenerFactory<T>) =
                 SelectionDialog.Builder()
                         .selectionListener(selectionListener = listenerFactory.invoke(dialogIdentifier))
+                        .title(title = title)
                         .data(data = data)
                         .build()
                         .show(fragmentManager, dialogIdentifier.identifier)
 
         fun <T : SelectionDialogIdentifier> showNonCancelable(dialogIdentifier: T,
                                                               fragmentManager: FragmentManager?,
+                                                              title: String = "",
                                                               data: List<SelectionItem>,
                                                               listenerFactory: ListenerFactory<T>) =
                 SelectionDialog.Builder()
                         .selectionListener(selectionListener = listenerFactory.invoke(dialogIdentifier))
+                        .title(title = title)
                         .data(data = data)
                         .cancelable(cancelable = false)
                         .build()

@@ -5,7 +5,6 @@ import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.model.Coin
 import com.catalinjurjiu.kairoscrypto.datalayer.network.coinmarketcap.model.CoinMarketCapCryptoCoinListResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -26,7 +25,7 @@ interface CoinMarketCapApiService {
      * @return an [Observable] which emits one [CoinMarketCapCryptoCoinListResponse] when the request
      * has finished
      */
-    @GET(V2_TICKER_ENDPOINT)
+    @GET("$V1_CRYPTOCURRENCY_ENDPOINT/listings/latest")
     fun fetchCoinsList(@Query(START_URL_PARAM) start: Int = 0,
                        @Query(LIMIT_URL_PARAM) limit: Int = 0,
                        @Query(CONVERT_URL_PARAM) currency: String = CurrencyRepresentation.USD.currency)
@@ -42,8 +41,8 @@ interface CoinMarketCapApiService {
      * @return an [Observable] which emits one [CoinMarketCapCryptoCoinDetails] when the request
      * has finished
      */
-    @GET("$V2_TICKER_ENDPOINT/{$PATH_COIN_ID}")
-    fun fetchCoinDetails(@Path(PATH_COIN_ID)
+    @GET("$V1_CRYPTOCURRENCY_ENDPOINT/quotes/latest")
+    fun fetchCoinDetails(@Query(COIN_ID)
                          coinId: String,
                          @Query(CONVERT_URL_PARAM)
                          currency: String = CurrencyRepresentation.USD.currency): Observable<CoinMarketCapCryptoCoinDetails>
@@ -52,11 +51,13 @@ interface CoinMarketCapApiService {
         /**
          * Base url for the Rest API of cointmarketcap.com
          */
-        const val BASE_URL: String = "https://api.coinmarketcap.com"
+        const val BASE_URL: String = "https://pro-api.coinmarketcap.com"
+        //custom header which will store the API KEY
+        const val API_KEY_HEADER: String = "X-CMC_PRO_API_KEY"
         //ticker endpoint
-        private const val V2_TICKER_ENDPOINT: String = "/v2/ticker"
+        private const val V1_CRYPTOCURRENCY_ENDPOINT: String = "/v1/cryptocurrency"
         //serverId of the coin which we want to retrieve
-        private const val PATH_COIN_ID = "serverId"
+        private const val COIN_ID = "id"
         //coin  nr limit
         private const val LIMIT_URL_PARAM: String = "limit"
         //list coins start

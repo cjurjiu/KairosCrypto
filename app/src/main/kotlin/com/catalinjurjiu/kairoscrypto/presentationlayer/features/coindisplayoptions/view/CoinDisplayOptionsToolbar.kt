@@ -70,6 +70,7 @@ class CoinDisplayOptionsToolbar @JvmOverloads constructor(context: Context?,
     override fun openChangeCurrencyDialog(selectionItems: List<SelectionItem>) {
         SelectionDialog.showCancelable(dialogIdentifier = CoinListSelectionDialogType.ChangeCurrency,
                 fragmentManager = fragmentManager,
+                title = context.getString(R.string.dialog_pick_currency),
                 data = selectionItems,
                 listenerFactory = ::getListenerForDialogType)
     }
@@ -77,6 +78,7 @@ class CoinDisplayOptionsToolbar @JvmOverloads constructor(context: Context?,
     override fun openSelectSnapshotDialog(selectionItems: List<SelectionItem>) {
         SelectionDialog.showCancelable(dialogIdentifier = CoinListSelectionDialogType.SelectSnapshot,
                 fragmentManager = fragmentManager,
+                title = context.getString(R.string.dialog_pick_period),
                 data = selectionItems,
                 listenerFactory = ::getListenerForDialogType)
     }

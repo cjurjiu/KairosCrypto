@@ -51,7 +51,7 @@ data class DbPartialCryptoCoin(
         @ColumnInfo(name = ColumnNames.MAX_SUPPLY)
         val maxSupply: Double,
         @ColumnInfo(name = ColumnNames.LAST_UPDATED)
-        val lastUpdated: Long) {
+        val lastUpdated: String) {
 
     companion object {
         const val COIN_TABLE_NAME: String = "coins"

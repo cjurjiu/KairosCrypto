@@ -8,11 +8,12 @@ import com.google.gson.annotations.SerializedName
  * Created by catalinj on 27.01.2018.
  */
 data class CoinMarketCapCryptoCoinDetails(
-        @SerializedName("data") val data: CoinMarketCapCryptoCoin,
-        @SerializedName("metadata") val metadata: CoinMarketCapCryptoCoinDetailsMetadata
+        @SerializedName("data") val data:  Map<String, CoinMarketCapCryptoCoin>,
+        @SerializedName("status") val metadata: CoinMarketCapCryptoCoinDetailsMetadata
 )
 
 data class CoinMarketCapCryptoCoinDetailsMetadata(
-        @SerializedName("timestamp") val timestamp: Long,
-        @SerializedName("error") val error: String
+        @SerializedName("timestamp") val timestamp: String,
+        @SerializedName("errorCode") val errorCode: Int,
+        @SerializedName("errorMessage") val errorMessage: String
 )

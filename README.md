@@ -5,23 +5,35 @@ Open Source cryptocurrency viewer for Android, written in Kotlin. MVP architectu
 
 ## Purpose
 
-This project is mainly used as a playground to validate architecture concepts, to learn working with new libraries & frameworks and to play with various ideas & widgets.
+This project was mainly used as a playground outside work to validate architecture concepts, to learn working with new libraries and to explore various ideas & widgets. Currently the project is no longer under active development, as it achieved its initial purpose.
 
-Currently the project is not published to the Google Play store, though it will certainly be published at some point.
-
-New features will be added as time progresses.
+It is not published to the Google Play store, and there are no plans to publish it anytime soon.
 
 ## Tech stack
 
-The project is written fully in Kotlin and is structured in 3 layers: presentation, business & data. Eacy layer belongs to its own Gradle module.
+The project is written fully in Kotlin and is structured in 3 layers: presentation, business & data. Each layer belongs to its own Gradle module.
 
 The interactions between layers respects Bob C. Martin's [dependency rule](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html#the-dependency-rule). Namely, "inner" layers know nothing about any of the outer layers (for instance, the data layer knows nothing about the business layer).
 
 The presentation layer uses the MVP architecture. Presenters are persisted across configuration changes & are re-attached to the new view instance after a configuration change occurs.
 
-Data is fetched from CoinMarketCap's [public API](https://coinmarketcap.com/api/) using Retrofit.
+Certain things have been left out intentionally (such as proper error handling).
 
-Tools used:
+## Data
+
+Retrofit is used to fetch cryptocurrency data from CoinMarketCap's [professional API](https://coinmarketcap.com/api/). Only free to use endpoints are used, but an API key is required. Once you obtain your API key, add it to `local.properties`:
+
+```
+coinMarketCapApiKey="<your key here>"
+```
+
+A read-to-use apk (for demo purposes) which uses a valid API-key can be found in the latest release.
+
+Cryptocurrency icons are fetched via Glide from [here](https://github.com/cjurjiu/cryptocurrency-icons).
+
+## Tools:
+
+The following tools/tech is used in KairosCrypto:
 - [Kotlin](https://kotlinlang.org/)
 - [RxJava2](https://github.com/ReactiveX/RxJava) (with RxJava's Android extensions)
 - [RxRelay](https://github.com/JakeWharton/RxRelay)

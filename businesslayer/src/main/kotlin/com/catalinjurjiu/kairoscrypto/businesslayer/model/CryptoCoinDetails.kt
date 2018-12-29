@@ -12,4 +12,4 @@ data class CryptoCoinDetails(val id: String,
                              val totalSupply: Double,
                              val maxSupply: Double,
                              var priceData: Map<String, PriceData>,
-                             val lastUpdated: Long)
+                             val lastUpdated: String)

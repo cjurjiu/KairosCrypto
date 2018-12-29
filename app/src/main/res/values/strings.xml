@@ -4,7 +4,8 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="coin_list">List</string>
     <string name="settings">Settings</string>
-    <string name="dialog_pick_transform_type">Pick a currency</string>
+    <string name="dialog_pick_currency">Pick a currency</string>
+    <string name="dialog_pick_period">Pick a period</string>
     <string name="dialog_action_text_positive">Done</string>
     <string name="dialog_action_text_negative">Cancel</string>
     <!--change currency dialog-->

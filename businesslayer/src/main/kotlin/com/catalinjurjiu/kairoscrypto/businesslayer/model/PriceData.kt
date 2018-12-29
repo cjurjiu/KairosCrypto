@@ -11,4 +11,4 @@ data class PriceData(val currency: String,
                      val percentChange1h: Float,
                      val percentChange24h: Float,
                      val percentChange7d: Float,
-                     val lastUpdated: Long = -1)
+                     val lastUpdated: String = "")

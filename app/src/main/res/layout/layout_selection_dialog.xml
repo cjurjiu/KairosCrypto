@@ -10,8 +10,7 @@
         style="@style/KairosCrypto.Style.Dialog.TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_pick_transform_type"
-        tools:text="@string/dialog_pick_transform_type" />
+        tools:text="@string/dialog_pick_currency" />
 
     <com.catalinjurjiu.kairoscrypto.presentationlayer.common.view.custom.MaxHeightRecyclerView
         android:id="@+id/dialog_selection_list"
@@ -26,8 +25,8 @@
         style="@style/KairosCrypto.Style.Button.Flat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_below="@id/dialog_selection_list"
+        android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
         android:text="@string/dialog_action_text_negative" />
 

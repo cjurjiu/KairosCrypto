@@ -80,16 +80,16 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                 coinMarketCapApiService = coinMarketCapApiService)
         val resultSubject: PublishSubject<Int> = PublishSubject.create()
 
-        apiRequest.response.observeOn(Schedulers.io()).subscribe {
+        apiRequest.response.observeOn(Schedulers.io()).subscribe { response ->
             //network coins from the response
-            val networkCoins: List<CoinMarketCapCryptoCoin> = it.data.map { coin -> coin.value }
+            val networkCoins: List<CoinMarketCapCryptoCoin> = response.data
             //db coins & insert
             val dbCoins: List<DbPartialCryptoCoin> = networkCoins.map { coin -> coin.toDataLayerCoin() }
             kairosCryptoDb.getPlainCryptoCoinDao().insert(dbCoins)
             //price data
             val coinsPriceData = networkCoins.flatMap { it.toDataLayerPriceData() }
             val insertedDataIds = kairosCryptoDb.getCoinMarketCapPriceDataDao().insert(coinsPriceData)
-            Log.d(TAG, "Repo getFreshCoins response AFTER do next coins size:" + it.data.size + "" +
+            Log.d(TAG, "Repo getFreshCoins response AFTER do next coins size:" + response.data.size + "" +
                     "inserted ids:" + insertedDataIds)
             resultSubject.onNext(pageIndex + numberOfPages - 1)
             resultSubject.onComplete()
@@ -162,7 +162,7 @@ class CoinMarketCapCoinsRepository(private val kairosCryptoDb: KairosCryptoDb,
                             .subscribeOn(Schedulers.io())
                             .observeOn(Schedulers.io())
                             .subscribe { coinResponse ->
-                                val coin = coinResponse.data
+                                val coin = coinResponse.data.entries.first().value
                                 val dbCoin: DbPartialCryptoCoin = coin.toDataLayerCoin()
                                 kairosCryptoDb.getPlainCryptoCoinDao().insert(dbCoin)
                                 val dbPriceData = coin.toDataLayerPriceData()

@@ -2,6 +2,9 @@
 
 apply from: 'config/config.gradle'
 
+ext.localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 subprojects {
     buildscript {
         repositories {
